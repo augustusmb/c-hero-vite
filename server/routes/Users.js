@@ -2,7 +2,7 @@ import db from '../../db/db.js';
 import path from 'path';
 import dotenv from 'dotenv';
 import { signUpMessage } from '../sms.js';
-// import pLimit from 'p-limit';
+import pLimit from 'p-limit';
 dotenv.config()
 
 import { defineConfig, loadEnv } from 'vite';
@@ -106,7 +106,6 @@ export async function insertUser(req) {
 
   // [ '45', '47', '46' ]
   
-  /*
   const limit = pLimit(4)
 
   let userProducts = products.map(product => [`${productMap[product]}a`, `${productMap[product]}b`, `${productMap[product]}c`,`${productMap[product]}d`])
@@ -121,7 +120,6 @@ export async function insertUser(req) {
 
   console.log('YO YO YO')
   console.log('Inserted User Products: ', insertedUserProducts)
-*/
 
 
 
