@@ -24,7 +24,7 @@ const port = env.PORT || 8080
 app.use('/api/routes', router)
 
 if (env.VITE_NODE_ENV === "production") {
-  app.use(express.static("dist"));
+  app.use(express.static("../dist"));
 }
 
 app.get('/', (req, res) => {
