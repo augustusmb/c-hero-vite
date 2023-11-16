@@ -63,7 +63,7 @@ export function updateUserInfo(req, res) {
   .catch(err => console.log('Error updating user info: ', err))
 }
 
-export async function insertUser(req, res) {
+export async function insertUser(req) {
   console.log(`Congrats, you've reached the point of entering a new user.`)
   console.log('New User Data: ', req.body.data)
   const name = req.body.data['field:comp-kx6gm8r4'] + ' ' + req.body.data['field:comp-kx6gm8rc']

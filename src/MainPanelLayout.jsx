@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-// import SideNavigation from "./SideNavigation.jsx";
-import HeaderNavigationBar from "./HeaderNavigation.jsx";
+import HeaderNavigation from "./HeaderNavigation.jsx";
 import MainPanelRouter from "./MainPanelRouter.jsx";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -52,15 +51,10 @@ const MainPanelLayout = () => {
     <Router>
       <UserAuthContext.Provider value={userInfoContext}>
         <div>
-          <HeaderNavigationBar toggleSidebar={toggleSidebar} />
+          <HeaderNavigation toggleSidebar={toggleSidebar} />
         </div>
         <div>
-          {/* <SideNavigation
-            showSidebar={showSidebar}
-            // toggleSidebar={toggleSidebar}
-          /> */}
-          {/* <MainPanelRouter /> */}
-          {showSidebar && window.innerWidth < 600 ? "" : <MainPanelRouter />}
+          <MainPanelRouter />
         </div>
       </UserAuthContext.Provider>
     </Router>
