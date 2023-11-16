@@ -40,24 +40,22 @@ export const getQuestions = (req, res) => {
   .catch(err => console.log('Error: ', err))
 }
 
-export const addQuestion = (req, res) => {
+export const addQuestion = (req) => {
   const { Title, TrueOrFalse, CorrectAnswer, WrongAnswer1, WrongAnswer2, WrongAnswer3, _44A, _44B, _44C, _44D, _45A, _45B, _45C, _45D, _47A, _47B, _47C, _47D, _62A, _62B, _62C, _62D } = req.body.questionData
   db.none(queries.addQuestion, { Title, TrueOrFalse, CorrectAnswer, WrongAnswer1, WrongAnswer2, WrongAnswer3, _44A, _44B, _44C, _44D, _45A, _45B, _45C, _45D, _47A, _47B, _47C, _47D, _62A, _62B, _62C, _62D })
-  .then(res => console.log('Success adding test question'))
+  .then(() => console.log('Success adding test question'))
   .catch(err => console.log('Error: ', err))
 }
 
 
-/*
-const limit = pLimit(10)
-*/
+// const limit = pLimit(10)
 
 
 export const addQuestionOnce = (items) => {
   items.forEach(item => {
     const { id, title, correct_answer, incorrect_answer1, incorrect_answer2, incorrect_answer3, true_or_false } = item
     db.none(queries.addQuestion, { id, title, correct_answer, incorrect_answer1, incorrect_answer2, incorrect_answer3, true_or_false })
-    .then(res => console.log('Success adding test question'))
+    .then(() => console.log('Success adding test question'))
     .catch(err => console.log('Error: ', err))
   })
 }

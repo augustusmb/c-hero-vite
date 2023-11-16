@@ -1,4 +1,3 @@
-/*
 import db from '../../db/db.js';
 import path from 'path';
 import pLimit from 'p-limit';
@@ -55,4 +54,3 @@ const addQuestionPLimit = async () => {
 }
 
 addQuestionPLimit()
-*/

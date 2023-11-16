@@ -9,7 +9,7 @@ import { getCompanies, getCompanyByName, insertCompany } from './routes/Company.
 import { getPorts } from './routes/Ports.js';
 import { getVessels } from './routes/Vessels.js';
 import { getDashboardUsers } from './routes/Dashboard.js';
-// import { getAllUserData } from './routes/AllUserOverview.js'
+import { getAllUserData } from './routes/AllUserOverview.js'
 
 const router = express.Router()
 
@@ -51,7 +51,7 @@ router.route('/classes')
 router.route('/dashboard')
   .get(getDashboardUsers)
 
-// router.route('/all-user-overview')
-//   .get(getAllUserData)
+router.route('/all-user-overview')
+  .get(getAllUserData)
 
 export default router
