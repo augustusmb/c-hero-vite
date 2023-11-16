@@ -1,3 +1,4 @@
+/*
 import db from '../../db/db.js';
 import path from 'path';
 import pLimit from 'p-limit';
@@ -29,9 +30,11 @@ const sql = (file) => {
   return new QueryFile(fullPath, {minify: true});
 }
 
+
 const queries = {
   addProductQuestionLinks: sql('addProductQuestionLink.sql'),
 };
+
 
 const limit = pLimit(10)
 
@@ -52,3 +55,4 @@ const addQuestionPLimit = async () => {
 }
 
 addQuestionPLimit()
+*/

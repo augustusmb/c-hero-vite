@@ -1,6 +1,6 @@
 import db from "../../db/db.js";
 import path from "path";
-import pLimit from 'p-limit';
+// import pLimit from 'p-limit';
 
 import dotenv from 'dotenv';
 
@@ -42,6 +42,7 @@ async function getUserTestData(user) {
   return user;
 }
 
+/*
 export async function getAllUserData(req, res) {
 
   const limit = pLimit(20)
@@ -60,3 +61,4 @@ export async function getAllUserData(req, res) {
   res.status(200).json(usersWithTestData);
 
 }
+*/

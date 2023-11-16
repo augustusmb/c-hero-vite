@@ -1,6 +1,6 @@
 import db from '../../db/db.js';
 import path from 'path';
-import pLimit from 'p-limit';
+// import pLimit from 'p-limit';
 import dotenv from 'dotenv';
 
 import { defineConfig, loadEnv } from 'vite';
@@ -48,8 +48,10 @@ export const addQuestion = (req, res) => {
 }
 
 
-
+/*
 const limit = pLimit(10)
+*/
+
 
 export const addQuestionOnce = (items) => {
   items.forEach(item => {
