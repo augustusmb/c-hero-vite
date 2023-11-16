@@ -7,13 +7,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const domain = import.meta.env.VITE_AUTH0_DOMAIN;
 const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
-const twilioToken = import.meta.env.VITE_TWILIO_AUTH_TOKEN;
-const twilioAccountId = import.meta.env.VITE_TWILIO_ACCOUNT_SID;
-
-console.log("Domain Here: ", domain);
-console.log("Client Id Here: ", clientId);
-console.log("Twilio Account SID Here: ", twilioAccountId);
-console.log("Twilio Auth Token Here: ", twilioToken);
 
 const queryClient = new QueryClient();
 
