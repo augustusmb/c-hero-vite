@@ -11,8 +11,10 @@ const HeaderNavigation = () => {
           <img src={eTrainingIcon} className="h-28" />
         </Link>
       </div>
-      <div className="grid grid-cols-4 col-span-2 justify-items-center">
-        <Link to="/">Home</Link>
+      <div className="flex justify-between col-span-2 items-center">
+        <Link to="/" class>
+          Home
+        </Link>
         <Link to="/certification">Certification</Link>
         <NavBarDropdown />
         <AuthenticationButton />
