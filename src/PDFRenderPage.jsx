@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { PropTypes } from "prop-types";
 import { pdfjs, Document, Page } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
 import class3b_a from "./assets/c-hero-classes/3b/3b_a.pdf";
 import class3b_b from "./assets/c-hero-classes/3b/3b_b.pdf";
 import class3b_c from "./assets/c-hero-classes/3b/3b_c.pdf";

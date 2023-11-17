@@ -20,7 +20,7 @@ const sql = (file) => {
   let fullPath = path.join(__dirname, '../db/queries/questions/', file)
 
   if (environment === 'production') {
-    fullPath = path.join(__dirname, 'db/queries/questions/', file);
+    fullPath = path.join(__dirname, '/db/queries/questions/', file);
   }
   return new QueryFile(fullPath, {minify: true});
 }
