@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { PropTypes } from "prop-types";
 import { pdfjs, Document, Page } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import class3b_a from "./assets/c-hero-classes/3b/3b_a.pdf";
@@ -101,9 +102,7 @@ const PDFRenderPage = (props) => {
   const [panelWidth, setPanelWidth] = useState(500);
 
   console.log("Look Here: ", props);
-  // const { classId, safety } = props.match.params;
-
-  let classId = "3b_a";
+  let { classId, safety } = useParams();
 
   const pdfKey = classId ? classId : safety;
 
@@ -140,6 +139,15 @@ const PDFRenderPage = (props) => {
       {classId ? <Link to={`/test/${classId}`}>Take the test</Link> : ""}
     </div>
   );
+};
+
+PDFRenderPage.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      classId: PropTypes.string,
+      safety: PropTypes.string,
+    }),
+  }),
 };
 
 export default PDFRenderPage;

@@ -3,13 +3,13 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { productsMap } from "./messages.js";
 import Modal from "simple-react-modal";
-import { UserAuthContext } from "./MainPanel.jsx";
+import { UserAuthContext } from "./MainPanelLayout.jsx";
 
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import TestInfoInput from "./TestInfoInput.jsx";
 
-const TestTakingPage = (props) => {
+const TestTakingPage = () => {
   const { handleSubmit, reset } = useForm();
   let [testQuestions, setTestQuestions] = useState([]);
   let [currentAnswers, setCurrentAnswers] = useState();
@@ -19,8 +19,10 @@ const TestTakingPage = (props) => {
   let [testPassed, setTestPassed] = useState(false);
   const userInfo = useContext(UserAuthContext);
 
-  const testInfo = productsMap[props.match.params.classId.slice(0, 2)];
-  const testType = props.match.params.classId.slice(3, 4);
+  const { classId } = useParams();
+
+  const testInfo = productsMap[classId.slice(0, 2)];
+  const testType = classId.slice(3, 5);
 
   const classTypes = {
     a: "Setup",
@@ -31,8 +33,8 @@ const TestTakingPage = (props) => {
 
   useEffect(() => {
     axios
-      .get("/routes/questions", {
-        params: { classId: props.match.params.classId },
+      .get("/api/routes/questions", {
+        params: { classId: classId },
       })
       .then((res) => {
         let randomQuestions = res.data.sort(() => Math.random() - 0.5);
@@ -92,7 +94,7 @@ const TestTakingPage = (props) => {
     }
     questionsMissed.sort((a, b) => a[0].slotIndex - b[0].slotIndex);
     let completedTestData = {
-      classId: props.match.params.classId,
+      classId: classId,
       name: userInfo.userInfo.name,
       phone: userInfo.userInfo.phone,
       userId: userInfo.userInfo.id,
@@ -215,7 +217,7 @@ const TestTakingPage = (props) => {
               <button>Return home to view other tests</button>
             </Link>
           ) : (
-            <Link to={`/class/${props.match.params.classId}`}>
+            <Link to={`/class/${classId}`}>
               <button>Return to class and take the test again</button>
             </Link>
           )}

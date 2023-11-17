@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-// import TestTakingPage from "./TestTakingPage.jsx";
+import TestTakingPage from "./TestTakingPage.jsx";
 // import UserAccountPage from "./UserAccountPage.jsx";
 // import CustomerSetup from "./CustomerSetup.jsx";
 // import DrillVideosPage from "./DrillVideosPage.jsx";
@@ -12,10 +12,10 @@ const MainPanelRouter = () => {
   return (
     <div>
       <Routes>
-        {/* <Route path="/drill-videos-page" element={DrillVideosPage} />
-        <Route path="/certification" element={CertificatePage} />
-        <Route path="/customersetup" element={CustomerSetup} />
-        <Route path="/test/:classId" element={TestTakingPage} /> */}
+        {/* <Route path="/drill-videos-page" element={DrillVideosPage} /> */}
+        {/* <Route path="/certification" element={CertificatePage} /> */}
+        {/* <Route path="/customersetup" element={CustomerSetup} /> */}
+        <Route path="/test/:classId" element={<TestTakingPage />} />
         <Route path="/class/:classId" element={<PDFRenderPage />} />
         {/* <Route path="/help/:safety" element={PDFRenderPage} />
         <Route path="/help/:troubleShooting" element={PDFRenderPage} />
