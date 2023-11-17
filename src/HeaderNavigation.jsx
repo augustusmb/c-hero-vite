@@ -1,22 +1,24 @@
-import eTrainingIcon from "./assets/ETraining.png";
+import eTrainingIcon from "./assets/c-hero-etraining-logo-final.png";
 import AuthenticationButton from "./AuthenticationButton";
-import PropTypes from "prop-types";
+import NavBarDropdown from "./NavBarDropdown.jsx";
 import { Link } from "react-router-dom";
 
-const HeaderNavigation = ({ toggleSidebar }) => {
+const HeaderNavigation = () => {
   return (
-    <div className="border-double border-4 border-sky-500">
-      <button onClick={toggleSidebar}>click me</button>
-      <Link to="/">
-        <img src={eTrainingIcon} />
-      </Link>
-      <AuthenticationButton />
+    <div className="border-double border-4 border-sky-500 grid grid-cols-3">
+      <div>
+        <Link to="/">
+          <img src={eTrainingIcon} className="h-28" />
+        </Link>
+      </div>
+      <div className="grid grid-cols-4 col-span-2 justify-items-center">
+        <Link to="/">Home</Link>
+        <Link to="/certification">Certification</Link>
+        <NavBarDropdown />
+        <AuthenticationButton />
+      </div>
     </div>
   );
-};
-
-HeaderNavigation.propTypes = {
-  toggleSidebar: PropTypes.func,
 };
 
 export default HeaderNavigation;

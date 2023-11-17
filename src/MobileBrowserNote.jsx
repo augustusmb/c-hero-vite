@@ -2,12 +2,12 @@ const MobileBrowserNote = () => {
   return (
     <div className="border-double border-4 border-sky-500">
       <strong>Mobile Phone Browser Note:</strong>
-      <p>This app works well on the following mobile browsers:</p>
-      <ul>
-        <li>Chrome</li>
-        <li>Firefox</li>
-      </ul>
-      <p>Please download Chrome or Firefox from the App store if needed</p>
+      <p>
+        This app works well on the following mobile browsers:{" "}
+        <span className="text-blue-700	font-bold	">Chrome</span>, &{" "}
+        <span className="text-red-700	font-bold	">Firefox</span>. Please download
+        either browser from the Appstore (iphone), PlayStore(android) as needed
+      </p>
     </div>
   );
 };

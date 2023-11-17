@@ -45,7 +45,7 @@ import classrs_b from "./assets/c-hero-classes/rs/rs_b.pdf";
 import classrs_c from "./assets/c-hero-classes/rs/rs_c.pdf";
 import classrs_d from "./assets/c-hero-classes/rs/rs_d.pdf";
 import safetyPDF from "./assets/c-hero-classes/safety/z_safety.pdf";
-import troubleShootingPDF from "./assets/c-hero-classes/troubleshooting/troubleshooting.pdf";
+import troubleshootingPDF from "./assets/c-hero-classes/troubleshooting/troubleshooting.pdf";
 import MobDrillLog from "./assets/MOBDrillLog.pdf";
 import MobInspectionCheckList from "./assets/MOBInspectionCheckList.pdf";
 
@@ -93,16 +93,16 @@ let pdfMap = {
   rs_c: classrs_c,
   rs_d: classrs_d,
   safety: safetyPDF,
-  troubleShooting: troubleShootingPDF,
+  troubleshooting: troubleshootingPDF,
   MobDrillLog: MobDrillLog,
   MobInspectionCheckList: MobInspectionCheckList,
 };
 
-const PDFRenderPage = (props) => {
+const PDFRenderPage = () => {
   const [numPages, setNumpages] = useState(1);
   const [panelWidth, setPanelWidth] = useState(500);
 
-  console.log("Look Here: ", props);
+  console.log("Look Here: ", useParams());
   let { classId, safety } = useParams();
 
   const pdfKey = classId ? classId : safety;

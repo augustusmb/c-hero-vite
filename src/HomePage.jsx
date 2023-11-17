@@ -12,10 +12,10 @@ const HomePage = () => {
         <DeleteUserSection />
       </div>
       <div className="flex justify-start mb-16">
-        <MobileBrowserNote />
+        <TermsAndConditions />
       </div>
       <div className="flex justify-start mb-16">
-        <TermsAndConditions />
+        <MobileBrowserNote />
       </div>
       <ClassCardSection />
     </div>

@@ -10,14 +10,7 @@ export const UserAuthContext = React.createContext();
 const MainPanelLayout = () => {
   const [userInfo, setUserInfo] = useState({});
   const [editMode, setEditMode] = useState(1);
-  const [showSidebar, setShowSidebar] = useState(false);
   const { user } = useAuth0();
-
-  console.log("User here: ", user);
-
-  // const user = {
-  //   name: "+16503808229",
-  // };
 
   const userInfoContext = {
     userInfo,
@@ -42,16 +35,11 @@ const MainPanelLayout = () => {
         });
   }, [user, editMode]);
 
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar);
-    console.log(showSidebar);
-  };
-
   return (
     <Router>
       <UserAuthContext.Provider value={userInfoContext}>
         <div>
-          <HeaderNavigation toggleSidebar={toggleSidebar} />
+          <HeaderNavigation />
         </div>
         <div>
           <MainPanelRouter />
