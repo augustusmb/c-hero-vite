@@ -59,9 +59,9 @@ const UserInfoSection = (props) => {
     <div>
       {!editMode ? (
         <div className="grid grid-cols-2">
-          <div htmlFor="Name">Name:</div>
+          <label htmlFor="Name">Name:</label>
           <div>{userInfo.name}</div>
-          <div htmlFor="Email">Email:</div>
+          <label htmlFor="Email">Email:</label>
           <div>{userInfo.email}</div>
           <div htmlFor="Title">Title:</div>
           <div>{userInfo.title_function}</div>
@@ -74,29 +74,39 @@ const UserInfoSection = (props) => {
         </div>
       ) : (
         <form ref={formRef}>
-          <div htmlFor="Name">Name:</div>
-          <input placeholder={userInfo.name} type="text" name="name" />
-          <div htmlFor="Email">Email:</div>
-          <input placeholder={userInfo.email} type="text" name="email" />
-          <div htmlFor="Title">Title:</div>
-          <input
-            placeholder={userInfo.title_function}
-            type="text"
-            name="title"
-          />
-          <div htmlFor="Company">Company:</div>
-          <input placeholder={userInfo.company} type="text" name="company" />
-          <div htmlFor="Vessel">Vessel:</div>
-          <input placeholder={userInfo.vessel} type="text" name="vessel" />
-          <div htmlFor="Port">Port:</div>
-          <input placeholder={userInfo.port} type="text" name="port" />
+          <div className="grid grid-cols-2">
+            <label htmlFor="name">Name:</label>
+            <input placeholder={userInfo.name} type="text" name="name" />
+            <label htmlFor="email">Email:</label>
+            <input placeholder={userInfo.email} type="text" name="email" />
+            <label htmlFor="title">Title:</label>
+            <input
+              placeholder={userInfo.title_function}
+              type="text"
+              name="title"
+            />
+            <label htmlFor="company">Company:</label>
+            <input placeholder={userInfo.company} type="text" name="company" />
+            <label htmlFor="vessel">Vessel:</label>
+            <input placeholder={userInfo.vessel} type="text" name="vessel" />
+            <label htmlFor="port">Port:</label>
+            <input placeholder={userInfo.port} type="text" name="port" />
+          </div>
         </form>
       )}
-      <button onClick={() => triggerEditMode()}>
+      <button
+        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+        onClick={() => triggerEditMode()}
+      >
         {editMode ? `Cancel` : `Edit`}
       </button>
       {editMode ? (
-        <button onClick={() => updateUserInfoToDatabase()}>Save</button>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+          onClick={() => updateUserInfoToDatabase()}
+        >
+          Save
+        </button>
       ) : (
         ""
       )}
@@ -112,7 +122,7 @@ UserInfoSection.propTypes = {
     company: PropTypes.string,
     vessel: PropTypes.string,
     port: PropTypes.string,
-    id: PropTypes.string,
+    id: PropTypes.number,
   }),
   toggleEditMode: PropTypes.func,
 };

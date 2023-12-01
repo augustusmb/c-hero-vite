@@ -30,9 +30,14 @@ const queries = {
 };
 
 export function getUsersAssignedClasses(req, res) {
-  let userId = req.query.id
-  db.any(queries.getUsersAssignedClasses, { userId })
+  const { userId } = req.query
+
+  console.log('User id: ', userId)
+  console.log('Type of: ', typeof parseInt(userId))
+
+  db.query(queries.getUsersAssignedClasses, { userId })
   .then(data => {
+    console.log('Data Here: ', data)
     res.status(200).json(data)
   })
   .catch(err => console.log('Error retrieving user\'s classes', err))

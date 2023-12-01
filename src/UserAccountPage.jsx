@@ -9,8 +9,6 @@ const UserAccountPage = () => {
   const { userInfo, toggleEditMode } = useContext(UserAuthContext);
   const { user, isLoading } = useAuth0();
 
-  console.log("User info here: ", userInfo);
-
   useEffect(() => {
     user &&
       axios

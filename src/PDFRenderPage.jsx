@@ -137,7 +137,18 @@ const PDFRenderPage = () => {
           </div>
         ))}
       </Document>
-      {classId ? <Link to={`/test/${classId}`}>Take the test</Link> : ""}
+      {classId ? (
+        <div className="m-10">
+          <Link
+            to={`/test/${classId}`}
+            className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 border-b-4 border-orange-700 hover:border-orange-500 rounded"
+          >
+            Take the test
+          </Link>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

@@ -56,6 +56,7 @@ const TestTakingPage = () => {
               return answer ? true : false;
             })
             .sort(() => Math.random() - 0.5);
+
           question.answerOptions.forEach((item, idx) => {
             if (item === "All of the above") {
               question.answerOptions.splice(idx, 1);
@@ -79,7 +80,7 @@ const TestTakingPage = () => {
       .catch((error) => {
         console.log("error: ", error);
       });
-  }, []);
+  }, [classId, questionOrder]);
 
   const submitForm = () => {
     let questionsMissed = [];
@@ -103,7 +104,7 @@ const TestTakingPage = () => {
     if (questionsMissed.length === 0) {
       setTestPassed(true);
     }
-    axios.post("/routes/submit-test", { completedTestData });
+    axios.post("../api/routes/submit-test", { completedTestData });
     setShowModal(true);
     questionsMissed.length === 0
       ? setModalData(<div>You scored 100% and passed the test!</div>)
@@ -115,9 +116,9 @@ const TestTakingPage = () => {
             {questionsMissed.map((question, i) => {
               return (
                 <div key={i}>
-                  <h3>{`${question[0].slotIndex}. ${question[0].title}`}</h3>
-                  <h4>{`Correct Answer: ${question[0].correctAnswer}`}</h4>
-                  <h4>{`Your Answer: ${question[0].currentAnswer}`}</h4>
+                  <p className="text-base bg-slate-300">{`${question[0].slotIndex}. ${question[0].title}`}</p>
+                  <p className="text-blue-500">{`Correct Answer: ${question[0].correctAnswer}`}</p>
+                  <p>{`Your Answer: ${question[0].currentAnswer}`}</p>
                 </div>
               );
             })}
@@ -135,7 +136,7 @@ const TestTakingPage = () => {
 
   function getBody(question) {
     let { answerOptions } = question;
-    return question.true_or_false ? (
+    return question.true_or_false === "TRUE" ? (
       <div>
         <div>
           <label>
@@ -163,8 +164,8 @@ const TestTakingPage = () => {
       </div>
     ) : (
       <div className="answerBody">
-        {answerOptions.map((option) => (
-          <div key="answer">
+        {answerOptions.map((option, i) => (
+          <div key={i}>
             <label>
               <input
                 type="radio"
@@ -187,8 +188,8 @@ const TestTakingPage = () => {
 
   return (
     <div>
-      <div>
-        <div>{`${testInfo.name}`}</div>
+      <div className="m-8 text-xl underline">
+        <div>{`${testInfo.productName}`}</div>
         <div>{`${classTypes[testType]} - TEST`}</div>
       </div>
       <TestInfoInput />
@@ -206,7 +207,10 @@ const TestTakingPage = () => {
           })}
         </div>
         <div>
-          <input type="submit"></input>
+          <input
+            className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 border-b-4 border-orange-700 hover:border-orange-500 rounded"
+            type="submit"
+          ></input>
         </div>
       </form>
       <Modal show={showModal} onClose={closeModal}>
@@ -218,7 +222,9 @@ const TestTakingPage = () => {
             </Link>
           ) : (
             <Link to={`/class/${classId}`}>
-              <button>Return to class and take the test again</button>
+              <button className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 border-b-4 border-orange-700 hover:border-orange-500 rounded">
+                Return to class and take the test again
+              </button>
             </Link>
           )}
         </div>

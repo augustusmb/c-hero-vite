@@ -54,7 +54,7 @@ const UserDashboardSection = () => {
 
   useEffect(() => {
     if (userInfo.level <= 3) {
-      axios.get("/routes/dashboard", { params: userInfo }).then((res) => {
+      axios.get("api/routes/dashboard", { params: userInfo }).then((res) => {
         let mappedUserData = res.data.map((dashUser) => {
           const {
             company,

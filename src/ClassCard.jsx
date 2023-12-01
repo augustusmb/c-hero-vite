@@ -1,26 +1,16 @@
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import ClassCardItem from "./ClassCardItem.jsx";
 
 const ClassCard = (props) => {
+  const { product } = props;
+
   return (
-    <div className="border-double border-4 border-sky-500">
-      <h4 className="underline">{props.product?.name}</h4>
+    <div className="border-solid border-2 border-slate-500">
+      <h4 className="underline">{product?.productName}</h4>
       <div className="flex flex-col items-start ml-10">
-        <div>
-          1. <Link to={`/class/${props.product?.code}_a`}>Setup</Link>
-        </div>
-        <div>
-          2. <Link to={`/class/${props.product?.code}_b`}>Operation</Link>
-        </div>
-        <div>
-          3. <Link to={`/class/${props.product?.code}_c`}>MOB Drills</Link>
-        </div>
-        <div>
-          4.{" "}
-          <Link to={`/class/${props.product?.code}_d`}>
-            Inspection & Storage
-          </Link>
-        </div>
+        {Object.values(product.classProgress).map((item) => (
+          <ClassCardItem key={item.product_id} item={item} />
+        ))}
       </div>
     </div>
   );
@@ -28,8 +18,9 @@ const ClassCard = (props) => {
 
 ClassCard.propTypes = {
   product: PropTypes.shape({
-    code: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    productId: PropTypes.string.isRequired,
+    productName: PropTypes.string.isRequired,
+    classProgress: PropTypes.object,
   }),
 };
 

@@ -31,7 +31,8 @@ const queries = {
   updateUserInfo: sql('updateUserInfo.sql'),
   deleteUser: sql('deleteUser.sql'),
   insertUser: sql('insertUser.sql'),
-  insertUsersProducts: sql('insertUsersProducts.sql')
+  insertUsersProducts: sql('insertUsersProducts.sql'),
+  acceptTermsAndConditions: sql('acceptTermsAndConditions.sql')
 };
 
 export function getUserByPhone(req, res) {
@@ -61,6 +62,17 @@ export function updateUserInfo(req, res) {
     res.status(200).json(data)
   })
   .catch(err => console.log('Error updating user info: ', err))
+}
+
+export function acceptTermsAndConditions(req, res) {
+  const { userId } = req.body.params
+
+  db.query(queries.acceptTermsAndConditions, { userId })
+  .then(data => {
+    console.log("User terms and conditions updated successfully")
+    res.status(200).json(data)
+  })
+  .catch(err => console.log('Error updating user accepting terms and conditions: ', err))
 }
 
 export async function insertUser(req) {
