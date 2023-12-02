@@ -4,6 +4,7 @@
   padding: .25rem;
   text-align: center;
   background-color: beige;
+  min-height: 100vh
 }
 
 .logo {
