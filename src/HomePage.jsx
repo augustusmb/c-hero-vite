@@ -26,7 +26,7 @@ const HomePage = () => {
         {userInfo?.level === 0 && <DeleteUserSection />}
       </div>
       {!userInfo?.terms_accepted && (
-        <div className="flex justify-start mb-16">
+        <div className="flex justify-center mb-16">
           <TermsAndConditions
             acceptTermsMutation={acceptTermsMutation}
             userId={userInfo.id}

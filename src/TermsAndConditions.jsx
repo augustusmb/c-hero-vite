@@ -4,7 +4,7 @@ const TermsAndConditions = (props) => {
   const { acceptTermsMutation, userId } = props;
 
   return (
-    <div className="border-double border-4 border-sky-500 flex">
+    <div className="border p-8 border-4 border-slate-500">
       <form>
         <h1 className="font-bold text-xl underline">
           C-Hero eTraining Terms and Condtions
@@ -22,20 +22,21 @@ const TermsAndConditions = (props) => {
           View C-Hero Terms and Conditions
         </a>
         <span>(opens in new tab)</span>
-        <div>
+        {/* <div>
           <input type="checkbox" />
           <label>
             I have viewed and fully read the C-Hero terms and conditions, and I
             agree to the terms.
           </label>
-        </div>
+        </div> */}
         <div>
           <button
             type="submit"
             onClick={() => acceptTermsMutation.mutate(userId)}
-            className="bg-orange-400 hover:bg-gray-600 rounded-sm text-black"
+            className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 border-b-4 border-orange-700 hover:border-orange-500 rounded"
           >
-            Start Training
+            I have viewed, read and agree to the C-Hero Terms -{" "}
+            <span className="underline">Start Training</span>
           </button>
         </div>
       </form>
