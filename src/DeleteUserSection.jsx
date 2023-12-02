@@ -32,7 +32,10 @@ const DeleteUserSection = () => {
             placeholder="Phone Number"
             {...register("Phone Number")}
           ></input>
-          <input type="submit" />
+          <input
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+          />
           <p>
             {userSearched ? (userFound ? "User Found" : "No User Found") : ""}
           </p>
@@ -52,7 +55,10 @@ const DeleteUserSection = () => {
           <p>{`Name: ${fetchedUserData.name}`}</p>
           <p>{`Port: ${fetchedUserData.port}`}</p>
           <p>{`Vessel: ${fetchedUserData.vessel}`}</p>
-          <input type="submit" />
+          <input
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+          />
         </div>
       </form>
     );

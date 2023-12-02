@@ -23,7 +23,7 @@ const HomePage = () => {
     <div>
       <div className="grid grid-cols-2 mb-16">
         <UserAccountPage />
-        {userInfo?.level === 0 && <DeleteUserSection />}
+        {userInfo?.level === "0" && <DeleteUserSection />}
       </div>
       {!userInfo?.terms_accepted && (
         <div className="flex justify-center mb-16">
