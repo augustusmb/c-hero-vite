@@ -12,7 +12,12 @@ const HeaderNavigation = () => {
         </Link>
       </div>
       <div className="flex flex-wrap justify-between col-span-2 items-center">
-        <Link to="/">Home</Link>
+        <Link
+          to="/"
+          className="bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-2 border-b-2 border-slate-700 hover:border-slate-500 rounded"
+        >
+          Home
+        </Link>
         <NavBarDropdown />
         <AuthenticationButton />
       </div>

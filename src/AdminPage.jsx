@@ -16,7 +16,6 @@ const AdminPage = () => {
 
   return (
     <div>
-      <div>AdminPage Yo</div>
       <DeleteUserSection />
     </div>
   );
