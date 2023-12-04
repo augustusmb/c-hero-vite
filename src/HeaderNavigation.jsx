@@ -13,7 +13,6 @@ const HeaderNavigation = () => {
       </div>
       <div className="flex flex-wrap justify-between col-span-2 items-center">
         <Link to="/">Home</Link>
-        <Link to="/certification">Certification</Link>
         <NavBarDropdown />
         <AuthenticationButton />
       </div>

@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { UserAuthContext } from "./MainPanelLayout.jsx";
 import ClassCardSection from "./ClassCardSection";
-import DeleteUserSection from "./DeleteUserSection";
 import MobileBrowserNote from "./MobileBrowserNote";
 import TermsAndConditions from "./TermsAndConditions";
 import UserAccountPage from "./UserAccountPage";
@@ -21,9 +20,9 @@ const HomePage = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-2 mb-16">
+      <div className="grid grid-cols-2 mb-16 mt-6">
         <UserAccountPage />
-        {userInfo?.level === "0" && <DeleteUserSection />}
+        <div></div>
       </div>
       {!userInfo?.terms_accepted && (
         <div className="flex justify-center mb-16">
