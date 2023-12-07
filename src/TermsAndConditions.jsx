@@ -22,13 +22,6 @@ const TermsAndConditions = (props) => {
           View C-Hero Terms and Conditions
         </a>
         <span>(opens in new tab)</span>
-        {/* <div>
-          <input type="checkbox" />
-          <label>
-            I have viewed and fully read the C-Hero terms and conditions, and I
-            agree to the terms.
-          </label>
-        </div> */}
         <div>
           <button
             type="submit"

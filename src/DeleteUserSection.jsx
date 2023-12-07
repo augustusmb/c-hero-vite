@@ -1,9 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-// import { useAuth0 } from "@auth0/auth0-react";
 import { useForm } from "react-hook-form";
-
-export const UserAuthContext = React.createContext();
 
 const DeleteUserSection = () => {
   const [fetchedUserData, setFetchedUserData] = useState({ name: "" });

@@ -5,31 +5,11 @@ import { PropTypes } from "prop-types";
 
 const UserInfoSection = (props) => {
   let [editMode, setEditMode] = useState(false);
-  let [companies, setCompanies] = useState([{}]);
-  let [vessels, setVessels] = useState([{}]);
-  let [ports, setPorts] = useState([{}]);
   const { userInfo, toggleEditMode } = props;
   const formRef = useRef(null);
 
   function triggerEditMode() {
-    console.log("Edit mode triggered");
     setEditMode(!editMode);
-    axios
-      .get("/routes/companies")
-      .then((res) => {
-        setCompanies(res.data);
-        return axios.get("/api/routes/vessels");
-      })
-      .then((res) => {
-        setVessels(res.data);
-        return axios.get("/api/routes/ports");
-      })
-      .then((res) => {
-        setPorts(res.data);
-      })
-      .catch((err) =>
-        console.log("Error retrieving companies, ports or vessels: ", err),
-      );
   }
 
   const updateUserInfoToDatabase = () => {
