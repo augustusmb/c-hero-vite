@@ -199,7 +199,14 @@ const TestTakingPage = () => {
             return (
               <div key={idx}>
                 <div>
-                  <p>{`${idx + 1}. ${question.title}`}</p>
+                  <p>
+                    {`${idx + 1}. ${question.title} `}
+                    <span className="underline">
+                      {userInfo.userInfo.level === "0"
+                        ? `(ID #: ${question.id})`
+                        : ""}
+                    </span>
+                  </p>
                 </div>
                 <div>{getBody(question)}</div>
               </div>
