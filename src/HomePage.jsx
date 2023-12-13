@@ -3,7 +3,7 @@ import { UserAuthContext } from "./MainPanelLayout.jsx";
 import ClassCardSection from "./ClassCardSection";
 import MobileBrowserNote from "./MobileBrowserNote";
 import TermsAndConditions from "./TermsAndConditions";
-import UserAccountPage from "./UserAccountPage";
+import UserInfoSection from "./UserInfoSection.jsx";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -20,9 +20,8 @@ const HomePage = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-2 mb-16 mt-6">
-        <UserAccountPage />
-        <div></div>
+      <div className="mb-16 mt-6">
+        <UserInfoSection userInfo={userInfo} />
       </div>
       {!userInfo?.terms_accepted && (
         <div className="flex justify-center mb-16">

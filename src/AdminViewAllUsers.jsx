@@ -20,10 +20,12 @@ const AdminFetchAllUsers = (props) => {
 
   return (
     <div>
-      <div className="grid justify-items-start underline">
-        <h3 className="font-bold">Click a below user to edit their info</h3>
-      </div>
       <div className="grid justify-items-start">
+        <h3 className="font-bold underline">
+          Click a user to view their account info
+        </h3>
+      </div>
+      <div className="grid justify-items-start bg-slate-100 w-4/5">
         {data.data?.map((user) => (
           <button key={user.id} onClick={() => handleUserToEdit(user)}>
             {user.name}

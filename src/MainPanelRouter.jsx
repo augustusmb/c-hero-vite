@@ -22,6 +22,7 @@ const MainPanelRouter = () => {
         <Route path="/help/:MobDrillLog" element={<PDFRenderPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/redirect" element={<Navigate to="/" />} />
+        <Route path="/home" element={<Navigate to="/" />} />
       </Routes>
     </div>
   );

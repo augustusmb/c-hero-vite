@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { PropTypes } from "prop-types";
 import { getFullUserProductProgressMap } from "./utils/utils.js";
 import { updateUserInfo } from "./api/user.js";
+import { labels } from "./messages";
 
 const EditUserAsAdmin = (props) => {
-  const { userInfo: user } = props;
+  const { userInfo: user, handleUserToEdit } = props;
   const [editMode, setEditMode] = useState(false);
   const formRef = useRef(null);
-  const labels = ["Name", "Email", "Title", "Company", "Vessel", "Port"];
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const EditUserAsAdmin = (props) => {
   const handleSaveClick = () => {
     let name = formRef.current["name"].value || user.name;
     let email = formRef.current["email"].value || user.email;
-    let title = formRef.current["title"].value || user.title_function;
+    let title = formRef.current["title"].value || user.title;
     let company = formRef.current["company"].value || user.company;
     let vessel = formRef.current["vessel"].value || user.vessel;
     let port = formRef.current["port"].value || user.port;
@@ -45,10 +45,10 @@ const EditUserAsAdmin = (props) => {
       vessel,
       port,
     };
-    console.log("22222222");
     updateUserMutation.mutate(updatedUserInfo);
+    handleUserToEdit(Object.assign(user, updatedUserInfo));
     setEditMode(!editMode);
-    return navigate("/admin");
+    navigate("/admin");
   };
 
   if (isLoading) {
@@ -75,7 +75,7 @@ const EditUserAsAdmin = (props) => {
             <div className="flex flex-col items-start col-span-2">
               <p>{user.name}</p>
               <p>{user.email}</p>
-              <p>{user.title_function}</p>
+              <p>{user.title}</p>
               <p>{user.company}</p>
               <p>{user.vessel}</p>
               <p>{user.port}</p>
@@ -111,11 +111,7 @@ const EditUserAsAdmin = (props) => {
               <div className="flex flex-col items-start col-span-2">
                 <input placeholder={user.name} type="text" name="name" />
                 <input placeholder={user.email} type="text" name="email" />
-                <input
-                  placeholder={user.title_function}
-                  type="text"
-                  name="title"
-                />
+                <input placeholder={user.title} type="text" name="title" />
                 <input placeholder={user.company} type="text" name="company" />
                 <input placeholder={user.vessel} type="text" name="vessel" />
                 <input placeholder={user.port} type="text" name="port" />
@@ -166,12 +162,13 @@ EditUserAsAdmin.propTypes = {
     phone: PropTypes.string,
     name: PropTypes.string,
     email: PropTypes.string,
-    title_function: PropTypes.string,
+    title: PropTypes.string,
     company: PropTypes.string,
     vessel: PropTypes.string,
     port: PropTypes.string,
   }),
   userProductMap: PropTypes.object,
+  handleUserToEdit: PropTypes.func,
 };
 
 export default EditUserAsAdmin;

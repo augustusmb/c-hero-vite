@@ -3,7 +3,7 @@ create table users (
   name text,
   phone text not null,
   email text,
-  title_function text,
+  title text,
   level int,
   picture text
 );

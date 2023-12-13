@@ -1,7 +1,7 @@
 update users
 set name = ${name},
     email = ${email},
-    title_function = ${title},
+    title = ${title},
     company = ${company}, 
     vessel = ${vessel}, 
     port = ${port}

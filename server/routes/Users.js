@@ -46,22 +46,40 @@ export function getUserByPhone(req, res) {
 }
 
 export function deleteUser(req, res) {
-  const { phone } = req.query
-  db.query(queries.deleteUser, { phone })
+  console.log('Deleting user in server with id: ', req.query.userId)
+  const { userId } = req.query
+  db.query(queries.deleteUser, { userId })
   .then(data => {
     res.send(data)
   })
-  .catch(err => console.log('Error requesting account info: ', err))
+  .catch(err => console.log('Error deleting user: ', err))
 }
 
 export function updateUserInfo(req, res) {
-  const { id, name, email, title, company, vessel, port } = req.body.params
+  const { id, name, email, title, company, vessel, port, newlyAssignedProducts } = req.body.params
+
   db.query(queries.updateUserInfo, { id, name, email, title, company, vessel, port })
   .then(data => {
     console.log(data)
     res.status(200).json(data)
   })
   .catch(err => console.log('Error updating user info: ', err))
+
+  newlyAssignedProducts && updateUserProducts(Object.keys(newlyAssignedProducts), id)
+}
+
+async function updateUserProducts(products, user_id) {
+  let classes = []
+  products.forEach(product => {
+    classes.push([`${product}_a`, `${product}_b`, `${product}_c`,`${product}_d`])
+  })
+  classes = classes.flat()
+
+  const limit = pLimit(4)
+
+  let promises = classes.map((product_id) => limit(() => db.none(queries.insertUsersProducts, { product_id, user_id })))
+  
+  let insertedUsersProducts = await Promise.all(promises)
 }
 
 export function acceptTermsAndConditions(req, res) {
@@ -84,8 +102,8 @@ export async function insertUser(req) {
   const company = req.body.data['field:comp-kx6gug04']
   const port = req.body.data['field:comp-kx6gvt2u']
   const vessel = req.body.data['field:comp-kx6gwut4']
-  const title_function = req.body.data['field:comp-kx6gm8rk']
-  const level = title_function === 'Shoreside' ? 1 : title_function === 'Captain' ? 2 : 3
+  const title = req.body.data['field:comp-kx6gm8rk']
+  const level = title === 'Shoreside' ? 1 : title === 'Captain' ? 2 : 3
   const products = req.body.data['field:comp-kx6gm8rp'].split(', ')
   console.log('True False Here: ', products)
   console.log('Type of is: ', typeof products)
@@ -103,7 +121,7 @@ export async function insertUser(req) {
     '62fp': '_62fp'
   }
 
-  const userId = await db.query(queries.insertUser, { name, phone, email, company, port, vessel, title_function, level })
+  const userId = await db.query(queries.insertUser, { name, phone, email, company, port, vessel, title, level })
   console.log('New Stuff Here: ' + userId)
   user_id = userId[0].id
   console.log('Alpha ' + userId[0].id)

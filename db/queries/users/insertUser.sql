@@ -1,7 +1,7 @@
 INSERT INTO
-  users (name, phone, email, title_function, company, port, vessel, level)
+  users (name, phone, email, title, company, port, vessel, level)
 VALUES
-  (${name}, ${phone}, ${email}, ${title_function}, ${company}, ${port}, ${vessel}, ${level})
+  (${name}, ${phone}, ${email}, ${title}, ${company}, ${port}, ${vessel}, ${level})
 ON CONFLICT (phone)
 DO NOTHING
 RETURNING id

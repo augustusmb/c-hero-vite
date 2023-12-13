@@ -211,6 +211,16 @@ export const productsArray = [
   }
 ]
 
+export const labels = [
+  "name",
+  "email",
+  "phone",
+  "title",
+  "company",
+  "vessel",
+  "port",
+];
+
 export const productsMap = {
   "3b":   {
     productId: "3b",
