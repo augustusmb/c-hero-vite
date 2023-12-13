@@ -50,10 +50,14 @@ const AdminEditUserForm = ({
 
   const onSubmit = (data) => {
     // compare newly assinged products to already assigned products
-    const newlyAssignedProducts = {};
+    const newlyAddedProducts = {};
+    const newlyRemovedProducts = {};
     for (const key in userProductData) {
       if (userProductData[key].assigned === false && data[key] === true) {
-        newlyAssignedProducts[key] = true;
+        newlyAddedProducts[key] = true;
+      }
+      if (userProductData[key].assigned === true && data[key] === false) {
+        newlyRemovedProducts[key] = true;
       }
     }
 
@@ -65,7 +69,8 @@ const AdminEditUserForm = ({
       vessel: data.vessel || user.vessel,
       port: data.port || user.port,
       id: user.id,
-      newlyAssignedProducts,
+      newlyAddedProducts,
+      newlyRemovedProducts,
     };
 
     alert(`${user.name}'s account has been updated.`);

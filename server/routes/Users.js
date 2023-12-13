@@ -32,7 +32,8 @@ const queries = {
   deleteUser: sql('deleteUser.sql'),
   insertUser: sql('insertUser.sql'),
   insertUsersProducts: sql('insertUsersProducts.sql'),
-  acceptTermsAndConditions: sql('acceptTermsAndConditions.sql')
+  acceptTermsAndConditions: sql('acceptTermsAndConditions.sql'),
+  deleteUserSpecificClasses: sql('deleteUserSpecificClasses.sql')
 };
 
 export function getUserByPhone(req, res) {
@@ -56,7 +57,9 @@ export function deleteUser(req, res) {
 }
 
 export function updateUserInfo(req, res) {
-  const { id, name, email, title, company, vessel, port, newlyAssignedProducts } = req.body.params
+  const { id, name, email, title, company, vessel, port, newlyAddedProducts, newlyRemovedProducts } = req.body.params
+
+  console.log('Newly removed products: ', newlyRemovedProducts)
 
   db.query(queries.updateUserInfo, { id, name, email, title, company, vessel, port })
   .then(data => {
@@ -65,7 +68,8 @@ export function updateUserInfo(req, res) {
   })
   .catch(err => console.log('Error updating user info: ', err))
 
-  newlyAssignedProducts && updateUserProducts(Object.keys(newlyAssignedProducts), id)
+  newlyAddedProducts && updateUserProducts(Object.keys(newlyAddedProducts), id)
+  newlyRemovedProducts && deleteUserSpecificClasses(Object.keys(newlyRemovedProducts), id)
 }
 
 async function updateUserProducts(products, user_id) {
@@ -80,6 +84,21 @@ async function updateUserProducts(products, user_id) {
   let promises = classes.map((product_id) => limit(() => db.none(queries.insertUsersProducts, { product_id, user_id })))
   
   let insertedUsersProducts = await Promise.all(promises)
+}
+
+async function deleteUserSpecificClasses(products, user_id) {
+  let classes = []
+  products.forEach(product => {
+    classes.push([`${product}_a`, `${product}_b`, `${product}_c`,`${product}_d`])
+  })
+  classes = classes.flat()
+
+  const limit = pLimit(4)
+
+  let promises = classes.map((product_id) => limit(() => db.none(queries.deleteUserSpecificClasses, { product_id, user_id })))
+  
+  let deletedUsersProducts = await Promise.all(promises)
+
 }
 
 export function acceptTermsAndConditions(req, res) {
