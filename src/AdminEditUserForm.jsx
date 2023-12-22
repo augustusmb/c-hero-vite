@@ -24,6 +24,7 @@ const AdminEditUserForm = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["all-users"]);
+      queryClient.invalidateQueries(["get-user-products"]);
     },
   });
 
@@ -44,7 +45,7 @@ const AdminEditUserForm = ({
     alert(`${user.name} has been deleted from the database.`);
     deleteUserMutation.mutate(user.id);
     handleUserToEdit({});
-    toggleEditMode(!editMode);
+    // toggleEditMode(!editMode);
     navigate("/admin");
   };
 
@@ -76,8 +77,6 @@ const AdminEditUserForm = ({
     alert(`${user.name}'s account has been updated.`);
     updateUserInfoMutation.mutate(userInfo);
     handleUserToEdit(Object.assign({}, user, userInfo));
-    toggleEditMode(!editMode);
-    navigate("/admin");
   };
 
   return (

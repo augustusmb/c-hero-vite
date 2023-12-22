@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserAuthContext } from "./MainPanelLayout.jsx";
-import AdminViewAllUsers from "./AdminViewAllUsers.jsx";
 import AdminEditUserStatic from "./AdminEditUserStatic.jsx";
 import AdminEditUserForm from "./AdminEditUserForm.jsx";
+import AdminUserInfoTable from "./AdminUserInfoTable.jsx";
 import { useQuery } from "@tanstack/react-query";
 import { getFullUserProductProgressMap } from "./utils/utils.js";
 
@@ -19,6 +19,8 @@ const AdminPage = () => {
       console.log(userInfo.level);
       return navigate("/redirect");
     }
+
+    console.log("userToEdit: ", userToEdit);
   }, [userToEdit, userInfo, navigate]);
 
   const { isLoading, isError, data, error } = useQuery({
@@ -41,15 +43,14 @@ const AdminPage = () => {
 
   const toggleEditMode = () => {
     if (!userToEdit.name) {
-      alert("Please first select a user to edit from the lefthand panel.");
+      alert("Please first select a user to edit from the table below.");
       return;
     }
     setEditMode(!editMode);
   };
 
   return (
-    <div className="grid grid-cols-4">
-      <AdminViewAllUsers handleUserToEdit={handleUserToEdit} />
+    <div className="grid grid-cols-3">
       <div className="col-span-3">
         {!editMode ? (
           <AdminEditUserStatic
@@ -68,6 +69,7 @@ const AdminPage = () => {
           />
         )}
       </div>
+      <AdminUserInfoTable handleUserToEdit={handleUserToEdit} />
     </div>
   );
 };
