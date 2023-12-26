@@ -13,14 +13,11 @@ const AdminPage = () => {
   const [userToEdit, setUserToEdit] = useState({});
   const [editMode, setEditMode] = useState(false);
 
+  // Check if user is admin
   useEffect(() => {
     if (userInfo?.level !== "0") {
-      // Check if user is admin
-      console.log(userInfo.level);
       return navigate("/redirect");
     }
-
-    console.log("userToEdit: ", userToEdit);
   }, [userToEdit, userInfo, navigate]);
 
   const { isLoading, isError, data, error } = useQuery({
@@ -28,13 +25,9 @@ const AdminPage = () => {
     queryFn: getFullUserProductProgressMap,
   });
 
-  if (isLoading) {
-    return <span>Loading...</span>;
-  }
+  if (isLoading) return <span>Loading...</span>;
 
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
+  if (isError) return <span>Error: {error.message}</span>;
 
   const handleUserToEdit = (user) => {
     setUserToEdit(user);

@@ -12,21 +12,15 @@ const ClassCardSection = () => {
     queryFn: getFullUserProductProgressMap,
   });
 
-  if (isLoading) {
-    return <span>Loading...</span>;
-  }
+  if (isLoading) return <span>Loading...</span>;
 
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
-
-  userInfo.products = data;
+  if (isError) return <span>Error: {error.message}</span>;
 
   return (
     <div>
       <h4>Assigned Classes Below:</h4>
       <div className="grid grid-cols-2 lg:grid-cols-4">
-        {Object.values(userInfo.products)
+        {Object.values(data)
           .filter((item) => item.assigned)
           .map((product) => (
             <ClassCard key={product.productId} product={product} />

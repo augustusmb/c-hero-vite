@@ -42,7 +42,6 @@ const DeleteUserSection = () => {
   };
 
   const deleteUserForm = () => {
-    console.log("Here ", fetchedUserData);
     return (
       <form onSubmit={handleSubmit(deleteUser)}>
         <div>

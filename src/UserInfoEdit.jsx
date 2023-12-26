@@ -26,7 +26,6 @@ const EditUserInfoSection = ({
   });
 
   const onSubmit = (data) => {
-    console.log("11111");
     let userInfo = {
       name: data.name || user.name,
       email: data.email || user.email,

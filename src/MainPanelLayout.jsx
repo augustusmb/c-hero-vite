@@ -28,7 +28,6 @@ const MainPanelLayout = () => {
         })
         .then((res) => {
           setUserInfo(res.data[0]);
-          console.log("User Info Set", res.data[0]);
         })
         .catch((err) => {
           console.log("Error here retrieving user info: ", err);

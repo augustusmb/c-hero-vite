@@ -102,7 +102,6 @@ const PDFRenderPage = () => {
   const [numPages, setNumpages] = useState(1);
   const [panelWidth, setPanelWidth] = useState(500);
 
-  console.log("Look Here: ", useParams());
   let { classId, safety } = useParams();
 
   const pdfKey = classId ? classId : safety;

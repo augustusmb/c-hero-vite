@@ -38,17 +38,12 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
     queryFn: fetchAllUsers,
   });
 
-  if (isLoading) {
-    return <span>Loading...</span>;
-  }
+  if (isLoading) return <span>Loading...</span>;
 
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
+  if (isError) return <span>Error: {error.message}</span>;
 
   const onSelectionChanged = (e) => {
     const selectedRowData = e.api.getSelectedNodes()[0].data;
-    console.log("selectedRowData: ", selectedRowData);
     handleUserToEdit(selectedRowData);
   };
 

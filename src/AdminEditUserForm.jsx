@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserInfoAndProducts, deleteUser } from "./api/user.js";
-import { labels } from "./messages";
+import { labels } from "./messages.js";
 
 const AdminEditUserForm = ({
   userInfo: user,
@@ -24,7 +24,7 @@ const AdminEditUserForm = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["all-users"]);
-      queryClient.invalidateQueries(["get-user-products"]);
+      // queryClient.invalidateQueries(["get-user-products"]);
     },
   });
 
@@ -74,7 +74,7 @@ const AdminEditUserForm = ({
       newlyRemovedProducts,
     };
 
-    alert(`${user.name}'s account has been updated.`);
+    // alert(`${user.name}'s account has been updated.`);
     updateUserInfoMutation.mutate(userInfo);
     handleUserToEdit(Object.assign({}, user, userInfo));
   };

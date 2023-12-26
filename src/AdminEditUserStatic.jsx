@@ -8,6 +8,8 @@ const AdminEditUserStatic = ({
   editMode,
   data,
 }) => {
+  // console.log("Static user data, userInfo: ", user);
+  // console.log("Static user data, data: ", data);
   return (
     <div className="grid grid-cols-6">
       <div className="col-span-3">
