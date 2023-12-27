@@ -56,49 +56,54 @@ export function deleteUser(req, res) {
   .catch(err => console.log('Error deleting user: ', err))
 }
 
-export function updateUserInfo(req, res) {
+export async function updateUserInfo(req, res) {
   const { id, name, email, title, company, vessel, port, newlyAddedProducts, newlyRemovedProducts } = req.body.params
 
-  console.log('Newly removed products: ', newlyRemovedProducts)
+  let insertQuery = updateUserProducts(Object.keys(newlyAddedProducts), id, newlyAddedProducts)
+  let deleteQuery = deleteUserSpecificClasses(Object.keys(newlyRemovedProducts), id)
 
-  db.query(queries.updateUserInfo, { id, name, email, title, company, vessel, port })
-  .then(data => {
-    console.log(data)
-    res.status(200).json(data)
+  await Promise.all([
+    db.none(insertQuery),
+    db.none(deleteQuery),
+    db.none(queries.updateUserInfo, { id, name, email, title, company, vessel, port })
+  ])
+  .then(() => {
+    console.log('All SQL commands executed');
+    res.status(200).json({ message: 'User info updated successfully' });
   })
-  .catch(err => console.log('Error updating user info: ', err))
-
-  newlyAddedProducts && updateUserProducts(Object.keys(newlyAddedProducts), id)
-  newlyRemovedProducts && deleteUserSpecificClasses(Object.keys(newlyRemovedProducts), id)
+  .catch(err => {
+    console.log('Error updating user products: ', err);
+    res.status(500).json({ message: 'Error updating user info' });
+  });
 }
 
-async function updateUserProducts(products, user_id) {
+function updateUserProducts(products, user_id) {
+  if (products.length === 0) return '-- This is a comment'
+
   let classes = []
   products.forEach(product => {
     classes.push([`${product}_a`, `${product}_b`, `${product}_c`,`${product}_d`])
   })
   classes = classes.flat()
 
-  const limit = pLimit(4)
-
-  let promises = classes.map((product_id) => limit(() => db.none(queries.insertUsersProducts, { product_id, user_id })))
-  
-  let insertedUsersProducts = await Promise.all(promises)
+  let values = classes.map((product_id) => `('${product_id}', '${user_id}')`);
+  let valuesPart = values.join(", ");
+  let insertStatement = `INSERT INTO users_products (product_id, user_id) VALUES ${valuesPart}`;
+  return insertStatement
 }
 
-async function deleteUserSpecificClasses(products, user_id) {
+function deleteUserSpecificClasses(products, user_id) {
+  if (products.length === 0) return '-- This is a comment'
+
   let classes = []
   products.forEach(product => {
     classes.push([`${product}_a`, `${product}_b`, `${product}_c`,`${product}_d`])
   })
   classes = classes.flat()
 
-  const limit = pLimit(4)
-
-  let promises = classes.map((product_id) => limit(() => db.none(queries.deleteUserSpecificClasses, { product_id, user_id })))
-  
-  let deletedUsersProducts = await Promise.all(promises)
-
+  let productIds = classes.map(id => `'${id}'`).join(", ");
+  let deleteStatement = `DELETE FROM users_products WHERE product_id IN (${productIds}) AND user_id = ${user_id}`;
+  return deleteStatement
 }
 
 export function acceptTermsAndConditions(req, res) {

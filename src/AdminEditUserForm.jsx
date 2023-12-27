@@ -24,7 +24,7 @@ const AdminEditUserForm = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["all-users"]);
-      // queryClient.invalidateQueries(["get-user-products"]);
+      queryClient.invalidateQueries(["get-user-products"]);
     },
   });
 
