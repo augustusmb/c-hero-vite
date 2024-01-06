@@ -25,7 +25,7 @@ export const updateUserInfo = async (updatedUserInfo) => {
 };
 
 export const updateUserInfoAndProducts = async (updatedUserInfo) => {
-  return await axios.put("api/routes/users", { params: updatedUserInfo })
+  return await axios.put("api/routes/users-products", { params: updatedUserInfo })
 };
 
 export const deleteUser = async (userId) => {  

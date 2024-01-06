@@ -57,6 +57,23 @@ export function deleteUser(req, res) {
 }
 
 export async function updateUserInfo(req, res) {
+  const { id, name, email, title, company, vessel, port } = req.body.params
+
+
+  await Promise.all([
+    db.none(queries.updateUserInfo, { id, name, email, title, company, vessel, port })
+  ])
+  .then(() => {
+    console.log('All SQL commands executed');
+    res.status(200).json({ message: 'User info updated successfully' });
+  })
+  .catch(err => {
+    console.log('Error updating user products: ', err);
+    res.status(500).json({ message: 'Error updating user info' });
+  });
+}
+
+export async function updateUserInfoAndProducts(req, res) {
   const { id, name, email, title, company, vessel, port, newlyAddedProducts, newlyRemovedProducts } = req.body.params
 
   let insertQuery = updateUserProducts(Object.keys(newlyAddedProducts), id, newlyAddedProducts)

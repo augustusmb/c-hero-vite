@@ -9,7 +9,7 @@ import { getCompanies, getCompanyByName, insertCompany } from './routes/Company.
 import { getPorts } from './routes/Ports.js';
 import { getVessels } from './routes/Vessels.js';
 import { getDashboardUsers } from './routes/Dashboard.js';
-import { getAllUserData } from './routes/AllUserOverview.js'
+import { updateUserInfoAndProducts } from './routes/Users.js'
 
 const router = express.Router()
 
@@ -39,6 +39,9 @@ router.route('/users')
   .post(insertUser)
   .delete(deleteUser)
 
+router.route('/users-products')
+  .put(updateUserInfoAndProducts)
+
 router.route('/users/terms')
   .put(acceptTermsAndConditions)
 
@@ -53,8 +56,5 @@ router.route('/classes')
 
 router.route('/dashboard')
   .get(getDashboardUsers)
-
-router.route('/all-user-overview')
-  .get(getAllUserData)
 
 export default router
