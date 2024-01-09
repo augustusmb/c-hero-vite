@@ -6,3 +6,7 @@ export const getTestQuestions = async (params) => {
   
   return result
 }
+
+export const submitCompletedTest = async (completedTestData) => {
+  await axios.post("/api/routes/submit-test", { params: { completedTestData } })
+}

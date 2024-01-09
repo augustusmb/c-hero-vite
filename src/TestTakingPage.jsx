@@ -6,8 +6,8 @@ import Modal from "simple-react-modal";
 import { UserAuthContext } from "./MainPanelLayout.jsx";
 import { Link, useParams } from "react-router-dom";
 import TestInfoInput from "./TestInfoInput.jsx";
-import { useQuery } from "@tanstack/react-query";
-import { getTestQuestions } from "./api/test.js";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getTestQuestions, submitCompletedTest } from "./api/test.js";
 import {
   randomizeArray,
   prepareAnswerOptions,
@@ -17,12 +17,13 @@ import { classTypes } from "./messages.js";
 
 const TestTakingPage = () => {
   const { handleSubmit, reset } = useForm();
-  let [testQuestions, setTestQuestions] = useState([]);
-  let [currentAnswers, setCurrentAnswers] = useState();
-  let [questionOrder, setQuestionOrder] = useState(false);
-  let [showModal, setShowModal] = useState(false);
-  let [modalData, setModalData] = useState();
-  let [testPassed, setTestPassed] = useState(false);
+  const queryClient = useQueryClient();
+  const [testQuestions, setTestQuestions] = useState([]);
+  const [currentAnswers, setCurrentAnswers] = useState();
+  const [questionOrder, setQuestionOrder] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState();
+  const [testPassed, setTestPassed] = useState(false);
   const userInfo = useContext(UserAuthContext);
 
   const { classId } = useParams();
@@ -38,6 +39,15 @@ const TestTakingPage = () => {
   } = useQuery({
     queryKey: ["get-test-questions", classId],
     queryFn: getTestQuestions,
+  });
+
+  const submitTestMutation = useMutation({
+    mutationFn: (completedTestData) => {
+      submitCompletedTest(completedTestData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["get-user-products"]);
+    },
   });
 
   useEffect(() => {
@@ -81,7 +91,7 @@ const TestTakingPage = () => {
     if (questionsMissed.length === 0) {
       setTestPassed(true);
     }
-    axios.post("../api/routes/submit-test", { completedTestData });
+    submitTestMutation.mutate(completedTestData);
     setShowModal(true);
     questionsMissed.length === 0
       ? setModalData(<div>You scored 100% and passed the test!</div>)

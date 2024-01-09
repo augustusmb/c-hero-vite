@@ -33,7 +33,8 @@ const informTestResult = (questionsMissed, name, phone, classId) => {
   client.messages.create({
     body: message,
     from: '+13129975262',
-    to: '+14159945256'
+    to: '+16503808229'
+    // to: '+14159945256'
   })
   .then(message => console.log('1', message.status));
 }

@@ -19,7 +19,7 @@ const sql = (file) => {
   let fullPath = path.join(__dirname, '../db/queries/submitTest/', file)
 
   if (environment === 'production') {
-    fullPath = path.join(__dirname, '../db/queries/submitTest/', file);
+    fullPath = path.join(__dirname, '/db/queries/submitTest/', file);
   }
   return new QueryFile(fullPath, {minify: true});
 }
@@ -29,7 +29,7 @@ const queries = {
 };
 
 export function submitTest(req, res) {
-  const { questionsMissed, name, phone, userId, classId } = req.body.completedTestData
+  const { questionsMissed, name, phone, userId, classId } = req.body.params.completedTestData
   informTestResult(questionsMissed, name, phone, classId)
   
   if (questionsMissed === 0) {

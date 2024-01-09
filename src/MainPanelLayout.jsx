@@ -4,7 +4,6 @@ import HeaderNavigation from "./HeaderNavigation.jsx";
 import MainPanelRouter from "./MainPanelRouter.jsx";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-
 export const UserAuthContext = React.createContext();
 
 const MainPanelLayout = () => {
