@@ -28,6 +28,7 @@ const sql = (file) => {
 
 const queries = {
   getUserByPhone: sql('getUserByPhone.sql'),
+  fetchAllUsers: sql('fetchAllUsers.sql'),
   updateUserInfo: sql('updateUserInfo.sql'),
   deleteUser: sql('deleteUser.sql'),
   insertUser: sql('insertUser.sql'),
@@ -44,6 +45,11 @@ export function getUserByPhone(req, res) {
     res.status(200).json(data)
   })
   .catch(err => console.log('Error requesting account info: ', err))
+}
+
+export async function fetchAllUsers(req, res) {
+  let allUserData = await db.any(queries.fetchAllUsers);
+  res.status(200).json(allUserData);
 }
 
 export function deleteUser(req, res) {

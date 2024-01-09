@@ -15,7 +15,7 @@ export const getUserByPhone = async (phone) => {
 }
 
 export const fetchAllUsers = async () => {
-  const users = await axios.get(`api/routes/all-user-overview`);
+  const users = await axios.get(`api/routes/fetch-all-users`);
 
   return users;
 };
