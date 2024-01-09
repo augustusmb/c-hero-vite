@@ -1,9 +1,8 @@
 import axios from "axios";
 
-
 export const fetchUserClasses = async (userId) => {
   const usersClasses = await axios.get(`api/routes/classes`, {
-    params: { userId: userId },
+    params: { userId },
   })
 
   return usersClasses; 

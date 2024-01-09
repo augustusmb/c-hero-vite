@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form";
 import { productsMap } from "./messages.js";
 import Modal from "simple-react-modal";
 import { UserAuthContext } from "./MainPanelLayout.jsx";
-
 import { Link, useParams } from "react-router-dom";
-
 import TestInfoInput from "./TestInfoInput.jsx";
+import { useQuery } from "@tanstack/react-query";
+import { getTestQuestions } from "./api/test.js";
 
 const TestTakingPage = () => {
   const { handleSubmit, reset } = useForm();
@@ -31,56 +31,56 @@ const TestTakingPage = () => {
     d: "Inspection & Storage",
   };
 
-  useEffect(() => {
-    axios
-      .get("/api/routes/questions", {
-        params: { classId: classId },
-      })
-      .then((res) => {
-        let randomQuestions = res.data.sort(() => Math.random() - 0.5);
-        randomQuestions.forEach((question) => {
-          let {
-            correct_answer,
-            incorrect_answer1,
-            incorrect_answer2,
-            incorrect_answer3,
-          } = question;
-          let answers = [
-            correct_answer,
-            incorrect_answer1,
-            incorrect_answer2,
-            incorrect_answer3,
-          ];
-          question.answerOptions = answers
-            .filter((answer) => {
-              return answer ? true : false;
-            })
-            .sort(() => Math.random() - 0.5);
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["get-test-questions", classId],
+    queryFn: getTestQuestions,
+  });
 
-          question.answerOptions.forEach((item, idx) => {
-            if (item === "All of the above") {
-              question.answerOptions.splice(idx, 1);
-              question.answerOptions.push("All of the above");
-            }
-          });
-        });
-        setTestQuestions(randomQuestions);
-        let blankAnswers = {};
-        randomQuestions.forEach((question, slotIndex) => {
-          blankAnswers[question.id] = {
-            title: question.title,
-            slotIndex: slotIndex + 1,
-            currentAnswer: "",
-            correctAnswer: question.correct_answer,
-          };
-        });
-        setCurrentAnswers(blankAnswers);
-        if (!questionOrder) setQuestionOrder(!questionOrder);
-      })
-      .catch((error) => {
-        console.log("error: ", error);
+  useEffect(() => {
+    let randomQuestions = data?.data.sort(() => Math.random() - 0.5);
+    randomQuestions.forEach((question) => {
+      let {
+        correct_answer,
+        incorrect_answer1,
+        incorrect_answer2,
+        incorrect_answer3,
+      } = question;
+      let answers = [
+        correct_answer,
+        incorrect_answer1,
+        incorrect_answer2,
+        incorrect_answer3,
+      ];
+      question.answerOptions = answers
+        .filter((answer) => {
+          return answer ? true : false;
+        })
+        .sort(() => Math.random() - 0.5);
+
+      question.answerOptions.forEach((item, idx) => {
+        if (item === "All of the above") {
+          question.answerOptions.splice(idx, 1);
+          question.answerOptions.push("All of the above");
+        }
       });
-  }, [classId, questionOrder]);
+    });
+    setTestQuestions(randomQuestions);
+    let blankAnswers = {};
+    randomQuestions.forEach((question, slotIndex) => {
+      blankAnswers[question.id] = {
+        title: question.title,
+        slotIndex: slotIndex + 1,
+        currentAnswer: "",
+        correctAnswer: question.correct_answer,
+      };
+    });
+    setCurrentAnswers(blankAnswers);
+    if (!questionOrder) setQuestionOrder(!questionOrder);
+  }, [classId, questionOrder, data]);
+
+  if (isLoading) return <span>Loading...</span>;
+
+  if (isError) return <span>Error: {error.message}</span>;
 
   const submitForm = () => {
     let questionsMissed = [];

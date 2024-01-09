@@ -32,7 +32,6 @@ const queries = {
 
 export const getQuestions = (req, res) => {
   const { classId } = req.query
-  console.log('CHECK Here: ', classId)
   db.any(queries.getQuestions, { classId })
   .then(data => {
     res.status(200).json(data)
