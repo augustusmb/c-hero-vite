@@ -1,4 +1,4 @@
-import { productsMap } from "../messages";
+import { productsMap } from "../messages.js";
 import { fetchUserClasses } from "../api/user.js";
 
 export const createUserClassesMap = (userClasses) => {

@@ -5,7 +5,7 @@ import AdminEditUserStatic from "./AdminEditUserStatic.jsx";
 import AdminEditUserForm from "./AdminEditUserForm.jsx";
 import AdminUserInfoTable from "./AdminUserInfoTable.jsx";
 import { useQuery } from "@tanstack/react-query";
-import { getFullUserProductProgressMap } from "./utils/utils.js";
+import { getFullUserProductProgressMap } from "./utils/user.js";
 
 const AdminPage = () => {
   const navigate = useNavigate();

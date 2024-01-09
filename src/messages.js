@@ -3,22 +3,6 @@ export const messages = {
     "Welcome aboard! C-Hero ETraining will help you become part of the C-Hero Rescue Crew. \n Click HERE to download the ETraining app, or \n Click HERE to do the training on a computer/pad \n You can edit/add your info, and begin a class at your convenience.",
   // customer setup info
   classSectionInstructions: "Thank you for enrolling into eTraining and your commitment to familiarizing yourself with your new C-Hero safety gear! Each product has a total of four sections to study and test against. <strong>Successfully completing</strong> the first section unlocks the next until you have finished all four. Have fun!",
-  vesselTypes: [
-    "Harbor Tug",
-    "Ocean Tug",
-    "ATB",
-    "Crew Boat",
-    "Dredge",
-    "Dredge Tender",
-    "Ferry",
-    "Passenger Vessel",
-    "Pilot Boat",
-    "Supply Boat",
-    "Survey Boat",
-    "Crane Barge",
-    "Oil Barge",
-    "Construction Barge",
-  ],
   branchFacilityTypes: ["Port", "Facility"],
   addressInputs: ["City", "State", "Province", "Zip"],
   cHeroEquipment: [
@@ -163,6 +147,13 @@ export const messages = {
     },
   },
 };
+
+export const classTypes = {
+  a: "Setup",
+  b: "Operation",
+  c: "MOB Drills",
+  d: "Inspection & Storage",
+}
 
 export const productsArray = [
   {

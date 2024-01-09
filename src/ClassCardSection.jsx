@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { UserAuthContext } from "./MainPanelLayout.jsx";
 import ClassCard from "./ClassCard.jsx";
 import { useQuery } from "@tanstack/react-query";
-import { getFullUserProductProgressMap } from "./utils/utils.js";
+import { getFullUserProductProgressMap } from "./utils/user.js";
 
 const ClassCardSection = () => {
   const { userInfo } = useContext(UserAuthContext);

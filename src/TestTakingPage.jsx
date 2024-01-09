@@ -8,6 +8,12 @@ import { Link, useParams } from "react-router-dom";
 import TestInfoInput from "./TestInfoInput.jsx";
 import { useQuery } from "@tanstack/react-query";
 import { getTestQuestions } from "./api/test.js";
+import {
+  randomizeArray,
+  prepareAnswerOptions,
+  prepareBlankAnswers,
+} from "./utils/test.js";
+import { classTypes } from "./messages.js";
 
 const TestTakingPage = () => {
   const { handleSubmit, reset } = useForm();
@@ -24,61 +30,30 @@ const TestTakingPage = () => {
   const testInfo = productsMap[classId.slice(0, 2)];
   const testType = classId.slice(3, 5);
 
-  const classTypes = {
-    a: "Setup",
-    b: "Operation",
-    c: "MOB Drills",
-    d: "Inspection & Storage",
-  };
-
-  const { isLoading, isError, data, error } = useQuery({
+  const {
+    isLoading,
+    isError,
+    data: questions,
+    error,
+  } = useQuery({
     queryKey: ["get-test-questions", classId],
     queryFn: getTestQuestions,
   });
 
   useEffect(() => {
-    if (data) {
-      let randomQuestions = data.data.sort(() => Math.random() - 0.5);
+    if (questions) {
+      let randomQuestions = randomizeArray(questions.data);
       randomQuestions.forEach((question) => {
-        let {
-          correct_answer,
-          incorrect_answer1,
-          incorrect_answer2,
-          incorrect_answer3,
-        } = question;
-        let answers = [
-          correct_answer,
-          incorrect_answer1,
-          incorrect_answer2,
-          incorrect_answer3,
-        ];
-        question.answerOptions = answers
-          .filter((answer) => {
-            return answer ? true : false;
-          })
-          .sort(() => Math.random() - 0.5);
-
-        question.answerOptions.forEach((item, idx) => {
-          if (item === "All of the above") {
-            question.answerOptions.splice(idx, 1);
-            question.answerOptions.push("All of the above");
-          }
-        });
+        question.answerOptions = prepareAnswerOptions(question);
       });
       setTestQuestions(randomQuestions);
-      let blankAnswers = {};
-      randomQuestions.forEach((question, slotIndex) => {
-        blankAnswers[question.id] = {
-          title: question.title,
-          slotIndex: slotIndex + 1,
-          currentAnswer: "",
-          correctAnswer: question.correct_answer,
-        };
-      });
+
+      let blankAnswers = prepareBlankAnswers(randomQuestions);
       setCurrentAnswers(blankAnswers);
+
       if (!questionOrder) setQuestionOrder(!questionOrder);
     }
-  }, [classId, questionOrder, data]);
+  }, [classId, questionOrder, questions]);
 
   if (isLoading) return <span>Loading...</span>;
 
