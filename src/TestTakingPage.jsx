@@ -37,45 +37,47 @@ const TestTakingPage = () => {
   });
 
   useEffect(() => {
-    let randomQuestions = data?.data.sort(() => Math.random() - 0.5);
-    randomQuestions.forEach((question) => {
-      let {
-        correct_answer,
-        incorrect_answer1,
-        incorrect_answer2,
-        incorrect_answer3,
-      } = question;
-      let answers = [
-        correct_answer,
-        incorrect_answer1,
-        incorrect_answer2,
-        incorrect_answer3,
-      ];
-      question.answerOptions = answers
-        .filter((answer) => {
-          return answer ? true : false;
-        })
-        .sort(() => Math.random() - 0.5);
+    if (data) {
+      let randomQuestions = data.data.sort(() => Math.random() - 0.5);
+      randomQuestions.forEach((question) => {
+        let {
+          correct_answer,
+          incorrect_answer1,
+          incorrect_answer2,
+          incorrect_answer3,
+        } = question;
+        let answers = [
+          correct_answer,
+          incorrect_answer1,
+          incorrect_answer2,
+          incorrect_answer3,
+        ];
+        question.answerOptions = answers
+          .filter((answer) => {
+            return answer ? true : false;
+          })
+          .sort(() => Math.random() - 0.5);
 
-      question.answerOptions.forEach((item, idx) => {
-        if (item === "All of the above") {
-          question.answerOptions.splice(idx, 1);
-          question.answerOptions.push("All of the above");
-        }
+        question.answerOptions.forEach((item, idx) => {
+          if (item === "All of the above") {
+            question.answerOptions.splice(idx, 1);
+            question.answerOptions.push("All of the above");
+          }
+        });
       });
-    });
-    setTestQuestions(randomQuestions);
-    let blankAnswers = {};
-    randomQuestions.forEach((question, slotIndex) => {
-      blankAnswers[question.id] = {
-        title: question.title,
-        slotIndex: slotIndex + 1,
-        currentAnswer: "",
-        correctAnswer: question.correct_answer,
-      };
-    });
-    setCurrentAnswers(blankAnswers);
-    if (!questionOrder) setQuestionOrder(!questionOrder);
+      setTestQuestions(randomQuestions);
+      let blankAnswers = {};
+      randomQuestions.forEach((question, slotIndex) => {
+        blankAnswers[question.id] = {
+          title: question.title,
+          slotIndex: slotIndex + 1,
+          currentAnswer: "",
+          correctAnswer: question.correct_answer,
+        };
+      });
+      setCurrentAnswers(blankAnswers);
+      if (!questionOrder) setQuestionOrder(!questionOrder);
+    }
   }, [classId, questionOrder, data]);
 
   if (isLoading) return <span>Loading...</span>;
