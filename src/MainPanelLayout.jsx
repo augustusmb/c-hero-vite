@@ -31,7 +31,6 @@ const MainPanelLayout = () => {
 
   useEffect(() => {
     (async () => {
-      console.log("hi2");
       const token = await getAccessTokenSilently();
       setAuthToken(token);
     })();

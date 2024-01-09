@@ -19,8 +19,6 @@ apiClient.interceptors.request.use(
 );
 
 export function setAuthToken(token) {
-  console.log('hi3')
-  console.log('token ', token)
   if (token) {
     apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   } else {

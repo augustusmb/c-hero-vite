@@ -1,7 +1,8 @@
-import apiClient from "./apiClient";
+import axios from "axios";
+// import apiClient from "./apiClient";
 
 export const fetchUserClasses = async (userId) => {
-  const usersClasses = await apiClient.get(`api/routes/classes`, {
+  const usersClasses = await axios.get(`api/routes/classes`, {
     params: { userId },
   })
 
@@ -11,25 +12,25 @@ export const fetchUserClasses = async (userId) => {
 
 export const getUserByPhone = async (params) => {
   const phone = params.queryKey[1]
-  return await apiClient.get("api/routes/users", { params: { phone } })
+  return await axios.get("api/routes/users", { params: { phone } })
 }
 
 export const fetchAllUsers = async () => {
-  const users = await apiClient.get(`api/routes/fetch-all-users`);
+  const users = await axios.get(`api/routes/fetch-all-users`);
 
   return users;
 };
 
 export const updateUserInfo = async (updatedUserInfo) => {
-  return await apiClient.put("api/routes/users", { params: updatedUserInfo })
+  return await axios.put("api/routes/users", { params: updatedUserInfo })
 };
 
 export const updateUserInfoAndProducts = async (updatedUserInfo) => {
-  return await apiClient.put("api/routes/users-products", { params: updatedUserInfo })
+  return await axios.put("api/routes/users-products", { params: updatedUserInfo })
 };
 
 export const deleteUser = async (userId) => {  
-  return await apiClient.delete("/api/routes/users", {
+  return await axios.delete("/api/routes/users", {
     params: { userId: userId },
   });
 }
