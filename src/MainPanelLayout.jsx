@@ -5,13 +5,15 @@ import MainPanelRouter from "./MainPanelRouter.jsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import { getUserByPhone } from "./api/user.js";
 import { useQuery } from "@tanstack/react-query";
+import { setAuthToken } from "./api/apiClient.js";
 export const UserAuthContext = React.createContext();
 
 const MainPanelLayout = () => {
   const [userInfo, setUserInfo] = useState({});
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
+  const token = (async () => await getAccessTokenSilently())();
 
-  const userInfoContext = { userInfo };
+  const userInfoContext = { userInfo, token };
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["get-user-info", user?.name],
@@ -26,6 +28,14 @@ const MainPanelLayout = () => {
     },
     enabled: !!user?.name,
   });
+
+  useEffect(() => {
+    (async () => {
+      console.log("hi2");
+      const token = await getAccessTokenSilently();
+      setAuthToken(token);
+    })();
+  }, [getAccessTokenSilently]);
 
   useEffect(() => {
     if (data) {

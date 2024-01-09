@@ -9,7 +9,7 @@ import { getFullUserProductProgressMap } from "./utils/user.js";
 
 const AdminPage = () => {
   const navigate = useNavigate();
-  const { userInfo } = useContext(UserAuthContext);
+  const { userInfo, token } = useContext(UserAuthContext);
   const [userToEdit, setUserToEdit] = useState({});
   const [editMode, setEditMode] = useState(false);
 
@@ -18,7 +18,8 @@ const AdminPage = () => {
     if (userInfo?.level !== "0") {
       return navigate("/redirect");
     }
-  }, [userToEdit, userInfo, navigate]);
+    console.log("token ", token);
+  }, [userToEdit, userInfo, navigate, token]);
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["get-user-products", userToEdit.id],

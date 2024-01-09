@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
 import express from 'express';
+import jwt from 'jsonwebtoken';
 dotenv.config()
 const __dirname = path.resolve();
 
@@ -16,12 +17,31 @@ const env = loadEnv(
 
 const app = express()
 
+const checkJwt = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (authHeader) {
+    const token = authHeader.split(' ')[1];
+
+    jwt.verify(token, env.VITE_TWILIO_ACCOUNT_SID, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+};
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors({ origin: 'http://localhost:5173' }));
 const port = env.PORT || 8080
 
-app.use('/api/routes', router)
+app.use('/api/routes', checkJwt, router)
 
 if (env.VITE_NODE_ENV === "production") {
   app.use(express.static("dist"));

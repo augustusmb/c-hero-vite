@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const domain = import.meta.env.VITE_AUTH0_DOMAIN;
 const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
+const audience = import.meta.env.VITE_AUTH0_AUDIENCE;
 
 const queryClient = new QueryClient();
 
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Auth0Provider
         domain={domain}
         clientId={clientId}
+        audience={audience}
         authorizationParams={{
           redirect_uri: window.location.origin,
         }}
