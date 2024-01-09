@@ -9,8 +9,9 @@ export const fetchUserClasses = async (userId) => {
   // [{product_id: '3b_c', user_id: 24, completed: false, date_completed: null}, {}...]
 }
 
-export const getUserByPhone = async (phone) => {
-  return await axios.get("api/routes/users", { params: phone })
+export const getUserByPhone = async (params) => {
+  const phone = params.queryKey[1]
+  return await axios.get("api/routes/users", { params: { phone } })
 }
 
 export const fetchAllUsers = async () => {

@@ -39,7 +39,6 @@ const queries = {
 
 export function getUserByPhone(req, res) {
   const { phone } = req.query
-  console.log('Server Hit Here: ', phone)
   db.query(queries.getUserByPhone, { phone })
   .then(data => {
     res.status(200).json(data)
