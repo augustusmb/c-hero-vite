@@ -5,7 +5,7 @@ import { productsMap } from "./messages.js";
 import Modal from "simple-react-modal";
 import { UserAuthContext } from "./MainPanelLayout.jsx";
 import { Link, useParams } from "react-router-dom";
-import TestInfoInput from "./TestInfoInput.jsx";
+import TestInfoInput from "./textComponents/TestInfoInput.jsx";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getTestQuestions, submitCompletedTest } from "./api/test.js";
 import {

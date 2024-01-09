@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { UserAuthContext } from "./MainPanelLayout.jsx";
 import ClassCardSection from "./ClassCardSection";
-import MobileBrowserNote from "./MobileBrowserNote";
-import TermsAndConditions from "./TermsAndConditions";
+import MobileBrowserNote from "./textComponents/MobileBrowserNote.jsx";
+import TermsAndConditions from "./textComponents/TermsAndConditions.jsx";
 import UserInfoSection from "./UserInfoSection.jsx";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
