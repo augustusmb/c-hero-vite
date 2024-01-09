@@ -1,4 +1,4 @@
-import CertificateSample from "./assets/Certificate.jpg";
+import CertificateSample from "../assets/Certificate.jpg";
 
 function CertificatePage() {
   return (
