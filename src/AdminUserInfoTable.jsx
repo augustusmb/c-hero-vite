@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AgGridReact } from "ag-grid-react"; // React Grid Logic
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
-import { fetchAllUsers } from "./api/user";
+import { fetchAllUsers } from "./api/user.js";
 import { PropTypes } from "prop-types";
 
 const AdminUserInfoTable = ({ handleUserToEdit }) => {

@@ -17,32 +17,31 @@ const env = loadEnv(
 
 const app = express()
 
-// const checkJwt = (req, res, next) => {
-//   const authHeader = req.headers.authorization;
+const checkJwt = (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-//   if (authHeader) {
-//     const token = authHeader.split(' ')[1];
+  if (authHeader) {
+    const token = authHeader.split(' ')[1];
 
-//     jwt.verify(token, env.VITE_TWILIO_ACCOUNT_SID, (err, user) => {
-//       if (err) {
-//         return res.sendStatus(403);
-//       }
+    jwt.verify(token, env.VITE_AUTH0_SECRET, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
 
-//       req.user = user;
-//       next();
-//     });
-//   } else {
-//     res.sendStatus(401);
-//   }
-// };
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+};
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors({ origin: 'http://localhost:5173' }));
 const port = env.PORT || 8080
 
-// app.use('/api/routes/fetch-all-users', checkJwt, router)
-app.use('/api/routes', router)
+app.use('/api/routes', checkJwt, router)
 
 if (env.VITE_NODE_ENV === "production") {
   app.use(express.static("dist"));
