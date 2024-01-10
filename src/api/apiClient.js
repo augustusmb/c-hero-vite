@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const environment = import.meta.env.VITE_NODE_ENV
+
 const apiClient = axios.create({
-  baseURL: 'https://c-herotraining.com/', // replace with your API base URL
+  baseURL: environment === 'local' ? 'http://localhost:5173/' : 'https://c-herotraining.com/',
 });
 
 apiClient.interceptors.request.use(

@@ -4,7 +4,9 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
 import express from 'express';
-// import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import jwksClient from 'jwks-rsa';
+
 dotenv.config()
 const __dirname = path.resolve();
 
@@ -17,15 +19,27 @@ const env = loadEnv(
 
 const app = express()
 
+const client = jwksClient({
+  jwksUri: `https://${env.VITE_AUTH0_DOMAIN}/.well-known/jwks.json`
+});
+
+function getKey(header, callback){
+  client.getSigningKey(header.kid, function(err, key) {
+    var signingKey = key.publicKey || key.rsaPublicKey;
+    callback(null, signingKey);
+  });
+}
+
 const checkJwt = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (authHeader) {
     const token = authHeader.split(' ')[1];
 
-    jwt.verify(token, env.VITE_AUTH0_SECRET, (err, user) => {
+    jwt.verify(token, getKey, { algorithms: ['RS256'] }, (err, user) => {
       if (err) {
-        return res.sendStatus(403);
+        console.log('err: ', err)
+        return res.status(403).send(err.message);
       }
 
       req.user = user;
@@ -38,7 +52,9 @@ const checkJwt = (req, res, next) => {
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors({ origin: 'http://localhost:5173' }));
+
+const corsOrigin = env.VITE_NODE_ENV === 'local' ? 'http://localhost:5173/' : 'https://c-herotraining.com/'
+app.use(cors({ origin: corsOrigin }));
 const port = env.PORT || 8080
 
 app.use('/api/routes', checkJwt, router)
