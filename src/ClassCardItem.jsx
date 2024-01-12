@@ -15,8 +15,8 @@ const ClassCardItem = (props) => {
     <div
       className={`${
         item.completed
-          ? "mb-1 w-full rounded-sm bg-slate-400 text-sm text-slate-800 line-through lg:w-4/5 lg:text-lg"
-          : "text-slate-950 mb-1 w-full rounded-sm bg-slate-100 text-sm hover:bg-slate-500 hover:text-slate-050 lg:w-4/5 lg:text-lg"
+          ? "mb-1 w-full rounded-sm bg-slate-400 text-sm text-slate-800 line-through lg:text-lg"
+          : "text-slate-950 mb-1 w-full rounded-sm bg-slate-100 text-sm drop-shadow-2xl hover:bg-slate-500 hover:text-slate-050 lg:text-lg	"
       }`}
     >
       <Link to={`/class/${item.product_id}`} htmlFor={item.product_id}>

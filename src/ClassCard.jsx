@@ -5,11 +5,11 @@ const ClassCard = (props) => {
   const { product } = props;
 
   return (
-    <div className="border-solid border-2 border-slate-800 rounded-md bg-slate-200">
-      <h4 className="underline w-100 bg-slate-500 text-slate-050 text-xs lg:text-lg font-semibold mb-2 py-1">
+    <div className="rounded-md border-2 border-solid border-slate-800 bg-slate-200">
+      <h4 className="w-100 mb-2 bg-slate-500 py-1 text-xs font-semibold text-slate-050 underline lg:text-lg">
         {product?.productName}
       </h4>
-      <div className="flex flex-col items-start px-2 lg:ml-10 mb-1">
+      <div className="mb-1 flex flex-col items-start px-2">
         {Object.values(product.classProgress).map((item) => (
           <ClassCardItem key={item.product_id} item={item} />
         ))}
