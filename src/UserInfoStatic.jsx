@@ -1,28 +1,44 @@
 import { PropTypes } from "prop-types";
-import { labels } from "./messages";
+import parsePhoneNumber from "libphonenumber-js";
 
 const UserInfoStatic = ({ userInfo: user }) => {
   const infoMissing = (
     <span className="italic text-slate-400">info missing</span>
   );
 
+  if (Object.keys(user).length === 0) {
+    return (
+      <p className="text-2xl text-slate-400 italic">Please select a user</p>
+    );
+  }
+
+  let phoneNumber = null;
+
+  if (Object.keys(user).length)
+    phoneNumber = parsePhoneNumber(user.phone, "US");
+
   return (
     <div className="grid grid-cols-4">
-      <div className="flex flex-col items-start">
-        {labels.map((label) => (
-          <label htmlFor={label} key={label}>
-            {label[0].toUpperCase() + label.slice(1)}:
-          </label>
-        ))}
+      <div className="flex col-span-2 items-start flex-col">
+        <p className="text-3xl text-slate-950">{user.name || infoMissing}</p>
+        <p className="text-lg text-slate-600 italic indent-2">
+          {user.email || infoMissing}
+        </p>
+        <p className="text-lg text-slate-600 italic indent-2">
+          {phoneNumber?.formatNational() || infoMissing}
+        </p>
       </div>
-      <div className="flex flex-col items-start col-span-3">
-        <p>{user.name || infoMissing}</p>
-        <p>{user.email || infoMissing}</p>
-        <p>{user.phone || infoMissing}</p>
-        <p>{user.title || infoMissing}</p>
-        <p>{user.company || infoMissing}</p>
-        <p>{user.vessel || infoMissing}</p>
-        <p>{user.port || infoMissing}</p>
+      <div className="flex col-span-2 items-start flex-col">
+        <p className="text-2xl text-slate-800">{user.title || infoMissing}</p>
+        <p className="text-md text-slate-600 italic indent-2">
+          {user.company || infoMissing}
+        </p>
+        <p className="text-md text-slate-600 italic indent-2">
+          {user.vessel || infoMissing}
+        </p>
+        <p className="text-md text-slate-600 italic indent-2">
+          {user.port || infoMissing}
+        </p>
       </div>
     </div>
   );

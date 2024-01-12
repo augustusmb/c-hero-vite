@@ -18,8 +18,10 @@ const ClassCardSection = () => {
 
   return (
     <div>
-      <h4>Assigned Classes Below:</h4>
-      <div className="grid grid-cols-2 lg:grid-cols-4">
+      <h4 className="text-xl font-semibold underline">
+        Assigned Classes Below:
+      </h4>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
         {Object.values(data)
           .filter((item) => item.assigned)
           .map((product) => (

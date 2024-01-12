@@ -7,7 +7,7 @@ const LogoutButton = () => {
 
   return (
     <button
-      className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-2 border-b-2 border-orange-700 hover:border-orange-500 rounded"
+      className="bg-orange-300 hover:bg-orange-500 hover:text-slate-050 text-slate-950 font-bold py-2 px-2 w-28 rounded"
       onClick={() =>
         logout({
           clientId: clientId,

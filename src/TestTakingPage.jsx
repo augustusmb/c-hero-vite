@@ -94,10 +94,14 @@ const TestTakingPage = () => {
     submitTestMutation.mutate(completedTestData);
     setShowModal(true);
     questionsMissed.length === 0
-      ? setModalData(<div>You scored 100% and passed the test!</div>)
+      ? setModalData(
+          <div className="text-xl font-medium">
+            You scored 100% and passed the test!
+          </div>,
+        )
       : setModalData(
           <div>
-            <h2>
+            <h2 className="text-xl font-medium">
               You did not pass the test, you missed the following questions:
             </h2>
             {questionsMissed.map((question, i) => {
@@ -202,7 +206,7 @@ const TestTakingPage = () => {
         </div>
         <div>
           <input
-            className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 border-b-4 border-orange-700 hover:border-orange-500 rounded"
+            className="bg-orange-300 hover:bg-orange-500 hover:text-slate-050 text-xl text-slate-950 font-bold py-2 px-2 rounded"
             type="submit"
           ></input>
         </div>
@@ -212,12 +216,14 @@ const TestTakingPage = () => {
         <div>
           {testPassed ? (
             <Link to={"/"}>
-              <button>Return home to view other tests</button>
+              <button className="bg-orange-300 hover:bg-orange-500 hover:text-slate-050 text-md text-slate-950 font-bold py-2 px-2 rounded">
+                Return to home page
+              </button>
             </Link>
           ) : (
             <Link to={`/class/${classId}`}>
-              <button className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 border-b-4 border-orange-700 hover:border-orange-500 rounded">
-                Return to class and take the test again
+              <button className="bg-orange-300 hover:bg-orange-500 hover:text-slate-050 text-lg text-slate-950 font-bold py-2 px-2 rounded">
+                Return to class material
               </button>
             </Link>
           )}

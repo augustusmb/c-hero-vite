@@ -7,7 +7,7 @@ const UserProductsStatic = (props) => {
       {Object.values(userProductData).map((product) => {
         return (
           <div key={product.productId}>
-            <label>
+            <label className="text-lg text-slate-700 italic">
               <input
                 type="checkbox"
                 name={product.productId}

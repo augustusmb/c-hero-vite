@@ -18,7 +18,6 @@ const AdminPage = () => {
     if (userInfo?.level !== "0") {
       return navigate("/redirect");
     }
-    console.log("token ", token);
   }, [userToEdit, userInfo, navigate, token]);
 
   const { isLoading, isError, data, error } = useQuery({
@@ -45,7 +44,7 @@ const AdminPage = () => {
 
   return (
     <div className="grid grid-cols-3">
-      <div className="col-span-3">
+      <div className="col-span-3 mb-10">
         {!editMode ? (
           <AdminEditUserStatic
             userInfo={userToEdit}

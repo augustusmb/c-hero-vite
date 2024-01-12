@@ -49,6 +49,11 @@ const AdminEditUserForm = ({
     navigate("/admin");
   };
 
+  const handleCancelClick = () => {
+    toggleConfirmDelete();
+    toggleEditMode(!editMode);
+  };
+
   const onSubmit = (data) => {
     // compare newly assinged products to already assigned products
     const newlyAddedProducts = {};
@@ -81,10 +86,10 @@ const AdminEditUserForm = ({
 
   return (
     <div>
-      <div className="grid grid-cols-6">
-        <div className="col-span-5">
-          <form className="grid grid-cols-5" onSubmit={handleSubmit(onSubmit)}>
-            <div className="col-span-3">
+      <div className="grid grid-cols-3">
+        <div className="col-span-3">
+          <form className="grid grid-cols-3" onSubmit={handleSubmit(onSubmit)}>
+            <div className="col-span-2">
               <h3 className="font-bold underline">Account Info</h3>
               <div className="grid grid-cols-4">
                 <div className="flex flex-col items-start">
@@ -106,13 +111,13 @@ const AdminEditUserForm = ({
                 </div>
               </div>
             </div>
-            <div className="col-span-2">
+            <div className="col-span-1">
               <h3 className="font-bold underline">Account Assigned Products</h3>
               <div className="col-span-3 flex flex-col items-start">
                 {Object.values(userProductData).map((product) => {
                   return (
                     <div key={product.productId}>
-                      <label>
+                      <label className="text-lg text-slate-700 italic">
                         <input
                           type="checkbox"
                           name={product.productId}
@@ -126,39 +131,38 @@ const AdminEditUserForm = ({
                 })}
               </div>
             </div>
-            <div className="col-span-3 flex justify-end">
+            <div className="col-span-2 flex justify-center gap-1">
+              <p
+                className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 w-36 border border-blue-500 hover:border-transparent rounded"
+                onClick={() => toggleEditMode(!editMode)}
+              >
+                Cancel
+              </p>
               <input
-                className="bg-blue-700 hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                className="bg-slate-700 hover:bg-slate-600 text-slate-050 font-semibold hover:text-slate-100 py-1 px-3 border border-slate-500 hover:border-transparent w-36 rounded"
                 type="submit"
                 value="Save Changes"
               />
+              <div>
+                {confirmDelete ? (
+                  <p
+                    className="bg-orange-100 hover:bg-orange-200 text-slate-950 font-semibold hover:text-orange-950 py-1 px-3 w-36 rounded"
+                    onClick={() => handleDeleteUser()}
+                  >
+                    Confirm Delete
+                  </p>
+                ) : (
+                  <p
+                    className="bg-slate-050 hover:bg-orange-100 text-orange-800 font-semibold border border-slate-400 hover:border-slate-950 hover:text-orange-950 py-1 px-3 w-36 rounded"
+                    onClick={() => toggleConfirmDelete()}
+                  >
+                    Delete User
+                  </p>
+                )}
+              </div>
             </div>
+            <div></div>
           </form>
-        </div>
-        <div className="col-span-1">
-          <h3 className="font-bold underline">Click to Edit User</h3>
-          <button
-            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-            onClick={() => toggleEditMode(!editMode)}
-          >
-            Cancel
-          </button>
-          <div>
-            <button
-              className="bg-red-500 hover:bg-red-300 text-white font-semibold hover:text-white py-2 px-4 border border-slate-800 hover:border-transparent rounded"
-              onClick={() => toggleConfirmDelete()}
-            >
-              Delete User
-            </button>
-            {confirmDelete && (
-              <button
-                className="bg-black hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-4 border border-red-700 hover:border-transparent rounded"
-                onClick={() => handleDeleteUser()}
-              >
-                Confirm Delete User
-              </button>
-            )}
-          </div>
         </div>
       </div>
     </div>

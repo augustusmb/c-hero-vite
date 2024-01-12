@@ -51,7 +51,7 @@ const EditUserInfoSection = ({
             </label>
           ))}
           <button
-            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            className="bg-transparent hover:bg-blue-500 text-blue-700 self-end mx-1 font-semibold hover:text-white py-1 px-3 w-24 border border-blue-500 hover:border-transparent rounded"
             onClick={() => triggerEditMode()}
           >
             Cancel
@@ -67,7 +67,7 @@ const EditUserInfoSection = ({
             />
           ))}
           <input
-            className="bg-blue-700 hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            className="bg-slate-700 hover:bg-slate-600 text-slate-050 font-semibold hover:text-slate-100 py-1 px-3 w-24 border border-slate-500 hover:border-transparent rounded"
             type="submit"
             value="Save"
           />

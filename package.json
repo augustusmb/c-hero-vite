@@ -26,6 +26,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.1.0",
+    "libphonenumber-js": "^1.10.53",
     "p-limit": "^5.0.0",
     "path": "^0.12.7",
     "pg-promise": "^11.5.4",

@@ -25,7 +25,7 @@ const UserInfoSection = ({ userInfo }) => {
   return (
     <div className="col-span-1">
       <div>
-        <h3 className="font-bold underline">Account Info</h3>
+        <h3 className="text-xl font-semibold underline">Account Info</h3>
         <div>
           {!editMode ? (
             <>
@@ -36,7 +36,7 @@ const UserInfoSection = ({ userInfo }) => {
               />
               <div className="flex">
                 <button
-                  className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                  className="bg-slate-050 hover:bg-slate-600 text-slate-950 font-semibold hover:text-slate-050 py-1 px-3 border border-slate-500 hover:border-transparent rounded"
                   onClick={() => triggerEditMode()}
                 >
                   Edit
