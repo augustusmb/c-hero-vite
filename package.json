@@ -9,6 +9,7 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "prettier": {"plugins": ["prettier-plugin-tailwindcss"]},
   "dependencies": {
     "@auth0/auth0-react": "^2.2.3",
     "@headlessui/react": "^1.7.17",

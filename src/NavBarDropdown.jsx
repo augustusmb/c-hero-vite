@@ -14,7 +14,7 @@ export default function NavbarDropDown() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex w-full w-28 justify-center gap-x-1.5 rounded-md bg-indigo-700 px-3 py-2 text-md font-semibold text-slate-050 hover:bg-indigo-600">
+        <Menu.Button className="inline-flex w-18 lg:w-28 justify-center gap-x-1.5 rounded-md bg-indigo-700 px-3 py-2 text-sm lg:text-lg font-semibold text-slate-050 hover:bg-indigo-600">
           More
           <ChevronDownIcon
             className="-mr-1 h-5 w-5 text-slate-050"

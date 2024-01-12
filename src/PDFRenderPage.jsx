@@ -140,7 +140,7 @@ const PDFRenderPage = () => {
         <div className="m-10">
           <Link
             to={`/test/${classId}`}
-            className="bg-orange-300 hover:bg-orange-500 hover:text-slate-050 text-2xl text-slate-950 font-bold py-2 px-2 rounded"
+            className="bg-orange-300 hover:bg-orange-500 hover:text-slate-050 text-lg lg:text-2xl text-slate-950 font-bold py-2 px-2 rounded"
           >
             Take the test
           </Link>

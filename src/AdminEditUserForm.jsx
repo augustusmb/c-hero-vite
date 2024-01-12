@@ -45,17 +45,11 @@ const AdminEditUserForm = ({
     alert(`${user.name} has been deleted from the database.`);
     deleteUserMutation.mutate(user.id);
     handleUserToEdit({});
-    // toggleEditMode(!editMode);
     navigate("/admin");
   };
 
-  const handleCancelClick = () => {
-    toggleConfirmDelete();
-    toggleEditMode(!editMode);
-  };
-
   const onSubmit = (data) => {
-    // compare newly assinged products to already assigned products
+    // compare newly assigned products to already assigned products
     const newlyAddedProducts = {};
     const newlyRemovedProducts = {};
     for (const key in userProductData) {
@@ -88,9 +82,14 @@ const AdminEditUserForm = ({
     <div>
       <div className="grid grid-cols-3">
         <div className="col-span-3">
-          <form className="grid grid-cols-3" onSubmit={handleSubmit(onSubmit)}>
-            <div className="col-span-2">
-              <h3 className="font-bold underline">Account Info</h3>
+          <form
+            className="grid grid-cols-1 lg:grid-cols-3"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className="col-span-2 mb-6 flex flex-col">
+              <h3 className="self-start text-lg font-bold underline lg:text-xl">
+                Account Info
+              </h3>
               <div className="grid grid-cols-4">
                 <div className="flex flex-col items-start">
                   {labels.map((label) => (
@@ -99,7 +98,7 @@ const AdminEditUserForm = ({
                     </label>
                   ))}
                 </div>
-                <div className="flex flex-col items-start col-span-3">
+                <div className="col-span-3 flex flex-col items-start">
                   {labels.map((label) => (
                     <input
                       key={label}
@@ -111,13 +110,15 @@ const AdminEditUserForm = ({
                 </div>
               </div>
             </div>
-            <div className="col-span-1">
-              <h3 className="font-bold underline">Account Assigned Products</h3>
+            <div className="col-span-1 flex flex-col">
+              <h3 className="self-start text-lg font-bold underline lg:text-xl">
+                Account Assigned Products
+              </h3>
               <div className="col-span-3 flex flex-col items-start">
                 {Object.values(userProductData).map((product) => {
                   return (
                     <div key={product.productId}>
-                      <label className="text-lg text-slate-700 italic">
+                      <label className="text-md italic text-slate-700 lg:text-lg">
                         <input
                           type="checkbox"
                           name={product.productId}
@@ -131,29 +132,29 @@ const AdminEditUserForm = ({
                 })}
               </div>
             </div>
-            <div className="col-span-2 flex justify-center gap-1">
+            <div className="col-span-2 mt-4 flex justify-center gap-1">
               <p
-                className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 w-36 border border-blue-500 hover:border-transparent rounded"
+                className="hover:bg-blue-500 text-blue-700 hover:text-white border-blue-500 w-36 rounded border bg-transparent px-3 py-1 font-semibold hover:border-transparent"
                 onClick={() => toggleEditMode(!editMode)}
               >
                 Cancel
               </p>
               <input
-                className="bg-slate-700 hover:bg-slate-600 text-slate-050 font-semibold hover:text-slate-100 py-1 px-3 border border-slate-500 hover:border-transparent w-36 rounded"
+                className="w-36 rounded border border-slate-500 bg-slate-700 px-3 py-1 font-semibold text-slate-050 hover:border-transparent hover:bg-slate-600 hover:text-slate-100"
                 type="submit"
                 value="Save Changes"
               />
               <div>
                 {confirmDelete ? (
                   <p
-                    className="bg-orange-100 hover:bg-orange-200 text-slate-950 font-semibold hover:text-orange-950 py-1 px-3 w-36 rounded"
+                    className="text-slate-950 hover:text-orange-950 w-36 rounded bg-orange-100 px-3 py-1 font-semibold hover:bg-orange-200"
                     onClick={() => handleDeleteUser()}
                   >
                     Confirm Delete
                   </p>
                 ) : (
                   <p
-                    className="bg-slate-050 hover:bg-orange-100 text-orange-800 font-semibold border border-slate-400 hover:border-slate-950 hover:text-orange-950 py-1 px-3 w-36 rounded"
+                    className="hover:border-slate-950 hover:text-orange-950 w-36 rounded border border-slate-400 bg-slate-050 px-3 py-1 font-semibold text-orange-800 hover:bg-orange-100"
                     onClick={() => toggleConfirmDelete()}
                   >
                     Delete User

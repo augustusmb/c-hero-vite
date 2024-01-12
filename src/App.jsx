@@ -3,7 +3,7 @@ import MainPanelLayout from "./MainPanelLayout";
 
 function App() {
   return (
-    <div className="bg-slate-050 h-screen">
+    <div className="bg-slate-050 h-full">
       <MainPanelLayout />
     </div>
   );

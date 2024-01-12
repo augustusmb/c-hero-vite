@@ -8,7 +8,9 @@ const UserInfoStatic = ({ userInfo: user }) => {
 
   if (Object.keys(user).length === 0) {
     return (
-      <p className="text-2xl text-slate-400 italic">Please select a user</p>
+      <p className="px-12 text-2xl italic text-slate-400">
+        Please select a user to begin editing
+      </p>
     );
   }
 
@@ -18,25 +20,29 @@ const UserInfoStatic = ({ userInfo: user }) => {
     phoneNumber = parsePhoneNumber(user.phone, "US");
 
   return (
-    <div className="grid grid-cols-4">
-      <div className="flex col-span-2 items-start flex-col">
-        <p className="text-3xl text-slate-950">{user.name || infoMissing}</p>
-        <p className="text-lg text-slate-600 italic indent-2">
+    <div className="grid h-40 grid-cols-2">
+      <div className="col-span-1 flex flex-col items-start">
+        <p className="text:lg text-slate-950 lg:text-3xl">
+          {user.name || infoMissing}
+        </p>
+        <p className="text-sm italic text-slate-600 lg:indent-2 lg:text-lg">
           {user.email || infoMissing}
         </p>
-        <p className="text-lg text-slate-600 italic indent-2">
+        <p className="text-sm italic text-slate-600 lg:indent-2 lg:text-lg">
           {phoneNumber?.formatNational() || infoMissing}
         </p>
       </div>
-      <div className="flex col-span-2 items-start flex-col">
-        <p className="text-2xl text-slate-800">{user.title || infoMissing}</p>
-        <p className="text-md text-slate-600 italic indent-2">
+      <div className="col-span-1 flex flex-col items-start">
+        <p className="text-md text-slate-800 lg:text-2xl">
+          {user.title || infoMissing}
+        </p>
+        <p className="text-sm italic text-slate-600 lg:indent-2 lg:text-lg">
           {user.company || infoMissing}
         </p>
-        <p className="text-md text-slate-600 italic indent-2">
+        <p className="text-sm italic text-slate-600 lg:indent-2 lg:text-lg">
           {user.vessel || infoMissing}
         </p>
-        <p className="text-md text-slate-600 italic indent-2">
+        <p className="text-sm italic text-slate-600 lg:lg:indent-2 lg:text-lg">
           {user.port || infoMissing}
         </p>
       </div>

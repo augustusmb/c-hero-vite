@@ -20,18 +20,18 @@ const HomePage = () => {
 
   return (
     <div>
-      <div className="mb-16 mt-6">
+      <div className="mb-16 mt-2 lg:mt-4">
         <UserInfoSection userInfo={userInfo} />
       </div>
       {!userInfo?.terms_accepted && (
-        <div className="flex justify-center mb-16">
+        <div className="mb-16 flex justify-center">
           <TermsAndConditions
             acceptTermsMutation={acceptTermsMutation}
             userId={userInfo.id}
           />
         </div>
       )}
-      <div className="flex justify-start mb-16">
+      <div className="mb-16 flex justify-start">
         <MobileBrowserNote />
       </div>
       {userInfo?.terms_accepted && <ClassCardSection />}

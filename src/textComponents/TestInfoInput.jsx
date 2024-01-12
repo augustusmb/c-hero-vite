@@ -1,9 +1,9 @@
 const TestInfoInput = () => {
   return (
-    <div className="flex flex-col items-start mb-10">
+    <ul className="flex flex-col mb-10 list-disc list-inside items-start">
       <li>The test is open book</li>
       <li>All test questions must be answered correctly to pass the test</li>
-    </div>
+    </ul>
   );
 };
 

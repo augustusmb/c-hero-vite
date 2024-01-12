@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from "react";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import { productsMap } from "./messages.js";
 import Modal from "simple-react-modal";
@@ -107,7 +106,7 @@ const TestTakingPage = () => {
             {questionsMissed.map((question, i) => {
               return (
                 <div key={i}>
-                  <p className="text-base bg-slate-300">{`${question[0].slotIndex}. ${question[0].title}`}</p>
+                  <p className="bg-slate-300 text-base">{`${question[0].slotIndex}. ${question[0].title}`}</p>
                   <p className="text-blue-500">{`Correct Answer: ${question[0].correctAnswer}`}</p>
                   <p>{`Your Answer: ${question[0].currentAnswer}`}</p>
                 </div>
@@ -128,7 +127,7 @@ const TestTakingPage = () => {
   function getBody(question) {
     let { answerOptions } = question;
     return question.true_or_false === "TRUE" ? (
-      <div>
+      <div className="flex flex-col items-start gap-1 indent-10">
         <div>
           <label>
             <input
@@ -136,7 +135,7 @@ const TestTakingPage = () => {
               name={question.id}
               value="true"
               onClick={handleClick}
-            />
+            />{" "}
             True
           </label>
         </div>
@@ -147,14 +146,14 @@ const TestTakingPage = () => {
               name={question.id}
               value="false"
               onClick={handleClick}
-            />
+            />{" "}
             False
           </label>
         </div>
         <br></br>
       </div>
     ) : (
-      <div className="answerBody">
+      <div className="flex flex-col items-start gap-1 indent-10">
         {answerOptions.map((option, i) => (
           <div key={i}>
             <label>
@@ -163,7 +162,7 @@ const TestTakingPage = () => {
                 name={question.id}
                 value={option}
                 onClick={handleClick}
-              ></input>
+              ></input>{" "}
               {option}
             </label>
           </div>
@@ -178,18 +177,18 @@ const TestTakingPage = () => {
   };
 
   return (
-    <div>
+    <div className="pb-10">
       <div className="m-8 text-xl underline">
         <div>{`${testInfo.productName}`}</div>
         <div>{`${classTypes[testType]} - TEST`}</div>
       </div>
       <TestInfoInput />
       <form onSubmit={handleSubmit(submitForm)}>
-        <div>
+        <div className="flex flex-col items-start">
           {testQuestions.map((question, idx) => {
             return (
               <div key={idx}>
-                <div>
+                <div className="mb-1 mt-2">
                   <p>
                     {`${idx + 1}. ${question.title} `}
                     <span className="underline">
@@ -206,7 +205,7 @@ const TestTakingPage = () => {
         </div>
         <div>
           <input
-            className="bg-orange-300 hover:bg-orange-500 hover:text-slate-050 text-xl text-slate-950 font-bold py-2 px-2 rounded"
+            className="text-slate-950 rounded bg-orange-300 px-2 py-2 text-lg font-bold hover:bg-orange-500 hover:text-slate-050 lg:text-2xl"
             type="submit"
           ></input>
         </div>
@@ -216,13 +215,13 @@ const TestTakingPage = () => {
         <div>
           {testPassed ? (
             <Link to={"/"}>
-              <button className="bg-orange-300 hover:bg-orange-500 hover:text-slate-050 text-md text-slate-950 font-bold py-2 px-2 rounded">
+              <button className="text-md text-slate-950 rounded bg-orange-300 px-2 py-2 font-bold hover:bg-orange-500 hover:text-slate-050">
                 Return to home page
               </button>
             </Link>
           ) : (
             <Link to={`/class/${classId}`}>
-              <button className="bg-orange-300 hover:bg-orange-500 hover:text-slate-050 text-lg text-slate-950 font-bold py-2 px-2 rounded">
+              <button className="text-slate-950 rounded bg-orange-300 px-2 py-2 text-lg font-bold hover:bg-orange-500 hover:text-slate-050">
                 Return to class material
               </button>
             </Link>

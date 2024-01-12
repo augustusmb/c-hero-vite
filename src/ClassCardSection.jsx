@@ -17,7 +17,7 @@ const ClassCardSection = () => {
   if (isError) return <span>Error: {error.message}</span>;
 
   return (
-    <div>
+    <div className="pb-10">
       <h4 className="text-xl font-semibold underline">
         Assigned Classes Below:
       </h4>
