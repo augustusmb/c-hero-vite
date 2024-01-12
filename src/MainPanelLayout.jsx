@@ -8,25 +8,18 @@ export const UserAuthContext = React.createContext();
 
 const MainPanelLayout = () => {
   const [userInfo, setUserInfo] = useState({});
-  const { user, getAccessTokenSilently } = useAuth0();
-  const [userFetched, setUserFetched] = useState(false);
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
-  const token = (async () => await getAccessTokenSilently())();
-
-  const userInfoContext = { userInfo, token, setUserInfo, userFetched };
+  const userInfoContext = { userInfo, setUserInfo };
 
   useEffect(() => {
-    (async () => {
-      const token = await getAccessTokenSilently();
-      setAuthToken(token);
-      setUserFetched(true);
-    })();
-  }, [getAccessTokenSilently]);
-
-  // useEffect(() => {
-  //   if (user) {
-  //   }
-  // }, [user]);
+    if (isAuthenticated) {
+      (async () => {
+        const token = await getAccessTokenSilently();
+        setAuthToken(token);
+      })();
+    }
+  }, [getAccessTokenSilently, isAuthenticated]);
 
   return (
     <Router>
@@ -35,7 +28,7 @@ const MainPanelLayout = () => {
           <HeaderNavigation />
         </div>
         <div>
-          {user?.name ? (
+          {isAuthenticated ? (
             <MainPanelRouter />
           ) : (
             <div>Please Login to continue</div>

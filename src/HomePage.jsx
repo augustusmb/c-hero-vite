@@ -11,22 +11,15 @@ import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 
 const HomePage = () => {
-  const { userInfo, setUserInfo, userFetched } = useContext(UserAuthContext);
-  const { user } = useAuth0();
+  const { userInfo, setUserInfo } = useContext(UserAuthContext);
+  const { user, isAuthenticated } = useAuth0();
   console.log("🚀 ~ HomePage ~ user:", user);
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["get-user-info", user?.name],
     queryFn: getUserByPhone,
-    onSettled: (data, error) => {
-      if (error) {
-        console.error("Error: ", error);
-      } else {
-        console.log("Data: ", data);
-        setUserInfo(data.data[0]);
-      }
-    },
-    enabled: userFetched,
+
+    enabled: isAuthenticated,
   });
 
   useEffect(() => {
