@@ -38,6 +38,8 @@ const queries = {
 };
 
 export function getUserByPhone(req, res) {
+  console.log('User Info Request here, params: ', req.query)
+
   const { phone } = req.query
   db.query(queries.getUserByPhone, { phone })
   .then(data => {
