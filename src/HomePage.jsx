@@ -1,14 +1,39 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserAuthContext } from "./MainPanelLayout.jsx";
 import ClassCardSection from "./ClassCardSection";
 import MobileBrowserNote from "./textComponents/MobileBrowserNote.jsx";
 import TermsAndConditions from "./textComponents/TermsAndConditions.jsx";
 import UserInfoSection from "./UserInfoSection.jsx";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { getUserByPhone } from "./api/user.js";
+import { useAuth0 } from "@auth0/auth0-react";
+
 import axios from "axios";
 
 const HomePage = () => {
-  const { userInfo } = useContext(UserAuthContext);
+  const { userInfo, setUserInfo, userFetched } = useContext(UserAuthContext);
+  const { user } = useAuth0();
+  console.log("🚀 ~ HomePage ~ user:", user);
+
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["get-user-info", user?.name],
+    queryFn: getUserByPhone,
+    onSettled: (data, error) => {
+      if (error) {
+        console.error("Error: ", error);
+      } else {
+        console.log("Data: ", data);
+        setUserInfo(data.data[0]);
+      }
+    },
+    enabled: userFetched,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setUserInfo(data.data[0]);
+    }
+  }, [data, setUserInfo]);
 
   const acceptTermsMutation = useMutation({
     mutationFn: (userId) => {
@@ -17,6 +42,9 @@ const HomePage = () => {
       });
     },
   });
+
+  if (isLoading) return <span>Loading...</span>;
+  if (isError) return <span>Error: {error.message}</span>;
 
   return (
     <div>
