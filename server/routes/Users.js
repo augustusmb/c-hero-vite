@@ -37,15 +37,18 @@ const queries = {
   deleteUserSpecificClasses: sql('deleteUserSpecificClasses.sql')
 };
 
-export function getUserByPhone(req, res) {
+export async function getUserByPhone(req, res) {
   console.log('User Info Request here, params: ', req.query)
 
   const { phone } = req.query
-  db.query(queries.getUserByPhone, { phone })
-  .then(data => {
-    res.status(200).json(data)
-  })
-  .catch(err => console.log('Error requesting account info: ', err))
+  const result = await db.query(queries.getUserByPhone, { phone })
+  res.status(200).json(result);
+
+  // db.query(queries.getUserByPhone, { phone })
+  // .then(data => {
+  //   res.status(200).json(data)
+  // })
+  // .catch(err => console.log('Error requesting account info: ', err))
 }
 
 export async function fetchAllUsers(req, res) {
