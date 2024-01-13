@@ -7,7 +7,7 @@ import HomePage from "./HomePage.jsx";
 
 const MainPanelRouter = () => {
   return (
-    <div className="p-1 lg:p-4">
+    <div className="p-1 lg:m-8">
       <Routes>
         <Route path="/certification" element={<CertificatePage />} />
         <Route path="/admin" element={<AdminPage />} />
