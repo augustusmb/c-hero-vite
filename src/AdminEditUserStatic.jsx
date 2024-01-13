@@ -10,7 +10,7 @@ const AdminEditUserStatic = ({
 }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3">
-      <div className="col-span-2 mb-6 flex flex-col">
+      <div className="col-span-2 flex flex-col">
         <h3 className="mb-3 self-start text-lg font-bold underline lg:text-xl">
           Account Info
         </h3>
@@ -22,7 +22,7 @@ const AdminEditUserStatic = ({
         </h3>
         <UserProductsStatic userProductData={data} />
       </div>
-      <div className="col-span-2 mt-4 flex items-start">
+      <div className="col-span-2 mt-3 flex items-start lg:mt-0">
         <button
           className="text-slate-950 w-24 rounded border border-slate-500 bg-slate-050 px-3 py-1 font-semibold hover:border-transparent hover:bg-slate-600 hover:text-slate-050 lg:w-36 lg:self-center"
           onClick={() => toggleEditMode(!editMode)}

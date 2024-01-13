@@ -43,19 +43,13 @@ const EditUserInfoSection = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-16 grid h-52 grid-cols-4">
+      <div className="grid h-60 grid-cols-4">
         <div className="flex flex-col items-start">
           {labels.map((label) => (
             <label htmlFor={label} key={label} className="text-lg">
               {label[0].toUpperCase() + label.slice(1)}:
             </label>
           ))}
-          <button
-            className="hover:bg-blue-500 text-blue-700 hover:text-white border-blue-500 ml-1 mt-3 w-24 self-end rounded border bg-transparent py-1 font-semibold hover:border-transparent"
-            onClick={() => triggerEditMode()}
-          >
-            Cancel
-          </button>
         </div>
         <div className="col-span-3 flex flex-col items-start">
           {labels.map((label) => (
@@ -66,17 +60,24 @@ const EditUserInfoSection = ({
               className="w-4/5 text-lg"
             />
           ))}
-          <div className="grid grid-cols-3">
-            <input
-              className="ml-1 mt-3 w-24 rounded border border-slate-500 bg-slate-700 px-3 py-1 font-semibold text-slate-050 hover:border-transparent hover:bg-slate-600 hover:text-slate-100"
-              type="submit"
-              value="Save"
-            />
-            <p className="col-span-2 ml-4 mt-3 text-xs italic">
-              Only change what is needed, rest of the values will remain.
-            </p>
-          </div>
         </div>
+      </div>
+      <div className="col-span-4 mb-8 flex items-start">
+        <button
+          className="hover:bg-blue-500 text-blue-700 hover:text-white border-blue-500 h-9 w-24 rounded border bg-transparent font-semibold hover:border-transparent"
+          onClick={() => triggerEditMode()}
+        >
+          Cancel
+        </button>
+        <input
+          className="ml-1 h-9 w-24 rounded border border-slate-500 bg-slate-700 font-semibold text-slate-050 hover:border-transparent hover:bg-slate-600 hover:text-slate-100"
+          type="submit"
+          value="Save"
+        />
+        <p className="lg:text-md col-span-2 ml-4 text-left text-xs italic lg:pr-8">
+          Only change what is needed
+          <p>Rest of the values will remain.</p>
+        </p>
       </div>
     </form>
   );

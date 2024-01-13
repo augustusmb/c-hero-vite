@@ -86,11 +86,11 @@ const AdminEditUserForm = ({
             className="grid grid-cols-1 lg:grid-cols-3"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <div className="col-span-2 mb-6 flex flex-col">
+            <div className="col-span-2 flex flex-col">
               <h3 className="mb-3 self-start text-lg font-bold underline lg:text-xl">
                 Account Info
               </h3>
-              <div className="grid h-52 grid-cols-4">
+              <div className="grid h-60 grid-cols-4">
                 <div className="flex flex-col items-start">
                   {labels.map((label) => (
                     <label htmlFor={label} key={label} className="text-lg">
@@ -133,7 +133,7 @@ const AdminEditUserForm = ({
                 })}
               </div>
             </div>
-            <div className="col-span-2 mt-4 flex items-start gap-1">
+            <div className="col-span-2 mt-3 flex items-start gap-1 lg:mt-0">
               <p
                 className="hover:bg-blue-500 text-blue-700 hover:text-white border-blue-500 w-36 rounded border bg-transparent px-3 py-1 font-semibold hover:border-transparent"
                 onClick={() => toggleEditMode(!editMode)}

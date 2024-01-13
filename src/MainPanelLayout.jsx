@@ -31,7 +31,9 @@ const MainPanelLayout = () => {
           {isAuthenticated ? (
             <MainPanelRouter />
           ) : (
-            <div>Please Login to continue</div>
+            <div className="mt-10 text-2xl italic">
+              Please Login to continue
+            </div>
           )}
         </div>
       </UserAuthContext.Provider>
