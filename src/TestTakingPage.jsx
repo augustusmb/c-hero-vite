@@ -129,7 +129,7 @@ const TestTakingPage = () => {
     return question.true_or_false === "TRUE" ? (
       <div className="flex flex-col items-start gap-1 indent-10">
         <div>
-          <label>
+          <label className="text-lg">
             <input
               type="radio"
               name={question.id}
@@ -141,7 +141,7 @@ const TestTakingPage = () => {
           </label>
         </div>
         <div>
-          <label>
+          <label className="text-lg">
             <input
               type="radio"
               name={question.id}
@@ -158,7 +158,7 @@ const TestTakingPage = () => {
       <div className="flex flex-col items-start gap-1 indent-10">
         {answerOptions.map((option, i) => (
           <div key={i}>
-            <label>
+            <label className="text-lg">
               <input
                 type="radio"
                 name={question.id}
@@ -187,12 +187,15 @@ const TestTakingPage = () => {
       </div>
       <TestInfoInput />
       <form onSubmit={handleSubmit(submitForm)}>
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col items-start overflow-hidden rounded-3xl bg-orange-050">
           {testQuestions.map((question, idx) => {
             return (
-              <div key={idx}>
-                <div className="mb-1 mt-2">
-                  <p className="text-left">
+              <div
+                key={idx}
+                className={`${idx % 2 === 0 ? "bg-indigo-050" : ""} w-full`}
+              >
+                <div className="mx-2 mb-1 mt-3">
+                  <p className="text-left text-xl">
                     {`${idx + 1}. ${question.title} `}
                     <span className="italic underline">
                       {userInfo.userInfo.level === "0"
