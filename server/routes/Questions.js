@@ -30,13 +30,10 @@ const queries = {
   getQuestions: sql('getQuestions.sql')
 };
 
-export const getQuestions = (req, res) => {
+export const getQuestions = async (req, res) => {
   const { classId } = req.query
-  db.any(queries.getQuestions, { classId })
-  .then(data => {
-    res.status(200).json(data)
-  })
-  .catch(err => console.log('Error: ', err))
+  let result = await db.any(queries.getQuestions, { classId })
+  res.status(200).json(result)
 }
 
 export const addQuestion = (req) => {

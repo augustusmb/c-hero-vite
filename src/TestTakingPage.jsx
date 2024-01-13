@@ -135,6 +135,7 @@ const TestTakingPage = () => {
               name={question.id}
               value="true"
               onClick={handleClick}
+              className="accent-orange-500"
             />{" "}
             True
           </label>
@@ -146,6 +147,7 @@ const TestTakingPage = () => {
               name={question.id}
               value="false"
               onClick={handleClick}
+              className="accent-orange-500"
             />{" "}
             False
           </label>
@@ -162,6 +164,7 @@ const TestTakingPage = () => {
                 name={question.id}
                 value={option}
                 onClick={handleClick}
+                className="accent-orange-500"
               ></input>{" "}
               {option}
             </label>
@@ -177,7 +180,7 @@ const TestTakingPage = () => {
   };
 
   return (
-    <div className="pb-10">
+    <div className="text-md mx-1 pb-10 lg:mx-10 lg:text-lg">
       <div className="m-8 text-xl underline">
         <div>{`${testInfo.productName}`}</div>
         <div>{`${classTypes[testType]} - TEST`}</div>
@@ -189,11 +192,11 @@ const TestTakingPage = () => {
             return (
               <div key={idx}>
                 <div className="mb-1 mt-2">
-                  <p>
+                  <p className="text-left">
                     {`${idx + 1}. ${question.title} `}
-                    <span className="underline">
+                    <span className="italic underline">
                       {userInfo.userInfo.level === "0"
-                        ? `(ID #: ${question.id})`
+                        ? `(ID#: ${question.id})`
                         : ""}
                     </span>
                   </p>
