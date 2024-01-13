@@ -66,11 +66,16 @@ const EditUserInfoSection = ({
               className="w-4/5 text-lg"
             />
           ))}
-          <input
-            className="ml-1 mt-3 w-24 rounded border border-slate-500 bg-slate-700 px-3 py-1 font-semibold text-slate-050 hover:border-transparent hover:bg-slate-600 hover:text-slate-100"
-            type="submit"
-            value="Save"
-          />
+          <div className="grid grid-cols-3">
+            <input
+              className="ml-1 mt-3 w-24 rounded border border-slate-500 bg-slate-700 px-3 py-1 font-semibold text-slate-050 hover:border-transparent hover:bg-slate-600 hover:text-slate-100"
+              type="submit"
+              value="Save"
+            />
+            <p className="col-span-2 ml-4 mt-3 text-xs italic">
+              Only change what is needed, rest of the values will remain.
+            </p>
+          </div>
         </div>
       </div>
     </form>

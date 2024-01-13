@@ -1,12 +1,20 @@
 import { PropTypes } from "prop-types";
+import { useMutation } from "@tanstack/react-query";
+import { acceptTermsAndConditions } from "../api/acceptTerms";
 
 const TermsAndConditions = (props) => {
-  const { acceptTermsMutation, userId } = props;
+  const { userId } = props;
+
+  const acceptTermsMutation = useMutation({
+    mutationFn: (userId) => {
+      acceptTermsAndConditions(userId);
+    },
+  });
 
   return (
-    <div className="bg-slate-200 px-8 py-8 border-4 border-slate-500">
+    <div className="border-4 border-slate-500 bg-slate-200 px-8 py-8">
       <form>
-        <h1 className="text-2xl text-slate-950">
+        <h1 className="text-slate-950 text-2xl">
           C-Hero eTraining Terms and Condtions
         </h1>
         <p className="text-slate-700">
@@ -17,7 +25,7 @@ const TermsAndConditions = (props) => {
           href="https://www.c-hero.com/terms"
           target="_blank"
           rel="noreferrer"
-          className="text-slate-950 underline font-semibold"
+          className="text-slate-950 font-semibold underline"
         >
           View C-Hero Terms and Conditions
         </a>
@@ -27,10 +35,10 @@ const TermsAndConditions = (props) => {
             type="submit"
             disabled={!userId}
             onClick={() => acceptTermsMutation.mutate(userId)}
-            className="bg-slate-700 hover:bg-slate-600 text-slate-050 font-semibold hover:text-slate-100 mt-4 py-1 px-3 border border-slate-500 hover:border-transparent rounded"
+            className="mt-4 rounded border border-slate-500 bg-slate-700 px-3 py-1 font-semibold text-slate-050 hover:border-transparent hover:bg-slate-600 hover:text-slate-100"
           >
             I have viewed, read and agree to the C-Hero Terms -{" "}
-            <span className="underline text-orange-300">Start Training</span>
+            <span className="text-orange-300 underline">Start Training</span>
           </button>
         </div>
       </form>
