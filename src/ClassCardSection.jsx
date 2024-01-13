@@ -17,11 +17,11 @@ const ClassCardSection = () => {
   if (isError) return <span>Error: {error.message}</span>;
 
   return (
-    <div className="pb-10">
-      <h4 className="text-xl font-semibold underline">
+    <div className="flex flex-col pb-10">
+      <h4 className="mb-3 self-start text-xl font-semibold text-slate-800 underline lg:text-xl">
         Assigned Classes Below:
       </h4>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 gap-2">
         {Object.values(data)
           .filter((item) => item.assigned)
           .map((product) => (

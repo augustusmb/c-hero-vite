@@ -87,13 +87,13 @@ const AdminEditUserForm = ({
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="col-span-2 mb-6 flex flex-col">
-              <h3 className="self-start text-lg font-bold underline lg:text-xl">
+              <h3 className="mb-3 self-start text-lg font-bold underline lg:text-xl">
                 Account Info
               </h3>
-              <div className="grid grid-cols-4">
+              <div className="grid h-52 grid-cols-4">
                 <div className="flex flex-col items-start">
                   {labels.map((label) => (
-                    <label htmlFor={label} key={label}>
+                    <label htmlFor={label} key={label} className="text-lg">
                       {label[0].toUpperCase() + label.slice(1)}:
                     </label>
                   ))}
@@ -104,14 +104,14 @@ const AdminEditUserForm = ({
                       key={label}
                       {...register(label)}
                       placeholder={user[label]}
-                      className="w-4/5"
+                      className="w-4/5 text-lg"
                     />
                   ))}
                 </div>
               </div>
             </div>
             <div className="col-span-1 flex flex-col">
-              <h3 className="self-start text-lg font-bold underline lg:text-xl">
+              <h3 className="mb-3 self-start text-lg font-bold underline lg:text-xl">
                 Account Assigned Products
               </h3>
               <div className="col-span-3 flex flex-col items-start">
@@ -124,6 +124,7 @@ const AdminEditUserForm = ({
                           name={product.productId}
                           defaultChecked={product.assigned}
                           {...register(product.productId)}
+                          className="accent-orange-500"
                         />
                         {` ${product.productName}`}
                       </label>

@@ -38,8 +38,6 @@ const queries = {
 };
 
 export async function getUserByPhone(req, res) {
-  console.log('User Info Request here, params: ', req.query)
-
   const { phone } = req.query
   const result = await db.query(queries.getUserByPhone, { phone })
   res.status(200).json(result);

@@ -11,7 +11,6 @@ export const fetchUserClasses = async (userId) => {
 }
 
 export const getUserByPhone = async (params) => {
-  console.log('User Info Request here, params: ', params)
   const phone = params.queryKey[1]
   return await apiClient.get("api/routes/users", { params: { phone } })
 }

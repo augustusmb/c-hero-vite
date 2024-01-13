@@ -43,31 +43,31 @@ const EditUserInfoSection = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="grid grid-cols-4">
+      <div className="mb-16 grid h-52 grid-cols-4">
         <div className="flex flex-col items-start">
           {labels.map((label) => (
-            <label htmlFor={label} key={label}>
+            <label htmlFor={label} key={label} className="text-lg">
               {label[0].toUpperCase() + label.slice(1)}:
             </label>
           ))}
           <button
-            className="bg-transparent hover:bg-blue-500 text-blue-700 self-end mx-1 font-semibold hover:text-white py-1 px-3 w-24 border border-blue-500 hover:border-transparent rounded"
+            className="hover:bg-blue-500 text-blue-700 hover:text-white border-blue-500 ml-1 mt-3 w-24 self-end rounded border bg-transparent py-1 font-semibold hover:border-transparent"
             onClick={() => triggerEditMode()}
           >
             Cancel
           </button>
         </div>
-        <div className="flex flex-col items-start col-span-3">
+        <div className="col-span-3 flex flex-col items-start">
           {labels.map((label) => (
             <input
               key={label}
               {...register(label)}
               placeholder={user[label]}
-              className="w-4/5"
+              className="w-4/5 text-lg"
             />
           ))}
           <input
-            className="bg-slate-700 hover:bg-slate-600 text-slate-050 font-semibold hover:text-slate-100 py-1 px-3 w-24 border border-slate-500 hover:border-transparent rounded"
+            className="ml-1 mt-3 w-24 rounded border border-slate-500 bg-slate-700 px-3 py-1 font-semibold text-slate-050 hover:border-transparent hover:bg-slate-600 hover:text-slate-100"
             type="submit"
             value="Save"
           />
