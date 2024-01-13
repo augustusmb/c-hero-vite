@@ -12,17 +12,17 @@ const ClassCardItem = (props) => {
   };
 
   return (
-    <div
+    <Link
+      to={`/class/${item.product_id}`}
+      htmlFor={item.product_id}
       className={`${
         item.completed
           ? "mb-1 w-full rounded-sm bg-orange-200 text-sm text-slate-800 line-through lg:text-lg"
           : "text-slate-950 mb-1 w-full rounded-sm bg-slate-100 text-sm drop-shadow-2xl hover:bg-slate-500 hover:text-slate-050 lg:text-lg	"
       }`}
     >
-      <Link to={`/class/${item.product_id}`} htmlFor={item.product_id}>
-        {classTypeMap[item.product_id.slice(3, 4)]}
-      </Link>
-    </div>
+      <p>{classTypeMap[item.product_id.slice(3, 4)]}</p>
+    </Link>
   );
 };
 
