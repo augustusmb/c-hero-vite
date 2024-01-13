@@ -133,7 +133,7 @@ const AdminEditUserForm = ({
                 })}
               </div>
             </div>
-            <div className="col-span-2 mt-4 flex justify-center gap-1">
+            <div className="col-span-2 mt-4 flex items-start gap-1">
               <p
                 className="hover:bg-blue-500 text-blue-700 hover:text-white border-blue-500 w-36 rounded border bg-transparent px-3 py-1 font-semibold hover:border-transparent"
                 onClick={() => toggleEditMode(!editMode)}

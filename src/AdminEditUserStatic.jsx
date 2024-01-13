@@ -22,9 +22,9 @@ const AdminEditUserStatic = ({
         </h3>
         <UserProductsStatic userProductData={data} />
       </div>
-      <div className="col-span-2 mt-4 items-center">
+      <div className="col-span-2 mt-4 flex items-start">
         <button
-          className="text-slate-950 w-24 rounded border border-slate-500 bg-slate-050 px-3 py-1 font-semibold hover:border-transparent hover:bg-slate-600 hover:text-slate-050"
+          className="text-slate-950 w-24 rounded border border-slate-500 bg-slate-050 px-3 py-1 font-semibold hover:border-transparent hover:bg-slate-600 hover:text-slate-050 lg:w-36 lg:self-center"
           onClick={() => toggleEditMode(!editMode)}
         >
           Edit

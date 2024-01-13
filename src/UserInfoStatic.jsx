@@ -29,7 +29,7 @@ const UserInfoStatic = ({ userInfo: user }) => {
           {user.email || infoMissing}
         </p>
         <p className="text-lg italic text-slate-600 lg:indent-2 lg:text-xl">
-          {phoneNumber?.formatNational() || infoMissing}
+          {phoneNumber?.formatInternational() || infoMissing}
         </p>
       </div>
       <div className="col-span-1 mt-2 flex flex-col items-start lg:mt-4">
