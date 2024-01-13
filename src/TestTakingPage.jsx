@@ -211,7 +211,7 @@ const TestTakingPage = () => {
         </div>
         <div>
           <input
-            className="text-slate-950 rounded bg-orange-300 px-2 py-2 text-lg font-bold hover:bg-orange-500 hover:text-slate-050 lg:text-2xl"
+            className="text-slate-950 drop-shadow-orange-900 mt-10 w-40 rounded bg-orange-300 px-2 py-2 text-lg font-bold drop-shadow-2xl hover:bg-orange-500 hover:text-slate-050 lg:text-2xl"
             type="submit"
           ></input>
         </div>
