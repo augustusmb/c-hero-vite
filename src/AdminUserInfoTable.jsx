@@ -12,7 +12,8 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
   useEffect(() => {
     const handleResize = () => {
       if (gridRef.current) {
-        gridRef.current.gridOptions.api.sizeColumnsToFit();
+        console.log(gridRef.current);
+        gridRef.current.api.sizeColumnsToFit();
       }
     };
 
@@ -100,13 +101,16 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
   return (
     <div className="ag-theme-quartz" style={{ height: 600 }}>
       <div className="example-wrapper">
-        <div className="flex text-lg">
-          <span className="text-lg">Filter Search:</span>
+        <div className="bg-yellow-200 flex text-lg">
+          <span className="text-slate-950 mr-4 text-lg font-bold">
+            {`Filter Search: `}
+          </span>
           <input
             type="text"
             id="filter-text-box"
             placeholder="Filter..."
             onInput={onFilterTextBoxChanged}
+            className="border-2 border-indigo-200"
           />
         </div>
         <div style={{ height: 500, width: "100%" }}>
