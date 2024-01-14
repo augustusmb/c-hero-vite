@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useCallback } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AgGridReact } from "ag-grid-react"; // React Grid Logic
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
@@ -8,12 +8,24 @@ import { PropTypes } from "prop-types";
 
 const AdminUserInfoTable = ({ handleUserToEdit }) => {
   const gridRef = useRef();
-  // const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
-  // const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (gridRef.current) {
+        gridRef.current.gridOptions.api.sizeColumnsToFit();
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener when the component is unmounted
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const defaultColDef = useMemo(() => {
     return {
       flex: 1,
+      cellStyle: { textAlign: "left", height: 82 },
     };
   }, []);
 
@@ -24,14 +36,58 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
     );
   }, []);
 
+  const getRowStyle = useCallback((params) => {
+    if (params.node.rowIndex % 2 === 0) {
+      return { background: "#f8f8f8" };
+    }
+    return null;
+  }, []);
+
   const [colDefs, setColDefs] = useState([
-    { field: "name" },
-    { field: "phone" },
-    { field: "title" },
-    { field: "vessel" },
-    { field: "port" },
-    { field: "company" },
+    {
+      headerName: "Name / Phone",
+      field: "name",
+      cellRenderer: TwoValuesCellRenderer,
+      cellRendererParams: {
+        field1: "name",
+        field2: "phone",
+      },
+    },
+    {
+      headerName: "Title / Vessel",
+      field: "name",
+      cellRenderer: TwoValuesCellRenderer,
+      cellRendererParams: {
+        field1: "title",
+        field2: "vessel",
+      },
+    },
+    {
+      headerName: "Company / Port",
+      field: "company",
+      cellRenderer: TwoValuesCellRenderer,
+      cellRendererParams: {
+        field1: "company",
+        field2: "port",
+      },
+    },
   ]);
+
+  function TwoValuesCellRenderer(params) {
+    const field1 = params.colDef.cellRendererParams.field1;
+    const field2 = params.colDef.cellRendererParams.field2;
+    return (
+      <div className="flex flex-col leading-7">
+        <span className="text-sm lg:text-xl">{params.data[field1]}</span>
+        <span className="text-xs italic lg:text-lg">{params.data[field2]}</span>
+      </div>
+    );
+  }
+
+  const onSelectionChanged = (e) => {
+    const selectedRowData = e.api.getSelectedNodes()[0].data;
+    handleUserToEdit(selectedRowData);
+  };
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["all-users"],
@@ -39,19 +95,13 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
   });
 
   if (isLoading) return <span>Loading...</span>;
-
   if (isError) return <span>Error: {error.message}</span>;
 
-  const onSelectionChanged = (e) => {
-    const selectedRowData = e.api.getSelectedNodes()[0].data;
-    handleUserToEdit(selectedRowData);
-  };
-
   return (
-    <div className="ag-theme-quartz" style={{ height: 600, width: 1200 }}>
+    <div className="ag-theme-quartz" style={{ height: 600 }}>
       <div className="example-wrapper">
         <div className="flex text-lg">
-          <span>Filter Search:</span>
+          <span className="text-lg">Filter Search:</span>
           <input
             type="text"
             id="filter-text-box"
@@ -59,7 +109,7 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
             onInput={onFilterTextBoxChanged}
           />
         </div>
-        <div style={{ height: 500, width: 1200 }}>
+        <div style={{ height: 500, width: "100%" }}>
           <AgGridReact
             ref={gridRef}
             rowData={data.data}
@@ -67,6 +117,8 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
             defaultColDef={defaultColDef}
             rowSelection="single"
             onSelectionChanged={(e) => onSelectionChanged(e)}
+            getRowStyle={getRowStyle}
+            rowHeight={65} // assuming the current height is 82
           />
         </div>
       </div>

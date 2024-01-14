@@ -62,7 +62,9 @@ const AdminPage = () => {
           />
         )}
       </div>
-      <AdminUserInfoTable handleUserToEdit={handleUserToEdit} />
+      <div className="col-span-3">
+        <AdminUserInfoTable handleUserToEdit={handleUserToEdit} />
+      </div>
     </div>
   );
 };
