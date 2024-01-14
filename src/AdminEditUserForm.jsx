@@ -148,14 +148,14 @@ const AdminEditUserForm = ({
               <div>
                 {confirmDelete ? (
                   <p
-                    className="text-slate-950 hover:text-orange-950 w-36 rounded bg-orange-100 px-3 py-1 font-semibold hover:bg-orange-200"
+                    className="text-slate-950 w-36 rounded bg-orange-050 px-3 py-1 font-semibold hover:bg-orange-200 hover:text-orange-600"
                     onClick={() => handleDeleteUser()}
                   >
                     Confirm Delete
                   </p>
                 ) : (
                   <p
-                    className="hover:border-slate-950 hover:text-orange-950 w-36 rounded border border-slate-400 bg-slate-050 px-3 py-1 font-semibold text-orange-800 hover:bg-orange-100"
+                    className="hover:border-slate-950 w-36 rounded border border-slate-400 bg-slate-050 px-3 py-1 font-semibold text-orange-500 hover:bg-orange-100 hover:text-orange-700"
                     onClick={() => toggleConfirmDelete()}
                   >
                     Delete User

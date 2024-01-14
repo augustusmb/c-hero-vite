@@ -180,10 +180,10 @@ const TestTakingPage = () => {
   };
 
   return (
-    <div className="text-md mx-1 pb-10 lg:mx-10 lg:text-lg">
-      <div className="m-8 text-xl underline">
-        <div>{`${testInfo.productName}`}</div>
-        <div>{`${classTypes[testType]} - TEST`}</div>
+    <div className="text-md mx-1 pb-10 drop-shadow-xl lg:mx-10 lg:text-lg">
+      <div className="m-4">
+        <div className="mb-1 text-2xl underline lg:mb-3 lg:text-4xl">{`${testInfo.productName}`}</div>
+        <div className="text-3xl italic text-indigo-400">{`${classTypes[testType]} - test`}</div>
       </div>
       <TestInfoInput />
       <form onSubmit={handleSubmit(submitForm)}>

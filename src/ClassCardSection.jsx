@@ -18,10 +18,10 @@ const ClassCardSection = () => {
 
   return (
     <div className="flex flex-col pb-10">
-      <h4 className="self-start text-xl font-semibold text-slate-800 underline lg:text-xl">
+      <h4 className="self-start text-xl font-semibold text-slate-900 underline lg:text-xl">
         Assigned Classes Below:
       </h4>
-      <div className="my-3 flex flex-col">
+      <div className="my-2 flex flex-col">
         <p className="text-left text-lg">{`- Work through a product's classes in order, top to bottom`}</p>
         <p className="text-left text-lg">{`- Study your chosen class's pdf material, click to take the test at the bottom of the page`}</p>
       </div>

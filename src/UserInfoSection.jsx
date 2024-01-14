@@ -25,7 +25,7 @@ const UserInfoSection = ({ userInfo }) => {
   return (
     <div className="col-span-1">
       <div className="flex flex-col">
-        <h3 className="mb-3 self-start text-lg font-semibold text-slate-800 underline lg:text-xl">
+        <h3 className="mb-2 self-start text-lg font-semibold text-slate-900 underline lg:text-xl">
           Account Info
         </h3>
         <div>

@@ -5,7 +5,10 @@ import { Link } from "react-router-dom";
 
 const HeaderNavigation = () => {
   return (
-    <div className="grid grid-cols-3 border-b-2 border-orange-400 bg-indigo-300">
+    <div
+      className="grid grid-cols-3 border-b-2 border-orange-400 bg-indigo-300"
+      style={{ backgroundImage: "linear-gradient(to right, #BED0F7, #35469C)" }}
+    >
       <div>
         <Link to="/">
           <img src={eTrainingIcon} className="h-14 sm:h-20" />

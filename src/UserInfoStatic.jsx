@@ -22,7 +22,7 @@ const UserInfoStatic = ({ userInfo: user }) => {
   return (
     <div className="grid h-60 grid-cols-1">
       <div className="col-span-1 flex flex-col items-start">
-        <p className="text-2xl text-indigo-500 lg:text-4xl">
+        <p className="text-red-400 text-2xl lg:text-4xl">
           {user.name || infoMissing}
         </p>
         <p className="text-lg italic text-slate-600 lg:indent-2 lg:text-xl">
@@ -33,7 +33,7 @@ const UserInfoStatic = ({ userInfo: user }) => {
         </p>
       </div>
       <div className="col-span-1 mt-2 flex flex-col items-start lg:mt-4">
-        <p className="text-xl text-indigo-500 lg:text-3xl">
+        <p className="text-red-400 text-xl lg:text-3xl">
           {user.title || infoMissing}
         </p>
         <p className="text-lg italic text-slate-600 lg:indent-2 lg:text-xl">

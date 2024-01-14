@@ -11,7 +11,7 @@ const AdminEditUserStatic = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3">
       <div className="col-span-2 flex flex-col">
-        <h3 className="mb-3 self-start text-lg font-bold underline lg:text-xl">
+        <h3 className="mb-3 self-start text-lg font-bold text-slate-900 underline lg:text-xl">
           Account Info
         </h3>
         <UserInfoStatic userInfo={user} />
