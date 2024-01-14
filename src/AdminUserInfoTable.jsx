@@ -12,7 +12,6 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
   useEffect(() => {
     const handleResize = () => {
       if (gridRef.current) {
-        console.log(gridRef.current);
         gridRef.current.api.sizeColumnsToFit();
       }
     };
