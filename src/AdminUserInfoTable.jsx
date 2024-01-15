@@ -78,7 +78,9 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
     const field2 = params.colDef.cellRendererParams.field2;
     return (
       <div className="flex flex-col leading-7">
-        <span className="text-sm lg:text-xl">{params.data[field1]}</span>
+        <span className="text-xs font-semibold lg:text-xl">
+          {params.data[field1]}
+        </span>
         <span className="text-xs italic lg:text-lg">{params.data[field2]}</span>
       </div>
     );
@@ -100,7 +102,7 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
   return (
     <div className="ag-theme-quartz" style={{ height: 600 }}>
       <div className="example-wrapper">
-        <div className="bg-yellow-200 flex text-lg">
+        <div className="bg-yellow-200 flex rounded text-lg">
           <span className="text-slate-950 mr-4 text-lg font-bold">
             {`Filter Search: `}
           </span>
@@ -112,7 +114,10 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
             className="border-2 border-indigo-200"
           />
         </div>
-        <div style={{ height: 500, width: "100%" }}>
+        <div
+          className="border-yellow-200 border-x-2 shadow-xl"
+          style={{ height: 500, width: "100%" }}
+        >
           <AgGridReact
             ref={gridRef}
             rowData={data.data}

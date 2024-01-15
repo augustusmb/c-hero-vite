@@ -25,7 +25,7 @@ const ClassCardSection = () => {
         <p className="text-left text-lg">{`- Work through a product's classes in order, top to bottom`}</p>
         <p className="text-left text-lg">{`- Study your chosen class's pdf material, click to take the test at the bottom of the page`}</p>
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-3">
         {Object.values(data)
           .filter((item) => item.assigned)
           .map((product) => (
