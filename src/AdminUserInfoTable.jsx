@@ -102,10 +102,10 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
   return (
     <div className="ag-theme-quartz" style={{ height: 600 }}>
       <div className="example-wrapper">
-        <div className="bg-yellow-200 flex rounded text-lg">
+        <div className="bg-yellow-200 flex items-baseline rounded text-lg">
           <label
             htmlFor="filter-text-box"
-            className="text-slate-950 mr-4 text-lg font-bold"
+            className="text-slate-950 mx-4 text-lg font-bold"
           >
             {`Filter Search: `}
           </label>
@@ -114,7 +114,7 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
             id="filter-text-box"
             placeholder="Filter..."
             onInput={onFilterTextBoxChanged}
-            className="border-2 border-indigo-200"
+            className="border-2 border-indigo-100"
           />
         </div>
         <div
