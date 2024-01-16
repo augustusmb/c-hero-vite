@@ -14,7 +14,7 @@ export default function NavbarDropDown() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex w-18 lg:w-28 justify-center gap-x-1.5 rounded-md bg-indigo-700 px-3 py-2 text-sm lg:text-lg font-semibold text-slate-050 hover:bg-indigo-600">
+        <Menu.Button className="w-18 inline-flex justify-center gap-x-1.5 rounded-md bg-indigo-700 px-3 py-2 text-sm font-semibold text-slate-050 hover:bg-indigo-600 lg:w-28 lg:text-lg">
           More
           <ChevronDownIcon
             className="-mr-1 h-5 w-5 text-slate-050"
@@ -32,7 +32,7 @@ export default function NavbarDropDown() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-indigo-050 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="ring-black absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-indigo-050 shadow-xl ring-1 ring-opacity-5 focus:outline-none">
           <div className="py-1">
             {userInfo.level === "0" ? (
               <Menu.Item>

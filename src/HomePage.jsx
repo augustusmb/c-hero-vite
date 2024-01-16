@@ -10,12 +10,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const HomePage = () => {
   const { userInfo, setUserInfo } = useContext(UserAuthContext);
-  const { user, isAuthenticated } = useAuth0();
+  const { isLoading: authLoading, user, isAuthenticated } = useAuth0();
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["get-user-info", user?.name],
     queryFn: getUserByPhone,
-    enabled: isAuthenticated,
+    enabled: !authLoading && user?.name && isAuthenticated,
   });
 
   useEffect(() => {

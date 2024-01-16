@@ -3,6 +3,7 @@ import { UserAuthContext } from "./MainPanelLayout.jsx";
 import ClassCard from "./ClassCard.jsx";
 import { useQuery } from "@tanstack/react-query";
 import { getFullUserProductProgressMap } from "./utils/user.js";
+import CheckIcon from "./assets/icons/icon-check.svg?react";
 
 const ClassCardSection = () => {
   const { userInfo } = useContext(UserAuthContext);
@@ -21,9 +22,16 @@ const ClassCardSection = () => {
       <h4 className="self-start text-xl font-semibold text-slate-900 underline lg:text-xl">
         Assigned Classes Below:
       </h4>
-      <div className="my-2 flex flex-col">
-        <p className="text-left text-lg">{`- Work through a product's classes in order, top to bottom`}</p>
-        <p className="text-left text-lg">{`- Study your chosen class's pdf material, click to take the test at the bottom of the page`}</p>
+      <div className="text-md my-2 flex flex-col lg:text-lg">
+        <div className="flex">
+          <CheckIcon className="h-6 w-6 fill-orange-050 stroke-orange-600" />
+
+          <p className="text-left">{`Work through a product's classes in order, top to bottom`}</p>
+        </div>
+        <div className="flex">
+          <CheckIcon className="h-6 w-6 fill-orange-050 stroke-orange-600" />
+          <p className="text-left">{`Study your chosen class's pdf material, click to take the test at the bottom of the page`}</p>
+        </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         {Object.values(data)

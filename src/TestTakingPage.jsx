@@ -179,11 +179,34 @@ const TestTakingPage = () => {
     reset();
   };
 
+  const getTestType = () => {
+    const testTypes = Object.values(classTypes);
+
+    return testTypes.map((type, i) => {
+      if (type === classTypes[testType]) {
+        return (
+          <span
+            key={i}
+            className="text-magenta-500 mx-1 text-xl italic lg:text-3xl"
+          >
+            {`${type}`}
+          </span>
+        );
+      } else {
+        return (
+          <span className="mx-1 text-sm italic text-slate-300" key={i}>
+            {type}
+          </span>
+        );
+      }
+    });
+  };
+
   return (
     <div className="text-md mx-1 pb-10 drop-shadow-xl lg:mx-10 lg:text-lg">
-      <div className="m-4">
+      <div className="my-4">
         <div className="mb-1 text-2xl underline lg:mb-3 lg:text-4xl">{`${testInfo.productName}`}</div>
-        <div className="text-3xl italic text-indigo-400">{`${classTypes[testType]} - test`}</div>
+        {getTestType()}
       </div>
       <TestInfoInput />
       <form onSubmit={handleSubmit(submitForm)}>

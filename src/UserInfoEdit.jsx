@@ -5,7 +5,7 @@ import { updateUserInfo } from "./api/user.js";
 import { useNavigate } from "react-router-dom";
 import { labels } from "./messages";
 
-const EditUserInfoSection = ({
+const UserInfoEdit = ({
   userInfo: user,
   triggerEditMode,
   editMode,
@@ -43,7 +43,7 @@ const EditUserInfoSection = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="grid h-60 grid-cols-4">
+      <div className="box-shadow-lg grid h-60 grid-cols-4 rounded-lg">
         <div className="flex flex-col items-start">
           {labels.map((label) => (
             <label htmlFor={label} key={label} className="text-lg">
@@ -75,15 +75,14 @@ const EditUserInfoSection = ({
           value="Save"
         />
         <p className="lg:text-md col-span-2 ml-4 text-left text-xs italic lg:pr-8">
-          Only change what is needed
-          <p>Rest of the values will remain.</p>
+          Only change what is needed, rest of the values will remain.
         </p>
       </div>
     </form>
   );
 };
 
-EditUserInfoSection.propTypes = {
+UserInfoEdit.propTypes = {
   userInfo: PropTypes.shape({
     name: PropTypes.string,
     email: PropTypes.string,
@@ -98,4 +97,4 @@ EditUserInfoSection.propTypes = {
   triggerEditMode: PropTypes.func,
 };
 
-export default EditUserInfoSection;
+export default UserInfoEdit;

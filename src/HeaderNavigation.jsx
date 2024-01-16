@@ -7,7 +7,7 @@ const HeaderNavigation = () => {
   return (
     <div
       className="grid grid-cols-3 border-b-2 border-orange-400 bg-indigo-300"
-      style={{ backgroundImage: "linear-gradient(to right, #BED0F7, #35469C)" }}
+      style={{ backgroundImage: "linear-gradient(to right, #98AEEB, #4055A8)" }}
     >
       <div>
         <Link to="/">

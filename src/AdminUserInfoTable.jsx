@@ -103,9 +103,12 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
     <div className="ag-theme-quartz" style={{ height: 600 }}>
       <div className="example-wrapper">
         <div className="bg-yellow-200 flex rounded text-lg">
-          <span className="text-slate-950 mr-4 text-lg font-bold">
+          <label
+            htmlFor="filter-text-box"
+            className="text-slate-950 mr-4 text-lg font-bold"
+          >
             {`Filter Search: `}
-          </span>
+          </label>
           <input
             type="text"
             id="filter-text-box"
