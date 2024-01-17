@@ -13,7 +13,6 @@ const AdminPage = () => {
   const [userToEdit, setUserToEdit] = useState({});
   const [editMode, setEditMode] = useState(false);
 
-  // Check if user is admin
   useEffect(() => {
     if (userInfo?.level !== "0") {
       return navigate("/redirect");
@@ -26,7 +25,6 @@ const AdminPage = () => {
   });
 
   if (isLoading) return <span>Loading...</span>;
-
   if (isError) return <span>Error: {error.message}</span>;
 
   const handleUserToEdit = (user) => {

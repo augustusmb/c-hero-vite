@@ -14,7 +14,6 @@ const ClassCardSection = () => {
   });
 
   if (isLoading) return <span>Loading...</span>;
-
   if (isError) return <span>Error: {error.message}</span>;
 
   return (

@@ -49,8 +49,7 @@ const AdminEditUserForm = ({
   };
 
   const onSubmit = (data) => {
-    // compare newly assigned products to already assigned products
-    const newlyAddedProducts = {};
+    const newlyAddedProducts = {}; // compare newly assigned products to already assigned products
     const newlyRemovedProducts = {};
     for (const key in userProductData) {
       if (userProductData[key].assigned === false && data[key] === true) {

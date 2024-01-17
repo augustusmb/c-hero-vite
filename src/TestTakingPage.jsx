@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { productsMap } from "./messages.js";
 import Modal from "simple-react-modal";
@@ -26,9 +26,8 @@ const TestTakingPage = () => {
   const userInfo = useContext(UserAuthContext);
 
   const { classId } = useParams();
-
-  const testInfo = productsMap[classId.slice(0, 2)];
-  const testType = classId.slice(3, 5);
+  const testInfo = useMemo(() => productsMap[classId.slice(0, 2)], [classId]);
+  const testType = useMemo(() => classId.slice(3, 5), [classId]);
 
   const {
     isLoading,
@@ -65,7 +64,6 @@ const TestTakingPage = () => {
   }, [classId, questionOrder, questions]);
 
   if (isLoading) return <span>Loading...</span>;
-
   if (isError) return <span>Error: {error.message}</span>;
 
   const submitForm = () => {
@@ -179,7 +177,7 @@ const TestTakingPage = () => {
     reset();
   };
 
-  const getTestType = () => {
+  const highlightTestType = () => {
     const testTypes = Object.values(classTypes);
 
     return testTypes.map((type, i) => {
@@ -187,7 +185,7 @@ const TestTakingPage = () => {
         return (
           <span
             key={i}
-            className="text-magenta-500 mx-1 text-xl italic lg:text-3xl"
+            className="mx-1 text-xl italic text-magenta-500 lg:text-3xl"
           >
             {`${type}`}
           </span>
@@ -206,7 +204,7 @@ const TestTakingPage = () => {
     <div className="text-md mx-1 pb-10 drop-shadow-xl lg:mx-10 lg:text-lg">
       <div className="my-4">
         <div className="mb-1 text-2xl underline lg:mb-3 lg:text-4xl">{`${testInfo.productName}`}</div>
-        {getTestType()}
+        {highlightTestType()}
       </div>
       <TestInfoInput />
       <form onSubmit={handleSubmit(submitForm)}>
