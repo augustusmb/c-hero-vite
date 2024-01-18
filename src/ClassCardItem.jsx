@@ -1,16 +1,8 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { classTypesMap } from "./messages";
 
-const ClassCardItem = (props) => {
-  const { item } = props;
-
-  const classTypeMap = {
-    a: "Setup",
-    b: "Operation",
-    c: "MOB Drills",
-    d: "Inspection & Storage",
-  };
-
+const ClassCardItem = ({ item }) => {
   return (
     <Link
       to={`/class/${item.product_id}`}
@@ -21,7 +13,7 @@ const ClassCardItem = (props) => {
           : "text-slate-950 mb-1 w-full rounded-sm bg-slate-100 text-sm drop-shadow-2xl hover:bg-slate-500 hover:text-slate-050 lg:text-lg	"
       }`}
     >
-      <p>{classTypeMap[item.product_id.slice(3, 4)]}</p>
+      <p>{classTypesMap[item.product_id.slice(3, 4)]}</p>
     </Link>
   );
 };

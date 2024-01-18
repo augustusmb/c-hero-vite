@@ -29,7 +29,8 @@ const ClassCardSection = () => {
         </div>
         <div className="flex">
           <CheckIcon className="h-6 w-6 fill-orange-050 stroke-orange-600" />
-          <p className="text-left">{`Study your chosen class's pdf material, click to take the test at the bottom of the page`}</p>
+
+          <p className="text-left">{`Click to take the test at the bottom of each class's PDF page`}</p>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3">

@@ -1,6 +1,5 @@
-import { useState, useEffect, useContext, useMemo } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
-import { productsMap } from "./messages.js";
 import Modal from "simple-react-modal";
 import { UserAuthContext } from "./MainPanelLayout.jsx";
 import { Link, useParams } from "react-router-dom";
@@ -12,7 +11,8 @@ import {
   prepareAnswerOptions,
   prepareBlankAnswers,
 } from "./utils/test.js";
-import { classTypes } from "./messages.js";
+import { classTypesMap } from "./messages.js";
+import { useClassId } from "./hooks/useClassId.jsx";
 
 const TestTakingPage = () => {
   const { handleSubmit, reset } = useForm();
@@ -26,8 +26,7 @@ const TestTakingPage = () => {
   const userInfo = useContext(UserAuthContext);
 
   const { classId } = useParams();
-  const testInfo = useMemo(() => productsMap[classId.slice(0, 2)], [classId]);
-  const testType = useMemo(() => classId.slice(3, 5), [classId]);
+  const { testInfo, testType } = useClassId(classId);
 
   const {
     isLoading,
@@ -178,10 +177,10 @@ const TestTakingPage = () => {
   };
 
   const highlightTestType = () => {
-    const testTypes = Object.values(classTypes);
+    const classTypeValues = Object.values(classTypesMap);
 
-    return testTypes.map((type, i) => {
-      if (type === classTypes[testType]) {
+    return classTypeValues.map((type, i) => {
+      if (type === classTypesMap[testType]) {
         return (
           <span
             key={i}

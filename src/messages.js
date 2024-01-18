@@ -148,7 +148,7 @@ export const messages = {
   },
 };
 
-export const classTypes = {
+export const classTypesMap = {
   a: "Setup",
   b: "Operation",
   c: "MOB Drills",
