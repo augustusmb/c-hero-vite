@@ -1,13 +1,13 @@
 export async function signUpUser(req, res) {
 
-  const { firstName, lastName, phone, email, company, port, vessel, title, rescuePole, mounts, rescueDavits } = req.query
+  // const { firstName, lastName, phone, email, company, port, vessel, title, rescuePole, mounts, rescueDavits } = req.query
 
   console.log('User Sign Up req.query: ', req.query)
 
 
   console.log('User Sign Up req.body: ', req.body)
 
-  res.status(200).json('Hello World')
+  res.status(200).json(req.query)
 
   // console.log(`Congrats, you've reached the point of entering a new user.`)
   // console.log('New User Data: ', req.body.data)

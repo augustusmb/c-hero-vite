@@ -58,7 +58,7 @@ app.use(cors({ origin: corsOrigin }));
 const port = env.PORT || 8080
 
 app.use('/api/routes/sign-up', router)
-app.use('/api/routes', checkJwt, router)
+app.use('/api/routes', router)
 
 if (env.VITE_NODE_ENV === "production") {
   app.use(express.static("dist"));
