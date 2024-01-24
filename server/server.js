@@ -57,6 +57,7 @@ const corsOrigin = env.VITE_NODE_ENV === 'local' ? 'http://localhost:5173/' : 'h
 app.use(cors({ origin: corsOrigin }));
 const port = env.PORT || 8080
 
+app.use('/api/routes/sign-up', router)
 app.use('/api/routes', checkJwt, router)
 
 if (env.VITE_NODE_ENV === "production") {
