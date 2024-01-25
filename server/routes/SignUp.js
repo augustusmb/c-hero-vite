@@ -31,23 +31,24 @@ const queries = {
 export async function signUpUser(req, res) {
 
   const { firstName, lastName, phone, email, company, port, vessel, title, rescuePole, mounts, rescueDavits } = req.body.data
-  const name = `${firstName} ${lastName}`
-  let level = null
+  // const values = [firstName, lastName, phone, email, company, port, vessel, title, rescuePole, mounts, rescueDavits]
+  // const name = `${firstName} ${lastName}`
+  // let level = null
 
   console.log('Look Here, length is: ', firstName.length)
 
-  switch (title) {
-    case 'Captain':
-      level = '1'
-    break;
-    case 'Shoreside':
-      level = '2'
-      break;
-    case 'Crew':
-      level = '1'
-    break;
-    default:
-      console.log('Unknown fruit');
+  // switch (title) {
+  //   case 'Captain':
+  //     level = '1'
+  //   break;
+  //   case 'Shoreside':
+  //     level = '2'
+  //     break;
+  //   case 'Crew':
+  //     level = '1'
+  //   break;
+  //   default:
+  //     console.log('Unknown fruit');
   }
   // insert user into users table
   // const user_id = await db.query(queries.insertUser, { name, phone, email, company, port, vessel, title, level })

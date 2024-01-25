@@ -2,7 +2,6 @@ import db from '../../db/db.js';
 import path from 'path';
 import dotenv from 'dotenv';
 import { signUpMessage } from '../sms.js';
-import pLimit from 'p-limit';
 dotenv.config()
 
 import { defineConfig, loadEnv } from 'vite';
@@ -31,7 +30,6 @@ const queries = {
   fetchAllUsers: sql('fetchAllUsers.sql'),
   updateUserInfo: sql('updateUserInfo.sql'),
   deleteUser: sql('deleteUser.sql'),
-  insertUser: sql('insertUser.sql'),
   insertUsersProducts: sql('insertUsersProducts.sql'),
   acceptTermsAndConditions: sql('acceptTermsAndConditions.sql'),
   deleteUserSpecificClasses: sql('deleteUserSpecificClasses.sql')
@@ -41,12 +39,6 @@ export async function getUserByPhone(req, res) {
   const { phone } = req.query
   const result = await db.query(queries.getUserByPhone, { phone })
   res.status(200).json(result);
-
-  // db.query(queries.getUserByPhone, { phone })
-  // .then(data => {
-  //   res.status(200).json(data)
-  // })
-  // .catch(err => console.log('Error requesting account info: ', err))
 }
 
 export async function fetchAllUsers(req, res) {

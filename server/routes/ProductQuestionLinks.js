@@ -12,8 +12,6 @@ const env = loadEnv(
   process.cwd()
 );
 
-
-
 const QueryFile = db.$config.pgp.QueryFile;
 const __dirname = path.resolve();
 const environment = env.VITE_NODE_ENV
