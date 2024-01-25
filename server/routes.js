@@ -1,5 +1,5 @@
 import express from 'express'
-import { getQuestions, addQuestion } from './routes/Questions.js'
+import { getQuestions } from './routes/Questions.js'
 import { addMobOfficer } from './routes/MobOfficers.js'
 import { getUserByPhone, updateUserInfo, deleteUser, acceptTermsAndConditions, fetchAllUsers } from './routes/Users.js'
 import { addCustomer } from './routes/Customers.js'
@@ -17,7 +17,6 @@ const router = express.Router()
 
 router.route('/questions')
   .get(getQuestions)
-  .post(addQuestion)
 
 router.route('/mobOfficers')
   .post(addMobOfficer)
@@ -40,7 +39,7 @@ router.route('/users')
   .put(updateUserInfo)
   .delete(deleteUser)
 
-  router.route('/sign-up')
+router.route('/sign-up')
   .post(signUpUser)
 
 router.route('/fetch-all-users')
