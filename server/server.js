@@ -66,7 +66,7 @@ const port = env.PORT || 8080
 //   res.send(req.body)
 // })
 
-app.use('/api/routes/sign-up', router)
+app.post('/api/routes/sign-up', router)
 app.use('/api/routes', router)
 
 if (env.VITE_NODE_ENV === "production") {
