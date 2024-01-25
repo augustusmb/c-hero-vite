@@ -50,6 +50,10 @@ const checkJwt = (req, res, next) => {
   }
 };
 
+app.use((req, res, next) => {
+  console.log(`Received ${req.method} request for ${req.url}`);
+  next();
+});
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -57,12 +61,12 @@ const corsOrigin = env.VITE_NODE_ENV === 'local' ? 'http://localhost:5173/' : 'h
 app.use(cors({ origin: corsOrigin }));
 const port = env.PORT || 8080
 
-// app.post('/api/routes/sign-up', (req, res) => {
-//   console.log('req.body: ', req.body)
-//   res.send(req.body)
-// })
+app.post('/api/routes/sign-up', (req, res) => {
+  console.log('req.body: ', req.body)
+  res.send(req.body)
+})
 
-app.use('/api/routes/sign-up', router)
+// app.use('/api/routes/sign-up', router)
 app.use('/api/routes', router)
 
 if (env.VITE_NODE_ENV === "production") {
