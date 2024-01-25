@@ -49,7 +49,7 @@ export async function signUpUser(req, res) {
   //   break;
   //   default:
   //     console.log('Unknown fruit');
-  }
+  // }
   // insert user into users table
   // const user_id = await db.query(queries.insertUser, { name, phone, email, company, port, vessel, title, level })
 
