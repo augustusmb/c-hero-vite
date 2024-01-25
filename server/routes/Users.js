@@ -1,7 +1,6 @@
 import db from '../../db/db.js';
 import path from 'path';
 import dotenv from 'dotenv';
-import { signUpMessage } from '../sms.js';
 dotenv.config()
 
 import { defineConfig, loadEnv } from 'vite';
@@ -30,7 +29,6 @@ const queries = {
   fetchAllUsers: sql('fetchAllUsers.sql'),
   updateUserInfo: sql('updateUserInfo.sql'),
   deleteUser: sql('deleteUser.sql'),
-  insertUsersProducts: sql('insertUsersProducts.sql'),
   acceptTermsAndConditions: sql('acceptTermsAndConditions.sql'),
   deleteUserSpecificClasses: sql('deleteUserSpecificClasses.sql')
 };

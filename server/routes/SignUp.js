@@ -1,6 +1,7 @@
 import db from '../../db/db.js';
 import path from 'path';
 import dotenv from 'dotenv';
+import pLimit from 'p-limit';
 dotenv.config()
 
 import { defineConfig, loadEnv } from 'vite';
@@ -26,41 +27,53 @@ const sql = (file) => {
 
 const queries = {
   insertUser: sql('insertUser.sql'),
+  insertUsersProducts: sql('insertUsersProducts.sql'),
 };
 
 export async function signUpUser(req, res) {
 
-  const { firstName, lastName, phone, email, company, port, vessel, title, rescuePole, mounts, rescueDavits } = req.body.data
-  // const values = [firstName, lastName, phone, email, company, port, vessel, title, rescuePole, mounts, rescueDavits]
-  // const name = `${firstName} ${lastName}`
-  // let level = null
-
-  console.log('Look Here, length is: ', firstName.length)
-
-  // switch (title) {
-  //   case 'Captain':
-  //     level = '1'
-  //   break;
-  //   case 'Shoreside':
-  //     level = '2'
-  //     break;
-  //   case 'Crew':
-  //     level = '1'
-  //   break;
-  //   default:
-  //     console.log('Unknown fruit');
-  // }
-  // insert user into users table
-  // const user_id = await db.query(queries.insertUser, { name, phone, email, company, port, vessel, title, level })
-
-
-  // const limit = pLimit(4)
-
-  // let userProducts = products.map(product => [`${productMap[product]}a`, `${productMap[product]}b`, `${productMap[product]}c`,`${productMap[product]}d`])
-  // userProducts = userProducts.flat()
-
+  const data = req.body.data;
+  const trimmedData = Object.entries(data).reduce((acc, [key, value]) => {
+    acc[key] = typeof value === 'string' ? value.trim() : value;
+    return acc;
+  }, {});
   
-  // let promises = userProducts.map(product_id => limit(() => db.query(queries.insertUsersProducts, { product_id, user_id })))
-  // let insertedUserProducts = await Promise.all(promises)
+  const { firstName, lastName, phone, email, company, port, vessel, title, rescuePole, mounts, rescueDavits } = trimmedData;
 
+  const name = `${firstName} ${lastName}`
+  let level = null
+
+  switch (title) {
+    case 'Captain':
+      level = '1'
+    break;
+    case 'Shoreside':
+      level = '2'
+      break;
+    case 'Crew':
+      level = '1'
+    break;
+    default:
+      console.log('Unknown fruit');
+  }
+
+  try {
+    const [{ id: user_id }] = await db.query(queries.insertUser, { name, phone, email, company, port, vessel, title, level });
+
+    const rescuePoleId = rescuePole;
+    const davitId = `${rescueDavits}${mounts}`;
+  
+    const usersProducts = [rescuePoleId, davitId];
+    const usersClasses = usersProducts.flatMap(product => [`${product}_a`, `${product}_b`, `${product}_c`,`${product}_d`]);
+  
+    const limit = pLimit(4);
+  
+    let promises = usersClasses.map(product_id => limit(() => db.query(queries.insertUsersProducts, { product_id, user_id })));
+    await Promise.all(promises);
+  
+    res.status(200).json('success inserting user and assiging products');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json('error inserting user and assigning products');
+  }
 }
