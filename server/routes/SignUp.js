@@ -31,6 +31,8 @@ const queries = {
 };
 
 export async function signUpUser(req, res) {
+  console.log(`You've made it into user sign up`)
+  console.log('Data: ', req.body.data)
 
   const data = req.body.data;
   const trimmedData = Object.entries(data).reduce((acc, [key, value]) => {
@@ -60,7 +62,10 @@ export async function signUpUser(req, res) {
   try {
     const [{ id: user_id }] = await db.query(queries.insertUser, { name, phone, email, company, port, vessel, title, level });
 
-    const usersProducts = [rescuePole, `${rescueDavit}${mount}`];
+    const davitCode = rescueDavit[7]
+    const mountCode = mount.includes('flat') ? 'f' : 'b'
+
+    const usersProducts = [rescuePole.slice(0, 2), `${davitCode}${mountCode}`];
     const usersClasses = usersProducts.flatMap(product => [`${product}_a`, `${product}_b`, `${product}_c`,`${product}_d`]);
   
     const limit = pLimit(4);
