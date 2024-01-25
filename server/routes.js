@@ -15,9 +15,9 @@ import { signUpUser } from './routes/SignUp.js'
 
 const router = express.Router()
 
-router.route('/sign-up')
+router.route('/')
   .post(signUpUser)
-  
+
 router.route('/questions')
   .get(getQuestions)
 
