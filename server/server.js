@@ -61,10 +61,10 @@ const corsOrigin = env.VITE_NODE_ENV === 'local' ? 'http://localhost:5173/' : 'h
 app.use(cors({ origin: corsOrigin }));
 const port = env.PORT || 8080
 
-// app.post('/api/routes/sign-up', (req, res) => {
-//   console.log('req.body: ', req.body)
-//   res.send(req.body)
-// })
+app.post('/api/routes/sign-up', (req, res) => {
+  console.log('req.body: ', req.body)
+  res.send(req.body)
+})
 
 app.post('/api/routes/sign-up', router)
 app.use('/api/routes', router)
