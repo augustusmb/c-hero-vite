@@ -30,25 +30,25 @@ function getKey(header, callback){
   });
 }
 
-const checkJwt = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+// const checkJwt = (req, res, next) => {
+//   const authHeader = req.headers.authorization;
 
-  if (authHeader) {
-    const token = authHeader.split(' ')[1];
+//   if (authHeader) {
+//     const token = authHeader.split(' ')[1];
 
-    jwt.verify(token, getKey, { algorithms: ['RS256'] }, (err, user) => {
-      if (err) {
-        console.log('err: ', err)
-        return res.status(403).send(err.message);
-      }
+//     jwt.verify(token, getKey, { algorithms: ['RS256'] }, (err, user) => {
+//       if (err) {
+//         console.log('err: ', err)
+//         return res.status(403).send(err.message);
+//       }
 
-      req.user = user;
-      next();
-    });
-  } else {
-    res.sendStatus(401);
-  }
-};
+//       req.user = user;
+//       next();
+//     });
+//   } else {
+//     res.sendStatus(401);
+//   }
+// };
 
 app.use((req, res, next) => {
   console.log(`Received ${req.method} request for ${req.url}`);
@@ -62,7 +62,7 @@ app.use(cors({ origin: corsOrigin }));
 const port = env.PORT || 8080
 
 app.post('/api/routes/sign-up', router)
-app.use('/api/routes', checkJwt, router)
+app.use('/api/routes', router)
 
 if (env.VITE_NODE_ENV === "production") {
   app.use(express.static("dist"));
