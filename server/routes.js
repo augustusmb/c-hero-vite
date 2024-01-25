@@ -15,6 +15,9 @@ import { signUpUser } from './routes/SignUp.js'
 
 const router = express.Router()
 
+router.route('/sign-up')
+  .post(signUpUser)
+  
 router.route('/questions')
   .get(getQuestions)
 
@@ -39,8 +42,6 @@ router.route('/users')
   .put(updateUserInfo)
   .delete(deleteUser)
 
-router.route('/sign-up')
-  .post(signUpUser)
 
 router.route('/fetch-all-users')
   .get(fetchAllUsers)
