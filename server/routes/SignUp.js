@@ -38,7 +38,7 @@ export async function signUpUser(req, res) {
     return acc;
   }, {});
   
-  const { firstName, lastName, phone, email, company, port, vessel, title, rescuePole, mounts, rescueDavits } = trimmedData;
+  const { firstName, lastName, phone, email, company, port, vessel, title, rescuePole, mount, rescueDavit } = trimmedData;
 
   const name = `${firstName} ${lastName}`
   let level = null
@@ -60,10 +60,7 @@ export async function signUpUser(req, res) {
   try {
     const [{ id: user_id }] = await db.query(queries.insertUser, { name, phone, email, company, port, vessel, title, level });
 
-    const rescuePoleId = rescuePole;
-    const davitId = `${rescueDavits}${mounts}`;
-  
-    const usersProducts = [rescuePoleId, davitId];
+    const usersProducts = [rescuePole, `${rescueDavit}${mount}`];
     const usersClasses = usersProducts.flatMap(product => [`${product}_a`, `${product}_b`, `${product}_c`,`${product}_d`]);
   
     const limit = pLimit(4);
