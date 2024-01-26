@@ -47,8 +47,7 @@ const checkJwt = (req, res, next) => {
     });
   } else {
     console.log(`No auth header`)
-    next();
-    res.sendStatus(401);
+    return res.sendStatus(401);
   }
 };
 
