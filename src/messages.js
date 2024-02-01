@@ -249,9 +249,15 @@ export const productsMap = {
     classProgress: {},
     assigned: false
   },
-  "9r":{
-    productId: "9r",
-    productName: "9R Man Rated Rescue Davit",
+  "9b":{
+    productId: "9b",
+    productName: "9B Series 9 Davit - Bitt Mount",
+    classProgress: {},
+    assigned: false
+  },
+  "9f":{
+    productId: "9f",
+    productName: "9F Series 9 Davit - Flat Mount",
     classProgress: {},
     assigned: false
   },

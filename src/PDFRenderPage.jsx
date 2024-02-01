@@ -28,10 +28,10 @@ import class_7f_a from "./assets/c-hero-classes/7f/7f_a.pdf";
 import class_7f_b from "./assets/c-hero-classes/7f/7f_b.pdf";
 import class_7f_c from "./assets/c-hero-classes/7f/7f_c.pdf";
 import class_7f_d from "./assets/c-hero-classes/7f/7f_d.pdf";
-import class_9r_a from "./assets/c-hero-classes/9r/9r_a.pdf";
-import class_9r_b from "./assets/c-hero-classes/9r/9r_b.pdf";
-import class_9r_c from "./assets/c-hero-classes/9r/9r_c.pdf";
-import class_9r_d from "./assets/c-hero-classes/9r/9r_d.pdf";
+import class_9f_a from "./assets/c-hero-classes/9f/9f_a.pdf";
+import class_9f_b from "./assets/c-hero-classes/9f/9f_b.pdf";
+import class_9f_c from "./assets/c-hero-classes/9f/9f_c.pdf";
+import class_9f_d from "./assets/c-hero-classes/9f/9f_d.pdf";
 import class_hr_a from "./assets/c-hero-classes/hr/hr_a.pdf";
 import class_hr_b from "./assets/c-hero-classes/hr/hr_b.pdf";
 import class_hr_c from "./assets/c-hero-classes/hr/hr_c.pdf";
@@ -80,10 +80,10 @@ let pdfMap = {
   "7f_b": class_7f_b,
   "7f_c": class_7f_c,
   "7f_d": class_7f_d,
-  "9r_a": class_9r_a,
-  "9r_b": class_9r_b,
-  "9r_c": class_9r_c,
-  "9r_d": class_9r_d,
+  "9f_a": class_9f_a,
+  "9f_b": class_9f_b,
+  "9f_c": class_9f_c,
+  "9f_d": class_9f_d,
   hr_a: class_hr_a,
   hr_b: class_hr_b,
   hr_c: class_hr_c,
