@@ -74,7 +74,7 @@ export async function signUpUser(req, res) {
     let promises = usersClasses.map(product_id => limit(() => db.query(queries.insertUsersProducts, { product_id, user_id })));
     await Promise.all(promises);
   
-    res.status(200).json('success inserting user and assiging products');
+    res.status(200).json('success inserting user and assigning products');
   } catch (error) {
     console.error(error);
     res.status(500).json('error inserting user and assigning products');
