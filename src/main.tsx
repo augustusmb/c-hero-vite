@@ -11,8 +11,10 @@ const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
 const audience = import.meta.env.VITE_AUTH0_AUDIENCE;
 
 const queryClient = new QueryClient();
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+
+root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <Auth0Provider

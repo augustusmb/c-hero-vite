@@ -1,18 +1,20 @@
+//@ts-nocheck
+
 import { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import Modal from "simple-react-modal";
-import { UserAuthContext } from "./MainPanelLayout.jsx";
+import { UserAuthContext } from "./MainPanelLayout.js";
 import { Link, useParams } from "react-router-dom";
-import TestInfoInput from "./textComponents/TestInfoInput.jsx";
+import TestInfoInput from "./textComponents/TestInfoInput.tsx";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getTestQuestions, submitCompletedTest } from "./api/test.js";
+import { getTestQuestions, submitCompletedTest } from "./api/test.ts";
 import {
   randomizeArray,
   prepareAnswerOptions,
   prepareBlankAnswers,
 } from "./utils/test.js";
-import { classTypesMap } from "./messages.js";
-import { useClassId } from "./hooks/useClassId.jsx";
+import { classTypesMap } from "./messages.ts";
+import { useClassId } from "./hooks/useClassId.tsx";
 
 const TestTakingPage = () => {
   const { handleSubmit, reset } = useForm();
@@ -24,6 +26,7 @@ const TestTakingPage = () => {
   const [modalData, setModalData] = useState();
   const [testPassed, setTestPassed] = useState(false);
   const userInfo = useContext(UserAuthContext);
+
 
   const { level } = userInfo.userInfo;
   const { classId } = useParams();

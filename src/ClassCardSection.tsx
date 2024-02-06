@@ -1,9 +1,17 @@
 import { useContext } from "react";
-import { UserAuthContext } from "./MainPanelLayout.jsx";
-import ClassCard from "./ClassCard.jsx";
+import { UserAuthContext } from "./MainPanelLayout.js";
+import ClassCard from "./ClassCard.js";
 import { useQuery } from "@tanstack/react-query";
-import { getFullUserProductProgressMap } from "./utils/user.js";
+import { getFullUserProductProgressMap } from "./utils/user.ts";
 import CheckIcon from "./assets/icons/icon-check.svg?react";
+import { ProductProgress } from "./types/types.ts";
+
+type Product = {
+  productId: string
+  productName: string
+  classProgress: ProductProgress
+  assigned: boolean
+}
 
 const ClassCardSection = () => {
   const { userInfo } = useContext(UserAuthContext);
@@ -35,10 +43,9 @@ const ClassCardSection = () => {
       </div>
       <div className="grid grid-cols-2 gap-3">
         {Object.values(data)
-          .filter((item) => item.assigned)
-          .map((product) => (
-            <ClassCard key={product.productId} product={product} />
-          ))}
+          .filter((item: Product) => item.assigned)
+          .map((product: Product) => <ClassCard key={product.productId} product={product} />
+          )}
       </div>
     </div>
   );

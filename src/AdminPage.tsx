@@ -1,16 +1,33 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserAuthContext } from "./MainPanelLayout.jsx";
-import AdminEditUserStatic from "./AdminEditUserStatic.jsx";
-import AdminEditUserForm from "./AdminEditUserForm.jsx";
+import { UserAuthContext } from "./MainPanelLayout.js";
+import AdminEditUserStatic from "./AdminEditUserStatic.js";
+import AdminEditUserForm from "./AdminEditUserForm.js";
 import AdminUserInfoTable from "./AdminUserInfoTable.jsx";
 import { useQuery } from "@tanstack/react-query";
-import { getFullUserProductProgressMap } from "./utils/user.js";
+import { getFullUserProductProgressMap } from "./utils/user.ts";
+import { UserType } from "./types/types.ts";
+
+interface UserAuthContextType {
+  userInfo: UserType;
+  token: string;
+}
 
 const AdminPage = () => {
   const navigate = useNavigate();
-  const { userInfo, token } = useContext(UserAuthContext);
-  const [userToEdit, setUserToEdit] = useState({});
+  const { userInfo, token } = useContext<UserAuthContextType>(UserAuthContext);
+  const [userToEdit, setUserToEdit] = useState<UserType>({
+    id: 0,
+    name: "",
+    email: "",
+    phone: "",
+    level: "",
+    title: "",
+    company: "",
+    vessel: "",
+    port: "",
+    terms_accepted: false,
+  });
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
@@ -27,7 +44,7 @@ const AdminPage = () => {
   if (isLoading) return <span>Loading...</span>;
   if (isError) return <span>Error: {error.message}</span>;
 
-  const handleUserToEdit = (user) => {
+  const handleUserToEdit = (user: UserType) => {
     setUserToEdit(user);
     setEditMode(false);
   };
@@ -35,7 +52,6 @@ const AdminPage = () => {
   const toggleEditMode = () => {
     if (!userToEdit.name) {
       alert("Please first select a user to edit from the table below.");
-      return;
     }
     setEditMode(!editMode);
   };

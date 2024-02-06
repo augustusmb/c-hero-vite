@@ -1,9 +1,11 @@
+//@ts-nocheck
+
 import { useForm } from "react-hook-form";
 import { PropTypes } from "prop-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateUserInfo } from "./api/user.js";
+import { updateUserInfo } from "./api/user.ts";
 import { useNavigate } from "react-router-dom";
-import { labels } from "./messages";
+import { labels } from "./messages.ts";
 
 const UserInfoEdit = ({
   userInfo: user,

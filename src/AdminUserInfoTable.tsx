@@ -1,13 +1,20 @@
+//@ts-nocheck
+
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AgGridReact } from "ag-grid-react"; // React Grid Logic
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
-import { fetchAllUsers } from "./api/user.js";
-import { PropTypes } from "prop-types";
+import { fetchAllUsers } from "./api/user.ts";
+import { UserType } from "./types/types.ts";
 
-const AdminUserInfoTable = ({ handleUserToEdit }) => {
-  const gridRef = useRef();
+interface AdminTableProps {
+  handleUserToEdit: (user: UserType) => void;
+}
+
+const AdminUserInfoTable: React.FC<AdminTableProps> = ({ handleUserToEdit }) => {
+  // const gridRef = useRef();
+  const gridRef = useRef<AgGridReact | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,13 +37,13 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
   }, []);
 
   const onFilterTextBoxChanged = useCallback(() => {
-    gridRef.current.api.setGridOption(
+    gridRef.current?.api.setGridOption(
       "quickFilterText",
-      document.getElementById("filter-text-box").value,
+      (document.getElementById("filter-text-box") as HTMLInputElement).value,
     );
   }, []);
 
-  const getRowStyle = useCallback((params) => {
+  const getRowStyle = useCallback((params: any) => {
     if (params.node.rowIndex % 2 === 0) {
       return { background: "#f8f8f8" };
     }
@@ -73,7 +80,7 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
     },
   ]);
 
-  function TwoValuesCellRenderer(params) {
+  function TwoValuesCellRenderer(params: { field1: string; field2: string }) {
     const field1 = params.colDef.cellRendererParams.field1;
     const field2 = params.colDef.cellRendererParams.field2;
     return (
@@ -86,7 +93,7 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
     );
   }
 
-  const onSelectionChanged = (e) => {
+  const onSelectionChanged = (e: HTMLEvent) => {
     const selectedRowData = e.api.getSelectedNodes()[0].data;
     handleUserToEdit(selectedRowData);
   };
@@ -102,7 +109,7 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
   return (
     <div className="ag-theme-quartz" style={{ height: 600 }}>
       <div className="example-wrapper">
-        <div className="bg-yellow-200 flex items-baseline rounded text-lg">
+        <div className="flex items-baseline rounded bg-yellow-200 text-lg">
           <label
             htmlFor="filter-text-box"
             className="text-slate-950 mx-4 text-lg font-bold"
@@ -118,7 +125,7 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
           />
         </div>
         <div
-          className="border-yellow-200 border-x-2 shadow-xl"
+          className="border-x-2 border-yellow-200 shadow-xl"
           style={{ height: 500, width: "100%" }}
         >
           <AgGridReact
@@ -135,10 +142,6 @@ const AdminUserInfoTable = ({ handleUserToEdit }) => {
       </div>
     </div>
   );
-};
-
-AdminUserInfoTable.propTypes = {
-  handleUserToEdit: PropTypes.func,
 };
 
 export default AdminUserInfoTable;

@@ -1,16 +1,26 @@
+//@ts-nocheck
+
 import { useContext, useEffect } from "react";
-import { UserAuthContext } from "./MainPanelLayout.jsx";
-import ClassCardSection from "./ClassCardSection";
-// import MobileBrowserNote from "./textComponents/MobileBrowserNote.jsx";
+import { UserAuthContext } from "./MainPanelLayout.tsx";
+import ClassCardSection from "./ClassCardSection.tsx";
 import TermsAndConditions from "./textComponents/TermsAndConditions.jsx";
 import UserInfoSection from "./UserInfoSection.jsx";
 import { useQuery } from "@tanstack/react-query";
-import { getUserByPhone } from "./api/user.js";
-import { useAuth0 } from "@auth0/auth0-react";
+import { getUserByPhone } from "./api/user.ts";
+import { User, useAuth0 } from "@auth0/auth0-react";
+import { UserType } from "./types/types.ts";
+
+interface UserAuthContextType {
+  userInfo: UserType
+  setUserInfo: (user: User) => void
+}
 
 const HomePage = () => {
-  const { userInfo, setUserInfo } = useContext(UserAuthContext);
+
+  const { userInfo, setUserInfo } = useContext<UserAuthContextType>(UserAuthContext); 
   const { isLoading: authLoading, user, isAuthenticated } = useAuth0();
+
+  console.log('userInfo: ', userInfo)
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["get-user-info", user?.name],

@@ -1,5 +1,7 @@
-import { productsMap } from "../messages.js";
-import { fetchUserClasses } from "../api/user.js";
+//@ts-nocheck
+
+import { productsMap } from "../messages.ts";
+import { fetchUserClasses } from "../api/user.ts";
 
 export const createUserClassesMap = (userClasses) => {
   const userClassesMap = {};
@@ -40,6 +42,7 @@ export const createUserFullProgressMap = (userClassesMap) => {
     }
   }
   
+  console.log('hi: ', userProductsMap);
   return userProductsMap;
 }
 

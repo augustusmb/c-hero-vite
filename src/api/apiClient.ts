@@ -20,7 +20,7 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export function setAuthToken(token) {
+export function setAuthToken(token: string) {
   if (token) {
     apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   } else {

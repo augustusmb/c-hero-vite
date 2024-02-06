@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import PropTypes from "prop-types";
 
 const UserProductsStatic = (props) => {

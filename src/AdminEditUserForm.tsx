@@ -1,12 +1,21 @@
 import { useState } from "react";
-import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateUserInfoAndProducts, deleteUser } from "./api/user.js";
-import { labels } from "./messages.js";
+import { updateUserInfoAndProducts, deleteUser } from "./api/user.ts";
+import { labels } from "./messages.ts";
+import { UserType, UserProductData, UpdatedUserInfoProducts, NewlyAddedProducts, NewlyRemovedProducts } from "./types/types.ts";
 
-const AdminEditUserForm = ({
+interface AdminEditUserStaticProps {
+  toggleEditMode: (editMode: boolean) => void;
+  editMode: boolean;
+  userInfo: UserType;
+  data: UserProductData
+  handleUserToEdit: (user: UserType) => void;
+}
+
+
+const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
   userInfo: user,
   toggleEditMode,
   editMode,
@@ -19,21 +28,21 @@ const AdminEditUserForm = ({
   const navigate = useNavigate();
 
   const updateUserInfoMutation = useMutation({
-    mutationFn: (updatedUserInfo) => {
-      updateUserInfoAndProducts(updatedUserInfo);
+    mutationFn: async (updatedUserInfoProducts: UpdatedUserInfoProducts) => {
+      updateUserInfoAndProducts(updatedUserInfoProducts);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["all-users"]);
-      queryClient.invalidateQueries(["get-user-products"]);
+      queryClient.invalidateQueries({ queryKey: ["all-users"] });
+      queryClient.invalidateQueries({ queryKey: ["get-user-products"] });
     },
   });
 
   const deleteUserMutation = useMutation({
-    mutationFn: (userId) => {
+    mutationFn: async (userId: number) => {
       deleteUser(userId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["all-users"]);
+      queryClient.invalidateQueries({ queryKey: ["all-users"] });
     },
   });
 
@@ -48,9 +57,9 @@ const AdminEditUserForm = ({
     navigate("/admin");
   };
 
-  const onSubmit = (data) => {
-    const newlyAddedProducts = {}; // compare newly assigned products to already assigned products
-    const newlyRemovedProducts = {};
+  const onSubmit = (data: UpdatedUserInfoProducts) => {
+    const newlyAddedProducts: NewlyAddedProducts = {}; // compare newly assigned products to already assigned products
+    const newlyRemovedProducts: NewlyRemovedProducts = {};
     for (const key in userProductData) {
       if (userProductData[key].assigned === false && data[key] === true) {
         newlyAddedProducts[key] = true;
@@ -168,22 +177,6 @@ const AdminEditUserForm = ({
       </div>
     </div>
   );
-};
-
-AdminEditUserForm.propTypes = {
-  userInfo: PropTypes.shape({
-    name: PropTypes.string,
-    email: PropTypes.string,
-    title: PropTypes.string,
-    company: PropTypes.string,
-    vessel: PropTypes.string,
-    port: PropTypes.string,
-    id: PropTypes.number,
-  }),
-  toggleEditMode: PropTypes.func,
-  editMode: PropTypes.bool,
-  data: PropTypes.object,
-  handleUserToEdit: PropTypes.func,
 };
 
 export default AdminEditUserForm;

@@ -1,6 +1,6 @@
 import eTrainingIcon from "./assets/c-hero-etraining-logo-final.png";
-import AuthenticationButton from "./AuthenticationButton";
-import NavBarDropdown from "./NavBarDropdown.jsx";
+import AuthenticationButton from "./AuthenticationButton.tsx";
+import NavBarDropdown from "./NavBarDropdown.tsx";
 import { Link } from "react-router-dom";
 
 const HeaderNavigation = () => {

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import HeaderNavigation from "./HeaderNavigation.jsx";
-import MainPanelRouter from "./MainPanelRouter.jsx";
+import HeaderNavigation from "./HeaderNavigation.tsx";
+import MainPanelRouter from "./MainPanelRouter.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
-import { setAuthToken } from "./api/apiClient.js";
-export const UserAuthContext = React.createContext();
+import { setAuthToken } from "./api/apiClient.ts";
+export const UserAuthContext = React.createContext({});
 
 const MainPanelLayout = () => {
   const [userInfo, setUserInfo] = useState({});

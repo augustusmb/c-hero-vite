@@ -24,128 +24,6 @@ export const messages = {
     ["44c", "45c", "46c", "47c", "62c"],
     ["44d", "45d", "46d", "47d", "62d"],
   ],
-  classList: {
-    _44sa: {
-      product: "Bitt Mounted Rescue Davit + Swivel",
-      classType: "Setup",
-      className: "_44sa",
-      classUrl: "",
-    },
-    _44sb: {
-      product: "Bitt Mounted Rescue Davit + Swivel",
-      classType: "Operation",
-      className: "_44sb",
-      classUrl: "",
-    },
-    _44sc: {
-      product: "Bitt Mounted Rescue Davit + Swivel",
-      classType: "Inspection & Storage",
-      className: "_44sc",
-      classUrl: "",
-    },
-    _44sd: {
-      product: "Bitt Mounted Rescue Davit + Swivel",
-      classType: "MOB Drill",
-      className: "_44sd",
-      classUrl: "",
-    },
-    _45a: {
-      product: "Rescue Pole",
-      classType: "Setup",
-      className: "_45a",
-      classUrl: "",
-    },
-    _45b: {
-      product: "Rescue Pole",
-      classType: "Operation",
-      className: "_45b",
-      classUrl: "",
-    },
-    _45c: {
-      product: "Rescue Pole",
-      classType: "Inspection & Storage",
-      className: "_45c",
-      classUrl: "",
-    },
-    _45d: {
-      product: "Rescue Pole",
-      classType: "MOB Drill",
-      className: "_45d",
-      classUrl: "",
-    },
-    _46a: {
-      product: "Horizontal Rescue Pole",
-      classType: "Setup",
-      className: "_46a",
-      classUrl: "",
-    },
-    _46b: {
-      product: "Horizontal Rescue Pole",
-      classType: "Operation",
-      className: "_46b",
-      classUrl: "",
-    },
-    _46c: {
-      product: "Horizontal Rescue Pole",
-      classType: "Inspection & Storage",
-      className: "_46c",
-      classUrl: "",
-    },
-    _46d: {
-      product: "Horizontal Rescue Pole",
-      classType: "MOB Drill",
-      className: "_46d",
-      classUrl: "",
-    },
-    _47a: {
-      product: "Rescue Pole w/ Recovery Strap",
-      classType: "Setup",
-      className: "_47a",
-      classUrl: "",
-    },
-    _47b: {
-      product: "Rescue Pole w/ Recovery Strap",
-      classType: "Operation",
-      className: "_47b",
-      classUrl: "",
-    },
-    _47c: {
-      product: "Rescue Pole w/ Recovery Strap",
-      classType: "Inspection & Storage",
-      className: "_47c",
-      classUrl: "",
-    },
-    _47d: {
-      product: "Rescue Pole w/ Recovery Strap",
-      classType: "MOB Drill",
-      className: "_47d",
-      classUrl: "",
-    },
-    _62a: {
-      product: "Flat Mounted Rescue Davit + Swivel",
-      classType: "Setup",
-      className: "_62a",
-      classUrl: "",
-    },
-    _62b: {
-      product: "Flat Mounted Rescue Davit + Swivel",
-      classType: "Operation",
-      className: "_62b",
-      classUrl: "",
-    },
-    _62c: {
-      product: "Flat Mounted Rescue Davit + Swivel",
-      classType: "Inspection & Storage",
-      className: "_62c",
-      classUrl: "",
-    },
-    _62d: {
-      product: "Flat Mounted Rescue Davit + Swivel",
-      classType: "MOB Drill",
-      className: "_62d",
-      classUrl: "",
-    },
-  },
 };
 
 export const classTypesMap = {
@@ -181,8 +59,8 @@ export const productsArray = [
     code: "7f"
   },
   {
-    name: "9R Man Rated Rescue Davit",
-    code: "9r"
+    name: "9F Man Rated Rescue Davit",
+    code: "9f"
   },
   {
     name: "HR Rescue Pole",
@@ -251,7 +129,7 @@ export const productsMap = {
   },
   "9f":{
     productId: "9f",
-    productName: "9F Series 9 Davit - Flat Mount",
+    productName: "9F Man Rated Rescue Davit",
     classProgress: {},
     assigned: false
   },

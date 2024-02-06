@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { PropTypes } from "prop-types";
 import { pdfjs, Document, Page } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -107,29 +106,29 @@ let pdfMap = {
 };
 
 const PDFRenderPage = () => {
-  const [numPages, setNumpages] = useState(1);
+  const [numPages, setNumpages] = useState<number | null>(1);
   const [panelWidth, setPanelWidth] = useState(500);
 
   let { classId, safety } = useParams();
 
   const pdfKey = classId ? classId : safety;
 
-  const onPDFSuccess = ({ numPages }) => {
+  const onPDFSuccess = ({ numPages }: { numPages: number }) => {
     setNumpages(numPages);
   };
 
   useEffect(() => {
-    setPanelWidth(document.getElementById("mainPanel").offsetWidth);
+    setPanelWidth(document.getElementById("mainPanel")?.offsetWidth ?? 0);
   }, []);
 
   return (
     <div id="mainPanel" className="pb-8">
       <Document
-        file={pdfMap[pdfKey]}
+        file={pdfMap[pdfKey as keyof typeof pdfMap]}
         onLoadSuccess={onPDFSuccess}
         onLoadError={console.error}
       >
-        {Array.from(new Array(numPages), (el, index) => (
+        {Array.from(new Array(numPages), (_el, index) => (
           <div key={index}>
             <Page
               key={`page_${index + 1}`}
@@ -139,7 +138,6 @@ const PDFRenderPage = () => {
               onRenderAnnotationLayerError={console.error}
               onGetAnnotationsError={console.error}
               width={panelWidth}
-              maxWidth={1000}
             />
           </div>
         ))}
@@ -158,15 +156,6 @@ const PDFRenderPage = () => {
       )}
     </div>
   );
-};
-
-PDFRenderPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      classId: PropTypes.string,
-      safety: PropTypes.string,
-    }),
-  }),
 };
 
 export default PDFRenderPage;

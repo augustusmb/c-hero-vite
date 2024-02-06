@@ -1,8 +1,15 @@
-import PropTypes from "prop-types";
 import UserInfoStatic from "./UserInfoStatic.jsx";
 import UserProductsStatic from "./UserProductsStatic.jsx";
+import { UserType, UserProductData } from "./types/types.ts";
 
-const AdminEditUserStatic = ({
+interface AdminEditUserStaticProps {
+  toggleEditMode: (editMode: boolean) => void;
+  editMode: boolean;
+  userInfo: UserType;
+  data: UserProductData
+}
+
+const AdminEditUserStatic: React.FC<AdminEditUserStaticProps> = ({
   userInfo: user,
   toggleEditMode,
   editMode,
@@ -32,21 +39,6 @@ const AdminEditUserStatic = ({
       </div>
     </div>
   );
-};
-
-AdminEditUserStatic.propTypes = {
-  userInfo: PropTypes.shape({
-    name: PropTypes.string,
-    email: PropTypes.string,
-    title: PropTypes.string,
-    company: PropTypes.string,
-    vessel: PropTypes.string,
-    port: PropTypes.string,
-    id: PropTypes.number,
-  }),
-  toggleEditMode: PropTypes.func,
-  editMode: PropTypes.bool,
-  data: PropTypes.object,
 };
 
 export default AdminEditUserStatic;

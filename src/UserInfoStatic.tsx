@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { PropTypes } from "prop-types";
 import parsePhoneNumber from "libphonenumber-js";
 import MailIcon from "./assets/icons/icon-mail.svg?react";
