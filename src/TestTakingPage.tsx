@@ -4,7 +4,7 @@ import { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import Modal from "simple-react-modal";
 import { UserAuthContext } from "./MainPanelLayout.js";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import TestInfoInput from "./textComponents/TestInfoInput.tsx";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getTestQuestions, submitCompletedTest } from "./api/test.ts";
@@ -26,7 +26,7 @@ const TestTakingPage = () => {
   const [modalData, setModalData] = useState();
   const [testPassed, setTestPassed] = useState(false);
   const userInfo = useContext(UserAuthContext);
-
+  let navigate = useNavigate();
 
   const { level } = userInfo.userInfo;
   const { classId } = useParams();
@@ -176,7 +176,8 @@ const TestTakingPage = () => {
   }
 
   const closeModal = () => {
-    setShowModal(!showModal);
+    setShowModal(prev => !prev);
+    navigate(`/class/${classId}`)
     reset();
   };
 
@@ -252,7 +253,7 @@ const TestTakingPage = () => {
           ) : (
             <Link to={`/class/${classId}`}>
               <button className="text-slate-950 rounded bg-orange-300 px-2 py-2 text-lg font-bold hover:bg-orange-500 hover:text-slate-050">
-                Return to class material
+                Return to class PDF
               </button>
             </Link>
           )}
