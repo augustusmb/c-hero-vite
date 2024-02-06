@@ -22,8 +22,6 @@ const classTypesMapping: ClassTypesMap = {
 
 const ClassCard = ({ product }: { product: product }) => {
 
-  console.log('product: ', product);
-
   return (
     <div className="overflow-hidden rounded-lg bg-slate-200 shadow-lg shadow-slate-300">
       <h4 className="w-100 mb-2 bg-slate-500 py-1 text-xs font-semibold text-slate-050 underline lg:text-lg">

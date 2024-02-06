@@ -5,7 +5,6 @@ export function randomizeArray(array, level) {
     return array.sort((a, b) => a.id - b.id)
   }
 
-  console.log("array: ", array)
   return array.sort(() => Math.random() - 0.5);
 }
 

@@ -20,8 +20,6 @@ const HomePage = () => {
   const { userInfo, setUserInfo } = useContext<UserAuthContextType>(UserAuthContext); 
   const { isLoading: authLoading, user, isAuthenticated } = useAuth0();
 
-  console.log('userInfo: ', userInfo)
-
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["get-user-info", user?.name],
     queryFn: getUserByPhone,

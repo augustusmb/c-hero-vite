@@ -42,7 +42,6 @@ export const createUserFullProgressMap = (userClassesMap) => {
     }
   }
   
-  console.log('hi: ', userProductsMap);
   return userProductsMap;
 }
 
