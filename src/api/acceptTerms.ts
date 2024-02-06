@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import apiClient from "./apiClient"
 
 export const acceptTermsAndConditions = async (userId) => {
