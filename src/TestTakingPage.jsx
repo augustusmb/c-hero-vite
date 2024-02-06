@@ -25,6 +25,7 @@ const TestTakingPage = () => {
   const [testPassed, setTestPassed] = useState(false);
   const userInfo = useContext(UserAuthContext);
 
+  const { level } = userInfo.userInfo;
   const { classId } = useParams();
   const { testInfo, testType } = useClassId(classId);
 
@@ -49,7 +50,7 @@ const TestTakingPage = () => {
 
   useEffect(() => {
     if (questions) {
-      let randomQuestions = randomizeArray(questions.data);
+      let randomQuestions = randomizeArray(questions.data, level);
       randomQuestions.forEach((question) => {
         question.answerOptions = prepareAnswerOptions(question);
       });

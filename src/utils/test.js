@@ -1,4 +1,9 @@
-export function randomizeArray(array) {
+export function randomizeArray(array, level) {
+  if (level === "0") {
+    return array.sort((a, b) => a.id - b.id)
+  }
+
+  console.log("array: ", array)
   return array.sort(() => Math.random() - 0.5);
 }
 
