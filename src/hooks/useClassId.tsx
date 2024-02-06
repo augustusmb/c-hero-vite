@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { useMemo } from "react";
 import { productsMap } from "../messages.ts";
 

@@ -1,6 +1,5 @@
 //@ts-nocheck
 
-import { PropTypes } from "prop-types";
 import parsePhoneNumber from "libphonenumber-js";
 import MailIcon from "./assets/icons/icon-mail.svg?react";
 import PhoneIcon from "./assets/icons/icon-phone-incoming-call.svg?react";
@@ -77,19 +76,6 @@ const UserInfoStatic = ({ userInfo: user }) => {
       </div>
     </div>
   );
-};
-
-UserInfoStatic.propTypes = {
-  userInfo: PropTypes.shape({
-    name: PropTypes.string,
-    email: PropTypes.string,
-    title: PropTypes.string,
-    company: PropTypes.string,
-    vessel: PropTypes.string,
-    port: PropTypes.string,
-    id: PropTypes.number,
-    phone: PropTypes.string,
-  }),
 };
 
 export default UserInfoStatic;

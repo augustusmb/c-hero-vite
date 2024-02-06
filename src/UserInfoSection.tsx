@@ -1,8 +1,9 @@
+//@ts-nocheck
+
 import { useState } from "react";
 import UserInfoStatic from "./UserInfoStatic.jsx";
 import UserInfoEdit from "./UserInfoEdit.jsx";
 import { useAuth0 } from "@auth0/auth0-react";
-import PropTypes from "prop-types";
 
 const UserInfoSection = ({ userInfo }) => {
   const { user, isLoading } = useAuth0();
@@ -57,13 +58,6 @@ const UserInfoSection = ({ userInfo }) => {
       </div>
     </div>
   );
-};
-
-UserInfoSection.propTypes = {
-  userInfo: PropTypes.object,
-  handleUserToEdit: PropTypes.func,
-  editMode: PropTypes.bool,
-  setEditMode: PropTypes.func,
 };
 
 export default UserInfoSection;

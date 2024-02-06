@@ -1,9 +1,9 @@
-import { PropTypes } from "prop-types";
+//@ts-nocheck
+
 import { useMutation } from "@tanstack/react-query";
 import { acceptTermsAndConditions } from "../api/acceptTerms";
 
-const TermsAndConditions = (props) => {
-  const { userId } = props;
+const TermsAndConditions = ({ userId }) => {
 
   const acceptTermsMutation = useMutation({
     mutationFn: (userId) => {
@@ -44,11 +44,6 @@ const TermsAndConditions = (props) => {
       </form>
     </div>
   );
-};
-
-TermsAndConditions.propTypes = {
-  acceptTermsMutation: PropTypes.object,
-  userId: PropTypes.number,
 };
 
 export default TermsAndConditions;

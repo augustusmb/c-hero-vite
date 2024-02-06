@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import CheckIcon from "../assets/icons/icon-check.svg?react";
 
 const TestInfoInput = () => {

@@ -2,8 +2,8 @@
 
 import PropTypes from "prop-types";
 
-const UserProductsStatic = (props) => {
-  const { userProductData } = props;
+const UserProductsStatic = ({ userProductData }) => {
+
   return (
     <div className="flex flex-col items-start">
       {Object.values(userProductData).map((product) => {
@@ -23,10 +23,6 @@ const UserProductsStatic = (props) => {
       })}
     </div>
   );
-};
-
-UserProductsStatic.propTypes = {
-  userProductData: PropTypes.object,
 };
 
 export default UserProductsStatic;
