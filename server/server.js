@@ -74,7 +74,7 @@ app.get('/', (req, res) => {
 });
 
 app.use((req, res) => {
-  const indexPath = path.join(__dirname, '../dist/index.html');
+  const indexPath = path.join(__dirname, '../../dist/index.html');
   console.log('Serving index.html from:', indexPath);
   res.sendFile(indexPath);
 });
