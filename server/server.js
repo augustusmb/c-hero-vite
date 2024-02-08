@@ -70,12 +70,11 @@ if (env.VITE_NODE_ENV === "production") {
 }
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, "../dist/index.html"));
+  res.sendFile(path.join(__dirname, "/dist/index.html"));
 });
 
 app.use((req, res) => {
   const indexPath = path.join(__dirname, '/dist/index.html');
-  console.log('Serving index.html from:', indexPath);
   res.sendFile(indexPath);
 });
 
