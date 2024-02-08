@@ -13,10 +13,10 @@ const UserInfoStatic = ({ userInfo: user }) => {
     <span className="italic text-slate-400">info missing</span>
   );
 
-  if (Object.keys(user).length === 0) {
+  if (user.name.length === 0) {
     return (
       <div className="mb-4 flex items-center justify-center">
-        <UserIcon className="fill-red-050 stroke-red-500 h-8 w-8 stroke-1 lg:h-10 lg:w-10" />
+        <UserIcon className="h-8 w-8 fill-red-050 stroke-red-500 stroke-1 lg:h-10 lg:w-10" />
         <span className="ml-2 text-center text-lg italic text-slate-400 lg:ml-4 lg:text-2xl">
           Please select a user to begin editing
         </span>
@@ -32,7 +32,7 @@ const UserInfoStatic = ({ userInfo: user }) => {
   return (
     <div className="grid h-60 grid-cols-1">
       <div className="col-span-1 flex flex-col items-start">
-        <span className="text-red-400 text-2xl lg:text-4xl">
+        <span className="text-2xl text-red-400 lg:text-4xl">
           {user.name || infoMissing}
         </span>
         <div className="flex items-center">
@@ -49,7 +49,7 @@ const UserInfoStatic = ({ userInfo: user }) => {
         </div>
       </div>
       <div className="col-span-1 mt-2 flex flex-col items-start lg:mt-4">
-        <span className="text-red-400 text-xl lg:text-3xl">
+        <span className="text-xl text-red-400 lg:text-3xl">
           {user.title || infoMissing}
         </span>
         <div className="flex items-center">
