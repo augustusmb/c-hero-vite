@@ -13,7 +13,7 @@ const UserInfoStatic = ({ userInfo: user }) => {
     <span className="italic text-slate-400">info missing</span>
   );
 
-  if (user.name.length === 0) {
+  if (Object.keys(user).length === 0) {
     return (
       <div className="mb-4 flex items-center justify-center">
         <UserIcon className="h-8 w-8 fill-red-050 stroke-red-500 stroke-1 lg:h-10 lg:w-10" />
