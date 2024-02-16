@@ -25,7 +25,6 @@ const sql = (file) => {
 }
 
 const queries = {
-  addQuestion: sql('addQuestion.sql'),
   getQuestions: sql('getQuestions.sql')
 };
 
@@ -33,13 +32,4 @@ export const getQuestions = async (req, res) => {
   const { classId } = req.query
   let result = await db.any(queries.getQuestions, { classId })
   res.status(200).json(result)
-}
-
-export const addQuestionOnce = (items) => {
-  items.forEach(item => {
-    const { id, title, correct_answer, incorrect_answer1, incorrect_answer2, incorrect_answer3, true_or_false } = item
-    db.none(queries.addQuestion, { id, title, correct_answer, incorrect_answer1, incorrect_answer2, incorrect_answer3, true_or_false })
-    .then(() => console.log('Success adding test question'))
-    .catch(err => console.log('Error: ', err))
-  })
 }

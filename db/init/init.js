@@ -15,14 +15,8 @@ const sql = (file) => {
 
 const queries = {
   products: sql('products.sql'),
-  vessels: sql('vessels.sql'),
-  company: sql('company.sql'),
   users: sql('users.sql'),
-  ports: sql('ports.sql'),
   questions: sql('questions.sql'),
-  company_products: sql('company_products.sql'),
-  company_vessels: sql('company_vessels.sql'),
-  ports_vessels: sql('ports_vessels.sql'),
   products_questions: sql('products_questions.sql'),
   users_products: sql('users_products.sql'),
   users_vessels: sql('users_vessels.sql'),
