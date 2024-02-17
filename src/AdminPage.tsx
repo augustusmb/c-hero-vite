@@ -1,6 +1,7 @@
 //@ts-nocheck
 
 import { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { UserAuthContext } from "./MainPanelLayout.js";
 import AdminEditUserStatic from "./AdminEditUserStatic.js";
@@ -52,10 +53,9 @@ const AdminPage = () => {
   };
 
   const toggleEditMode = () => {
-    if (!userToEdit.name) {
-      alert("Please first select a user to edit from the table below.");
-    }
-    setEditMode(!editMode);
+    if (!userToEdit.name)
+      toast.error("Please first select a user to edit from the table below.");
+    else setEditMode(!editMode);
   };
 
   return (

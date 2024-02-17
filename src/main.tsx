@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -11,8 +12,9 @@ const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
 const audience = import.meta.env.VITE_AUTH0_AUDIENCE;
 
 const queryClient = new QueryClient();
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement,
+);
 
 root.render(
   <React.StrictMode>

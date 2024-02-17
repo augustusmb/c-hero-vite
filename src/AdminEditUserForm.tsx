@@ -1,21 +1,26 @@
 //@ts-nocheck
 
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserInfoAndProducts, deleteUser } from "./api/user.ts";
 import { labels } from "./messages.ts";
-import { UserType, UserProductData, UpdatedUserInfoProducts, NewlyAddedProducts, NewlyRemovedProducts } from "./types/types.ts";
+import {
+  UserType,
+  UserProductData,
+  UpdatedUserInfoProducts,
+} from "./types/types.ts";
+import { compareProducts, createUserInfo } from "./utils/AdminPageUtils.ts";
 
 interface AdminEditUserStaticProps {
   toggleEditMode: (editMode: boolean) => void;
   editMode: boolean;
   userInfo: UserType;
-  data: UserProductData
+  data: UserProductData;
   handleUserToEdit: (user: UserType) => void;
 }
-
 
 const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
   userInfo: user,
@@ -53,37 +58,35 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
   };
 
   const handleDeleteUser = () => {
-    alert(`${user.name} has been deleted from the database.`);
+    toast.success(`${user.name} has been deleted from the database.`);
     deleteUserMutation.mutate(user.id);
-    handleUserToEdit({});
-    navigate("/admin");
+    handleUserToEdit({
+      id: 0,
+      name: "",
+      email: "",
+      phone: "",
+      level: "",
+      title: "",
+      company: "",
+      vessel: "",
+      port: "",
+      terms_accepted: false,
+    });
   };
 
-  const onSubmit = (data: UpdatedUserInfoProducts) => {
-    const newlyAddedProducts: NewlyAddedProducts = {}; // compare newly assigned products to already assigned products
-    const newlyRemovedProducts: NewlyRemovedProducts = {};
-    for (const key in userProductData) {
-      if (userProductData[key].assigned === false && data[key] === true) {
-        newlyAddedProducts[key] = true;
-      }
-      if (userProductData[key].assigned === true && data[key] === false) {
-        newlyRemovedProducts[key] = true;
-      }
-    }
-
-    let userInfo = {
-      name: data.name || user.name,
-      email: data.email || user.email,
-      title: data.title || user.title,
-      company: data.company || user.company,
-      vessel: data.vessel || user.vessel,
-      port: data.port || user.port,
-      id: user.id,
+  const onSubmit = (formData: UpdatedUserInfoProducts) => {
+    const { newlyAddedProducts, newlyRemovedProducts } = compareProducts(
+      userProductData,
+      formData,
+    );
+    const userInfo = createUserInfo(
+      formData,
+      user,
       newlyAddedProducts,
       newlyRemovedProducts,
-    };
+    );
 
-    // alert(`${user.name}'s account has been updated.`);
+    toast.success(`${user.name}'s account has been updated.`);
     updateUserInfoMutation.mutate(userInfo);
     handleUserToEdit(Object.assign({}, user, userInfo));
   };
