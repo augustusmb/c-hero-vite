@@ -62,11 +62,22 @@ export async function signUpUser(req, res) {
   try {
     const [{ id: user_id }] = await db.query(queries.insertUser, { name, phone, email, company, port, vessel, title, level });
 
-    const rescuePoleCode = rescuePole.slice(0, 2).toLowerCase()
-    const davitCode = rescueDavit[7]
-    const mountCode = mount.includes('flat') ? 'f' : 'b'
 
-    const usersProducts = [rescuePoleCode, `${davitCode}${mountCode}`];
+
+    const usersProducts = []
+
+    if (checkValidDavitAndMount(rescueDavit, mount)) {
+      const davitType = rescueDavit[7]
+      const mountType = mount.includes('flat') ? 'f' : 'b'
+      const davitCode = `${davitType}${mountType}`
+      usersProducts.push(davitCode)
+    }
+
+    if (checkValidRescuePole(rescuePole)) {
+      const rescuePoleCode = rescuePole.slice(0, 2).toLowerCase()
+      usersProducts.push(rescuePoleCode)
+    }
+
     const usersClasses = usersProducts.flatMap(product => [`${product}_a`, `${product}_b`, `${product}_c`,`${product}_d`]);
   
     const limit = pLimit(4);
@@ -77,6 +88,18 @@ export async function signUpUser(req, res) {
     res.status(200).json('success inserting user and assigning products');
   } catch (error) {
     console.error(error);
-    res.status(500).json('error inserting user and assigning products');
+    res.status(500).json('error inserting user and assigning products, check if duplicate phone exists in the database.');
   }
+}
+
+
+function checkValidRescuePole(rescuePole) {
+  const validRescuePoles = ['RK', 'VR14', 'RS14', 'HR14'];
+  return validRescuePoles.includes(rescuePole);
+}
+
+function checkValidDavitAndMount(rescueDavit, mount) {
+  const validDavitMounts = ['Tugboat Bitt Mount', 'Side of Boat Flat Mount'];
+  const validRescueDavits = ['Series 3 Fixed Davit', 'Series 5 Hinged Davit', 'Series 7 Swivel Davit', 'Series 9 Man Rated'];
+  return validDavitMounts.includes(mount) && validRescueDavits.includes(rescueDavit);
 }
