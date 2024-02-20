@@ -1,6 +1,5 @@
 import db from "../../db/db.js";
 import path from "path";
-
 import dotenv from 'dotenv';
 
 import { defineConfig, loadEnv } from 'vite';

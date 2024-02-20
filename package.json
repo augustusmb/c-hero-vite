@@ -7,7 +7,9 @@
     "dev": "vite",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "node server/server.js",
+    "start": "concurrently \"npm run server\" \"npm run dev\""
   },
   "prettier": {
     "plugins": [
@@ -56,6 +58,7 @@
     "@typescript-eslint/parser": "^6.19.0",
     "@vitejs/plugin-react": "^4.2.1",
     "axios-mock-adapter": "^1.22.0",
+    "concurrently": "^8.2.2",
     "eslint": "^8.45.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",

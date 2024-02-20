@@ -16,8 +16,8 @@ const environment = env.VITE_NODE_ENV
 
 
 const sql = (file) => {
-  let fullPath = path.join(__dirname, '../db/queries/users/', file)
-  
+  let fullPath = path.join(__dirname, '/db/queries/users/', file)
+
   if (environment === 'production') {
     fullPath = path.join(__dirname, '/db/queries/users/', file);
   }
