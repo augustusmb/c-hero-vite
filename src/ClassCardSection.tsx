@@ -1,30 +1,32 @@
-//@ts-nocheck
-
-import { useContext } from "react";
-import { UserAuthContext } from "./MainPanelLayout.js";
 import ClassCard from "./ClassCard.js";
 import { useQuery } from "@tanstack/react-query";
 import { getFullUserProductProgressMap } from "./utils/user.ts";
 import CheckIcon from "./assets/icons/icon-check.svg?react";
 import { ProductProgress } from "./types/types.ts";
+import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 
 type Product = {
-  productId: string
-  productName: string
-  classProgress: ProductProgress
-  assigned: boolean
-}
+  productId: string;
+  productName: string;
+  classProgress: ProductProgress;
+  assigned: boolean;
+};
 
 const ClassCardSection = () => {
-  const { userInfo } = useContext(UserAuthContext);
+  const { loggedInUserInfo } = useLoggedInUserContext();
 
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["products", userInfo.id],
+  const { isLoading, isError, data, error } = useQuery<
+    { [key: string]: Product },
+    Error
+  >({
+    queryKey: ["products", loggedInUserInfo?.id],
     queryFn: getFullUserProductProgressMap,
   });
 
   if (isLoading) return <span>Loading...</span>;
   if (isError) return <span>Error: {error.message}</span>;
+
+  console.log("data: ", data);
 
   return (
     <div className="flex flex-col pb-10">
@@ -44,10 +46,11 @@ const ClassCardSection = () => {
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
-        {Object.values(data)
+        {Object.values(data ?? {})
           .filter((item: Product) => item.assigned)
-          .map((product: Product) => <ClassCard key={product.productId} product={product} />
-          )}
+          .map((product: Product) => (
+            <ClassCard key={product.productId} product={product} />
+          ))}
       </div>
     </div>
   );

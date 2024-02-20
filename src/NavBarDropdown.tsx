@@ -1,17 +1,15 @@
-//@ts-nocheck
-
-import { Fragment, useContext } from "react";
+import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
-import { UserAuthContext } from "./MainPanelLayout.js";
+import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function NavbarDropDown() {
-  const { userInfo } = useContext(UserAuthContext);
+  const { loggedInUserInfo } = useLoggedInUserContext();
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -36,7 +34,7 @@ export default function NavbarDropDown() {
       >
         <Menu.Items className="ring-black absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-indigo-050 shadow-xl ring-1 ring-opacity-5 focus:outline-none">
           <div className="py-1">
-            {userInfo.level === "0" ? (
+            {loggedInUserInfo?.level === "0" ? (
               <Menu.Item>
                 {({ active }) => (
                   <Link

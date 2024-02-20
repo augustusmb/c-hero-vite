@@ -1,9 +1,7 @@
-//@ts-nocheck
-
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { UserAuthContext } from "./MainPanelLayout.js";
+import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import AdminEditUserStatic from "./AdminEditUserStatic.js";
 import AdminEditUserForm from "./AdminEditUserForm.js";
 import AdminUserInfoTable from "./AdminUserInfoTable.jsx";
@@ -11,14 +9,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getFullUserProductProgressMap } from "./utils/user.ts";
 import { UserType } from "./types/types.ts";
 
-interface UserAuthContextType {
-  userInfo: UserType;
-  token: string;
-}
-
 const AdminPage = () => {
   const navigate = useNavigate();
-  const { userInfo, token } = useContext<UserAuthContextType>(UserAuthContext);
+  const { loggedInUserInfo } = useLoggedInUserContext();
   const [userToEdit, setUserToEdit] = useState<UserType>({
     id: 0,
     name: "",
@@ -34,10 +27,10 @@ const AdminPage = () => {
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    if (userInfo?.level !== "0") {
+    if (loggedInUserInfo?.level !== "0") {
       return navigate("/redirect");
     }
-  }, [userToEdit, userInfo, navigate, token]);
+  }, [userToEdit, loggedInUserInfo, navigate]);
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["get-user-products", userToEdit.id],

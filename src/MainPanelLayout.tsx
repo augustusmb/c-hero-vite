@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import HeaderNavigation from "./HeaderNavigation.tsx";
 import MainPanelRouter from "./MainPanelRouter.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import { setAuthToken } from "./api/apiClient.ts";
-export const UserAuthContext = React.createContext({});
+import { UserType } from "./types/types.ts";
+
+interface LoggedInUserContextType {
+  loggedInUserInfo: UserType | null;
+  setLoggedInUserInfo: (user: any) => void;
+}
+
+export const LoggedInUserContext =
+  createContext<LoggedInUserContextType | null>(null);
 
 const MainPanelLayout = () => {
-  const [userInfo, setUserInfo] = useState({});
+  const [loggedInUserInfo, setLoggedInUserInfo] = useState(null);
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-
-  const userInfoContext = { userInfo, setUserInfo };
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -23,7 +29,9 @@ const MainPanelLayout = () => {
 
   return (
     <Router>
-      <UserAuthContext.Provider value={userInfoContext}>
+      <LoggedInUserContext.Provider
+        value={{ loggedInUserInfo, setLoggedInUserInfo }}
+      >
         <div>
           <HeaderNavigation />
         </div>
@@ -36,7 +44,7 @@ const MainPanelLayout = () => {
             </div>
           )}
         </div>
-      </UserAuthContext.Provider>
+      </LoggedInUserContext.Provider>
     </Router>
   );
 };

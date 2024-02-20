@@ -1,9 +1,6 @@
-//@ts-nocheck
-
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import Modal from "simple-react-modal";
-import { UserAuthContext } from "./MainPanelLayout.js";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import TestInfoInput from "./textComponents/TestInfoInput.tsx";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,20 +12,36 @@ import {
 } from "./utils/test.js";
 import { classTypesMap } from "./messages.ts";
 import { useClassId } from "./hooks/useClassId.tsx";
+import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
+import { CompletedTestData } from "./types/types.ts";
+
+type TestQuestion = {
+  id: number;
+  title: string;
+  correct_answer: string;
+  incorrect_answer1: string;
+  incorrect_answer2: string;
+  incorrect_answer3: string;
+  true_or_false: string;
+  answerOptions: string[];
+};
 
 const TestTakingPage = () => {
   const { handleSubmit, reset } = useForm();
   const queryClient = useQueryClient();
   const [testQuestions, setTestQuestions] = useState([]);
-  const [currentAnswers, setCurrentAnswers] = useState();
+  const [currentAnswers, setCurrentAnswers] = React.useState<Record<
+    string,
+    any
+  > | null>(null);
   const [questionOrder, setQuestionOrder] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalData, setModalData] = useState();
+  const [modalData, setModalData] = useState<ReactNode>(null);
   const [testPassed, setTestPassed] = useState(false);
-  const userInfo = useContext(UserAuthContext);
+  const { loggedInUserInfo } = useLoggedInUserContext();
   let navigate = useNavigate();
 
-  const { level } = userInfo.userInfo;
+  const { level, name, phone, id } = loggedInUserInfo || {};
   const { classId } = useParams();
   const { testInfo, testType } = useClassId(classId);
 
@@ -38,23 +51,23 @@ const TestTakingPage = () => {
     data: questions,
     error,
   } = useQuery({
-    queryKey: ["get-test-questions", classId],
+    queryKey: ["get-test-questions", classId || ""],
     queryFn: getTestQuestions,
   });
 
   const submitTestMutation = useMutation({
-    mutationFn: (completedTestData) => {
+    mutationFn: async (completedTestData: CompletedTestData) => {
       submitCompletedTest(completedTestData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["get-user-products"]);
+      queryClient.invalidateQueries({ queryKey: ["get-user-products"] });
     },
   });
 
   useEffect(() => {
     if (questions) {
       let randomQuestions = randomizeArray(questions.data, level);
-      randomQuestions.forEach((question) => {
+      randomQuestions.forEach((question: TestQuestion) => {
         question.answerOptions = prepareAnswerOptions(question);
       });
       setTestQuestions(randomQuestions);
@@ -80,25 +93,31 @@ const TestTakingPage = () => {
         questionsMissed.push([currentAnswers[key]]);
       }
     }
-    questionsMissed.sort((a, b) => a[0].slotIndex - b[0].slotIndex);
-    let completedTestData = {
-      classId: classId,
-      name: userInfo.userInfo.name,
-      phone: userInfo.userInfo.phone,
-      userId: userInfo.userInfo.id,
-      questionsMissed: questionsMissed.length,
-    };
-    if (questionsMissed.length === 0) {
-      setTestPassed(true);
+    questionsMissed.sort(
+      (a: any[], b: any[]) => a[0].slotIndex - b[0].slotIndex,
+    );
+    if (!classId || !name || !phone || !id) {
+      // Handle the error here, e.g., show an error message to the user
+      console.error("All fields must be filled out");
+    } else {
+      const completedTestData: CompletedTestData = {
+        classId,
+        name,
+        phone,
+        userId: id,
+        questionsMissed,
+      };
+
+      submitTestMutation.mutate(completedTestData);
     }
-    submitTestMutation.mutate(completedTestData);
     setShowModal(true);
     questionsMissed.length === 0
-      ? setModalData(
+      ? (setTestPassed(true),
+        setModalData(
           <div className="text-xl font-medium">
             You scored 100% and passed the test!
           </div>,
-        )
+        ))
       : setModalData(
           <div>
             <h2 className="text-xl font-medium">
@@ -117,7 +136,7 @@ const TestTakingPage = () => {
         );
   };
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
     let newObject = { ...currentAnswers };
 
@@ -125,7 +144,7 @@ const TestTakingPage = () => {
     setCurrentAnswers({ ...newObject });
   };
 
-  function getBody(question) {
+  function getBody(question: TestQuestion) {
     let { answerOptions } = question;
     return question.true_or_false === "TRUE" ? (
       <div className="flex flex-col items-start gap-1 indent-10">
@@ -133,9 +152,9 @@ const TestTakingPage = () => {
           <label className="text-lg">
             <input
               type="radio"
-              name={question.id}
+              name={JSON.stringify(question.id)}
               value="true"
-              onClick={handleClick}
+              onChange={handleClick}
               className="accent-orange-500"
             />{" "}
             True
@@ -145,9 +164,9 @@ const TestTakingPage = () => {
           <label className="text-lg">
             <input
               type="radio"
-              name={question.id}
+              name={JSON.stringify(question.id)}
               value="false"
-              onClick={handleClick}
+              onChange={handleClick}
               className="accent-orange-500"
             />{" "}
             False
@@ -162,9 +181,9 @@ const TestTakingPage = () => {
             <label className="text-lg">
               <input
                 type="radio"
-                name={question.id}
+                name={JSON.stringify(question.id)}
                 value={option}
-                onClick={handleClick}
+                onChange={handleClick}
                 className="accent-orange-500"
               ></input>{" "}
               {option}
@@ -176,8 +195,8 @@ const TestTakingPage = () => {
   }
 
   const closeModal = () => {
-    setShowModal(prev => !prev);
-    navigate(`/class/${classId}`)
+    setShowModal((prev) => !prev);
+    navigate(`/class/${classId}`);
     reset();
   };
 
@@ -185,7 +204,7 @@ const TestTakingPage = () => {
     const classTypeValues = Object.values(classTypesMap);
 
     return classTypeValues.map((type, i) => {
-      if (type === classTypesMap[testType]) {
+      if (type === classTypesMap[testType as keyof typeof classTypesMap]) {
         return (
           <span
             key={i}
@@ -213,7 +232,7 @@ const TestTakingPage = () => {
       <TestInfoInput />
       <form onSubmit={handleSubmit(submitForm)}>
         <div className="flex flex-col items-start overflow-hidden rounded-3xl bg-orange-050">
-          {testQuestions.map((question, idx) => {
+          {testQuestions.map((question: TestQuestion, idx) => {
             return (
               <div
                 key={idx}
@@ -223,7 +242,7 @@ const TestTakingPage = () => {
                   <p className="text-left text-xl">
                     {`${idx + 1}. ${question.title} `}
                     <span className="italic underline">
-                      {userInfo.userInfo.level === "0"
+                      {loggedInUserInfo?.level === "0"
                         ? `(ID#: ${question.id})`
                         : ""}
                     </span>

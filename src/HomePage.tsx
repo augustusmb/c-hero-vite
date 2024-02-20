@@ -1,36 +1,27 @@
-//@ts-nocheck
-
-import { useContext, useEffect } from "react";
-import { UserAuthContext } from "./MainPanelLayout.tsx";
+import { useEffect } from "react";
 import ClassCardSection from "./ClassCardSection.tsx";
 import TermsAndConditions from "./textComponents/TermsAndConditions.jsx";
 import UserInfoSection from "./UserInfoSection.jsx";
 import { useQuery } from "@tanstack/react-query";
 import { getUserByPhone } from "./api/user.ts";
-import { User, useAuth0 } from "@auth0/auth0-react";
-import { UserType } from "./types/types.ts";
-
-interface UserAuthContextType {
-  userInfo: UserType
-  setUserInfo: (user: User) => void
-}
+import { useAuth0 } from "@auth0/auth0-react";
+import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 
 const HomePage = () => {
-
-  const { userInfo, setUserInfo } = useContext<UserAuthContextType>(UserAuthContext); 
+  const { loggedInUserInfo, setLoggedInUserInfo } = useLoggedInUserContext();
   const { isLoading: authLoading, user, isAuthenticated } = useAuth0();
 
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["get-user-info", user?.name],
+    queryKey: ["get-user-info", user?.name ?? ""],
     queryFn: getUserByPhone,
-    enabled: !authLoading && user?.name && isAuthenticated,
+    enabled: !authLoading && Boolean(user?.name) && isAuthenticated,
   });
 
   useEffect(() => {
     if (data) {
-      setUserInfo(data.data[0]);
+      setLoggedInUserInfo(data.data[0]);
     }
-  }, [data, setUserInfo]);
+  }, [data, setLoggedInUserInfo]);
 
   if (isLoading) return <span>Loading...</span>;
   if (isError) return <span>Error: {error.message}</span>;
@@ -38,13 +29,13 @@ const HomePage = () => {
   return (
     <div className="grid lg:grid-cols-2">
       <div>
-        <UserInfoSection userInfo={userInfo} />
+        <UserInfoSection userInfo={loggedInUserInfo} />
       </div>
       <div>
-        {userInfo?.terms_accepted ? (
+        {loggedInUserInfo?.terms_accepted ? (
           <ClassCardSection />
         ) : (
-          <TermsAndConditions userId={userInfo.id} />
+          <TermsAndConditions userId={loggedInUserInfo?.id} />
         )}
       </div>
       {/* <div className="mb-16 flex justify-start">

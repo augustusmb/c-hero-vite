@@ -1,5 +1,3 @@
-//@ts-nocheck
-
 import parsePhoneNumber from "libphonenumber-js";
 import MailIcon from "./assets/icons/icon-mail.svg?react";
 import PhoneIcon from "./assets/icons/icon-phone-incoming-call.svg?react";
@@ -8,14 +6,14 @@ import BuoyIcon from "./assets/icons/icon-buoy.svg?react";
 import MapIcon from "./assets/icons/icon-map.svg?react";
 import UserIcon from "./assets/icons/icon-user-circle.svg?react";
 
-const UserInfoStatic = ({ userInfo: user }) => {
+const UserInfoStatic = ({ userInfo }: { userInfo: any }) => {
   const infoMissing = (
     <span className="italic text-slate-400">info missing</span>
   );
 
-  console.log("user: ", user);
+  console.log("user: ", userInfo);
 
-  if (user?.name?.length === 0) {
+  if (userInfo?.name?.length === 0) {
     return (
       <div className="mb-4 flex items-center justify-center">
         <UserIcon className="h-8 w-8 fill-red-050 stroke-red-500 stroke-1 lg:h-10 lg:w-10" />
@@ -28,19 +26,19 @@ const UserInfoStatic = ({ userInfo: user }) => {
 
   let phoneNumber = null;
 
-  if (Object.keys(user).length)
-    phoneNumber = parsePhoneNumber(user.phone, "US");
+  if (userInfo && Object.keys(userInfo).length)
+    phoneNumber = parsePhoneNumber(userInfo.phone, "US");
 
   return (
     <div className="grid h-60 grid-cols-1">
       <div className="col-span-1 flex flex-col items-start">
         <span className="text-2xl text-red-400 lg:text-4xl">
-          {user.name || infoMissing}
+          {userInfo?.name || infoMissing}
         </span>
         <div className="flex items-center">
           <MailIcon className="h-5 w-5 fill-indigo-050 stroke-indigo-600" />
           <span className="ml-2 text-lg italic text-slate-600 lg:indent-2 lg:text-xl">
-            {user.email || infoMissing}
+            {userInfo?.email || infoMissing}
           </span>
         </div>
         <div className="flex items-center">
@@ -52,27 +50,27 @@ const UserInfoStatic = ({ userInfo: user }) => {
       </div>
       <div className="col-span-1 mt-2 flex flex-col items-start lg:mt-4">
         <span className="text-xl text-red-400 lg:text-3xl">
-          {user.title || infoMissing}
+          {userInfo?.title || infoMissing}
         </span>
         <div className="flex items-center">
           <FactoryIcon className="h-5 w-5 fill-indigo-050 stroke-indigo-600" />
 
           <span className="ml-2 text-lg italic text-slate-600 lg:indent-2 lg:text-xl">
-            {user.company || infoMissing}
+            {userInfo?.company || infoMissing}
           </span>
         </div>
         <div className="flex items-center">
           <BuoyIcon className="h-5 w-5 fill-indigo-050 stroke-indigo-600" />
 
           <span className="ml-2 text-lg italic text-slate-600 lg:indent-2 lg:text-xl">
-            {user.vessel || infoMissing}
+            {userInfo?.vessel || infoMissing}
           </span>
         </div>
         <div className="flex items-center">
           <MapIcon className="h-5 w-5 fill-indigo-050 stroke-indigo-600" />
 
           <span className="ml-2 text-lg italic text-slate-600 lg:indent-2 lg:text-xl">
-            {user.port || infoMissing}
+            {userInfo?.port || infoMissing}
           </span>
         </div>
       </div>
