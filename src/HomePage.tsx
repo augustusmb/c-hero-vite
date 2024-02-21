@@ -36,7 +36,7 @@ const HomePage = () => {
         {loggedInUserInfo?.terms_accepted ? (
           <ClassCardSection />
         ) : (
-          <TermsAndConditions userId={loggedInUserInfo?.id} />
+          <TermsAndConditions userId={loggedInUserInfo?.id || 0} />
         )}
       </div>
       {/* <div className="mb-16 flex justify-start">

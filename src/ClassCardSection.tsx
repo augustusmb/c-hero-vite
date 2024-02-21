@@ -2,31 +2,33 @@ import ClassCard from "./ClassCard.js";
 import { useQuery } from "@tanstack/react-query";
 import { getFullUserProductProgressMap } from "./utils/user.ts";
 import CheckIcon from "./assets/icons/icon-check.svg?react";
-import { ProductProgress } from "./types/types.ts";
+import { ProductData } from "./types/types.ts";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
-
-type Product = {
-  productId: string;
-  productName: string;
-  classProgress: ProductProgress;
-  assigned: boolean;
-};
 
 const ClassCardSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
 
-  const { isLoading, isError, data, error } = useQuery<
-    { [key: string]: Product },
-    Error
-  >({
-    queryKey: ["products", loggedInUserInfo?.id],
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["products", loggedInUserInfo?.id || 0],
     queryFn: getFullUserProductProgressMap,
   });
 
   if (isLoading) return <span>Loading...</span>;
   if (isError) return <span>Error: {error.message}</span>;
 
-  console.log("data: ", data);
+  const getClassCardSection = () => {
+    const productsList: ProductData[] = Object.values(data);
+
+    const assignedProductsList: ProductData[] = productsList.filter(
+      (item: ProductData) => item.assigned,
+    );
+
+    const classCards = assignedProductsList.map((product: ProductData) => (
+      <ClassCard key={product.productId} product={product} />
+    ));
+
+    return classCards;
+  };
 
   return (
     <div className="flex flex-col pb-10">
@@ -45,13 +47,7 @@ const ClassCardSection = () => {
           <p className="text-left">{`Click to take the test at the bottom of each class's PDF page`}</p>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-3">
-        {Object.values(data ?? {})
-          .filter((item: Product) => item.assigned)
-          .map((product: Product) => (
-            <ClassCard key={product.productId} product={product} />
-          ))}
-      </div>
+      <div className="grid grid-cols-2 gap-3">{getClassCardSection()}</div>
     </div>
   );
 };

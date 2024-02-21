@@ -3,7 +3,6 @@ import { fetchUserClasses } from "../api/user.ts";
 import { ProductProgress, ClassProgress } from "../types/types.ts";
 
 export const createUserClassesMap = (userClasses: ClassProgress[]) => {
-  console.log("userClasses: ", userClasses);
   const userClassesMap: ProductProgress = {};
   userClasses.forEach((class_id) => {
     userClassesMap[class_id.product_id] = class_id;

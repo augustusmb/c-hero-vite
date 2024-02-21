@@ -13,9 +13,6 @@ export function compareProducts(
   const newlyAddedProducts: NewlyAddedProducts = {};
   const newlyRemovedProducts: NewlyRemovedProducts = {};
 
-  console.log("userProductData: ", userProductData);
-  console.log("formData: ", formData);
-
   for (const key in formData.assignedProductChange) {
     if (
       userProductData[key].assigned === false &&
@@ -30,9 +27,6 @@ export function compareProducts(
       newlyRemovedProducts[key] = true;
     }
   }
-
-  console.log("newlyAddedProducts: ", newlyAddedProducts);
-  console.log("newlyRemovedProducts: ", newlyRemovedProducts);
 
   return { newlyAddedProducts, newlyRemovedProducts };
 }

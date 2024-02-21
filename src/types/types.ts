@@ -36,6 +36,13 @@ export interface UserProducts {
   };
 }
 
+export interface ProductData {
+  productId: string;
+  productName: string;
+  assigned: boolean;
+  classProgress: ProductProgress;
+}
+
 export interface ProductProgress {
   [key: string]: ClassProgress;
 }

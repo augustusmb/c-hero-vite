@@ -49,7 +49,7 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
     return { background: "#ffffff" };
   }, []);
 
-  const [colDefs, setColDefs] = useState([
+  const colDefs = [
     {
       headerName: "Name / Phone",
       field: "name",
@@ -77,7 +77,7 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
         field2: "port",
       },
     },
-  ]);
+  ];
 
   function TwoValuesCellRenderer(params: {
     colDef: any;

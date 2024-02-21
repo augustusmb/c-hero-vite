@@ -16,8 +16,6 @@ const UserInfoStatic = ({
     <span className="italic text-slate-400">info missing</span>
   );
 
-  console.log("user: ", userInfo);
-
   if (userInfo?.name?.length === 0) {
     return (
       <div className="mb-4 flex items-center justify-center">
