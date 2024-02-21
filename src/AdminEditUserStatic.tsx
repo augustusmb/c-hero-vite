@@ -6,7 +6,7 @@ interface AdminEditUserStaticProps {
   toggleEditMode: (editMode: boolean) => void;
   editMode: boolean;
   userInfo: UserType;
-  data: UserProductData
+  data: UserProductData;
 }
 
 const AdminEditUserStatic: React.FC<AdminEditUserStaticProps> = ({
@@ -21,7 +21,7 @@ const AdminEditUserStatic: React.FC<AdminEditUserStaticProps> = ({
         <h3 className="mb-3 self-start text-lg font-bold text-slate-900 underline lg:text-xl">
           Account Info
         </h3>
-        <UserInfoStatic userInfo={user} />
+        <UserInfoStatic userInfoToEdit={user} />
       </div>
       <div className="col-span-1 flex flex-col">
         <h3 className="mb-3 self-start text-lg font-bold text-slate-900 underline lg:text-xl">
