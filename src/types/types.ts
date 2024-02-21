@@ -2,7 +2,7 @@ export interface AdminEditUserStaticProps {
   toggleEditMode: (editMode: boolean) => void;
   editMode: boolean;
   userInfo: UserType;
-  data: UserProductData;
+  data: UserProducts;
 }
 
 export interface UserType {
@@ -27,6 +27,15 @@ export type CompletedTestData = {
   questionsMissed: any;
 };
 
+export interface UserProducts {
+  [key: string]: {
+    assigned: boolean;
+    classProgress: ProductProgress;
+    productId: string;
+    productName: string;
+  };
+}
+
 export interface ProductProgress {
   [key: string]: ClassProgress;
 }
@@ -36,15 +45,6 @@ export interface ClassProgress {
   user_id: number;
   completed: boolean;
   data_completed: string | null;
-}
-
-export interface UserProductData {
-  [key: string]: {
-    assigned: boolean;
-    classProgress: ProductProgress;
-    productId: string;
-    productName: string;
-  };
 }
 
 export type RawUserFormData = {
@@ -89,4 +89,15 @@ export type UpdatedUserInfo = {
   vessel: string;
   port: string;
   id: number;
+};
+
+export type TestQuestion = {
+  id: number;
+  title: string;
+  correct_answer: string;
+  incorrect_answer1: string;
+  incorrect_answer2: string;
+  incorrect_answer3: string;
+  true_or_false: string;
+  answerOptions: string[];
 };

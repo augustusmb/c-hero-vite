@@ -1,7 +1,5 @@
-//@ts-nocheck
+import apiClient from "./apiClient";
 
-import apiClient from "./apiClient"
-
-export const acceptTermsAndConditions = async (userId) => {
-  return await apiClient.put("api/routes/users/terms", { params: { userId } })
-}
+export const acceptTermsAndConditions = async (userId: number) => {
+  return await apiClient.put("api/routes/users/terms", { params: { userId } });
+};

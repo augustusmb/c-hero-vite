@@ -1,12 +1,9 @@
-//@ts-nocheck
-
 import { useMutation } from "@tanstack/react-query";
 import { acceptTermsAndConditions } from "../api/acceptTerms";
 
-const TermsAndConditions = ({ userId }) => {
-
+const TermsAndConditions = ({ userId }: { userId: number }) => {
   const acceptTermsMutation = useMutation({
-    mutationFn: (userId) => {
+    mutationFn: async (userId: number) => {
       acceptTermsAndConditions(userId);
     },
   });

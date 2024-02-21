@@ -6,7 +6,7 @@ import { updateUserInfoAndProducts, deleteUser } from "./api/user.ts";
 import { labels } from "./messages.ts";
 import {
   UserType,
-  UserProductData,
+  UserProducts,
   FormattedUserFormData,
   RawUserFormData,
 } from "./types/types.ts";
@@ -16,7 +16,7 @@ interface AdminEditUserStaticProps {
   toggleEditMode: (editMode: boolean) => void;
   editMode: boolean;
   userInfo: UserType;
-  data: UserProductData;
+  data: UserProducts;
   handleUserToEdit: (userToEdit: UserType) => void;
 }
 

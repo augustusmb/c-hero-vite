@@ -1,12 +1,12 @@
 import UserInfoStatic from "./UserInfoStatic.jsx";
 import UserProductsStatic from "./UserProductsStatic.jsx";
-import { UserType, UserProductData } from "./types/types.ts";
+import { UserType, UserProducts } from "./types/types.ts";
 
 interface AdminEditUserStaticProps {
   toggleEditMode: (editMode: boolean) => void;
   editMode: boolean;
   userInfo: UserType;
-  data: UserProductData;
+  data: UserProducts;
 }
 
 const AdminEditUserStatic: React.FC<AdminEditUserStaticProps> = ({

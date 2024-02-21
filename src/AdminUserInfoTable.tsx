@@ -1,5 +1,3 @@
-//@ts-nocheck
-
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AgGridReact } from "ag-grid-react"; // React Grid Logic
@@ -15,7 +13,6 @@ interface AdminTableProps {
 const AdminUserInfoTable: React.FC<AdminTableProps> = ({
   handleUserToEdit,
 }) => {
-  // const gridRef = useRef();
   const gridRef = useRef<AgGridReact | null>(null);
 
   useEffect(() => {
@@ -49,7 +46,7 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
     if (params.node.rowIndex % 2 === 0) {
       return { background: "#f8f8f8" };
     }
-    return null;
+    return { background: "#ffffff" };
   }, []);
 
   const [colDefs, setColDefs] = useState([
@@ -82,9 +79,15 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
     },
   ]);
 
-  function TwoValuesCellRenderer(params: { field1: string; field2: string }) {
+  function TwoValuesCellRenderer(params: {
+    colDef: any;
+    field1: string;
+    field2: string;
+    data: UserType;
+  }) {
     const field1 = params.colDef.cellRendererParams.field1;
     const field2 = params.colDef.cellRendererParams.field2;
+
     return (
       <div className="flex flex-col leading-7">
         <span className="text-xs font-semibold lg:text-xl">
@@ -95,7 +98,7 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
     );
   }
 
-  const onSelectionChanged = (e: HTMLEvent) => {
+  const onSelectionChanged = (e: { api: any }) => {
     const selectedRowData = e.api.getSelectedNodes()[0].data;
     handleUserToEdit(selectedRowData);
   };
@@ -132,7 +135,7 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
         >
           <AgGridReact
             ref={gridRef}
-            rowData={data.data}
+            rowData={data?.data}
             columnDefs={colDefs}
             defaultColDef={defaultColDef}
             rowSelection="single"

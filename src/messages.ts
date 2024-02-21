@@ -1,8 +1,11 @@
+import { UserProducts } from "./types/types";
+
 export const messages = {
   signUpSmsText:
     "Welcome aboard! C-Hero ETraining will help you become part of the C-Hero Rescue Crew. \n Click HERE to download the ETraining app, or \n Click HERE to do the training on a computer/pad \n You can edit/add your info, and begin a class at your convenience.",
   // customer setup info
-  classSectionInstructions: "Thank you for enrolling into eTraining and your commitment to familiarizing yourself with your new C-Hero safety gear! Each product has a total of four sections to study and test against. <strong>Successfully completing</strong> the first section unlocks the next until you have finished all four. Have fun!",
+  classSectionInstructions:
+    "Thank you for enrolling into eTraining and your commitment to familiarizing yourself with your new C-Hero safety gear! Each product has a total of four sections to study and test against. <strong>Successfully completing</strong> the first section unlocks the next until you have finished all four. Have fun!",
   branchFacilityTypes: ["Port", "Facility"],
   addressInputs: ["City", "State", "Province", "Zip"],
   cHeroEquipment: [
@@ -31,54 +34,54 @@ export const classTypesMap = {
   b: "Operation",
   c: "MOB Drills",
   d: "Inspection & Storage",
-}
+};
 
 export const productsArray = [
   {
     name: "3B Series 3 Davit - Bitt Mount",
-    code: "3b"
+    code: "3b",
   },
   {
     name: "3F Series 3 Davit - Flat Mount",
-    code: "3f"
+    code: "3f",
   },
   {
     name: "5B Series 5 Davit - Bitt Mount",
-    code: "5b"
+    code: "5b",
   },
   {
     name: "5F Series 5 Davit - Flat Mount",
-    code: "5f"
+    code: "5f",
   },
   {
     name: "7B Series 7 Davit - Bitt Mount",
-    code: "7b"
+    code: "7b",
   },
   {
     name: "7F Series 7 Davit - Flat Mount",
-    code: "7f"
+    code: "7f",
   },
   {
     name: "9F Man Rated Rescue Davit",
-    code: "9f"
+    code: "9f",
   },
   {
     name: "HR Rescue Pole",
-    code: "hr"
+    code: "hr",
   },
   {
     name: "VR Rescue Pole",
-    code: "vr"
+    code: "vr",
   },
   {
     name: "RK Rescue Pole",
-    code: "rk"
+    code: "rk",
   },
   {
     name: "RS Rescue Pole",
-    code: "rs"
-  }
-]
+    code: "rs",
+  },
+];
 
 export const labels = [
   "name",
@@ -90,71 +93,71 @@ export const labels = [
   "port",
 ];
 
-export const productsMap = {
-  "3b":   {
+export const productsMap: UserProducts = {
+  "3b": {
     productId: "3b",
     productName: "3B Series 3 Davit - Bitt Mount",
     classProgress: {},
-    assigned: false
+    assigned: false,
   },
   "3f": {
     productId: "3f",
     productName: "3F Series 3 Davit - Flat Mount",
     classProgress: {},
-    assigned: false
+    assigned: false,
   },
   "5b": {
     productId: "5b",
     productName: "5B Series 5 Davit - Bitt Mount",
     classProgress: {},
-    assigned: false
+    assigned: false,
   },
   "5f": {
     productId: "5f",
     productName: "5F Series 5 Davit - Flat Mount",
     classProgress: {},
-    assigned: false
+    assigned: false,
   },
   "7b": {
     productId: "7b",
     productName: "7B Series 7 Davit - Bitt Mount",
     classProgress: {},
-    assigned: false
+    assigned: false,
   },
-  "7f":{
+  "7f": {
     productId: "7f",
     productName: "7F Series 7 Davit - Flat Mount",
     classProgress: {},
-    assigned: false
+    assigned: false,
   },
-  "9f":{
+  "9f": {
     productId: "9f",
     productName: "9F Man Rated Rescue Davit",
     classProgress: {},
-    assigned: false
+    assigned: false,
   },
-  "hr":{
+  hr: {
     productId: "hr",
     productName: "HR Rescue Pole",
     classProgress: {},
-    assigned: false
+    assigned: false,
   },
-  "vr":{
+  vr: {
     productId: "vr",
     productName: "VR Rescue Pole",
     classProgress: {},
-    assigned: false
+    assigned: false,
   },
-  "rk":{
+  rk: {
     productId: "rk",
     productName: "RK Rescue Pole",
     classProgress: {},
-    assigned: false
+    assigned: false,
   },
-  "rs":{
+  rs: {
     productId: "rs",
     productName: "RS Rescue Pole",
     classProgress: {},
-    assigned: false
-  }
-}
+    assigned: false,
+  },
+};

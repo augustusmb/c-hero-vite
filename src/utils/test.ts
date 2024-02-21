@@ -1,14 +1,14 @@
-//@ts-nocheck
+import { TestQuestion } from "../types/types";
 
-export function randomizeArray(array, level) {
+export function randomizeArray(array: [], level: string) {
   if (level === "0") {
-    return array.sort((a, b) => a.id - b.id)
+    return array.sort((a: TestQuestion, b: TestQuestion) => a.id - b.id);
   }
 
   return array.sort(() => Math.random() - 0.5);
 }
 
-export function prepareAnswerOptions(question) {
+export function prepareAnswerOptions(question: TestQuestion) {
   let {
     correct_answer,
     incorrect_answer1,
@@ -35,8 +35,17 @@ export function prepareAnswerOptions(question) {
   return answerOptions;
 }
 
-export function prepareBlankAnswers(questions) {
-  let blankAnswers = {};
+type BlankAnswers = {
+  [key: number]: {
+    title: string;
+    slotIndex: number;
+    currentAnswer: string;
+    correctAnswer: string;
+  };
+};
+
+export function prepareBlankAnswers(questions: TestQuestion[]) {
+  let blankAnswers: BlankAnswers = {};
   questions.forEach((question, slotIndex) => {
     blankAnswers[question.id] = {
       title: question.title,

@@ -1,34 +1,34 @@
-//@ts-nocheck
-
 import { productsMap } from "../messages.ts";
 import { fetchUserClasses } from "../api/user.ts";
+import { ProductProgress, ClassProgress } from "../types/types.ts";
 
-export const createUserClassesMap = (userClasses) => {
-  const userClassesMap = {};
+export const createUserClassesMap = (userClasses: ClassProgress[]) => {
+  console.log("userClasses: ", userClasses);
+  const userClassesMap: ProductProgress = {};
   userClasses.forEach((class_id) => {
     userClassesMap[class_id.product_id] = class_id;
   });
 
   return userClassesMap;
-}
+};
 // returns an object with the product_id as the key and the user's progress as the value
 // {
-//   "3b_a": {product_id: '3b_a', user_id: 24, completed: false, date_completed: null}, 
+//   "3b_a": {product_id: '3b_a', user_id: 24, completed: false, date_completed: null},
 //   "3b_b": {product_id: '3b_b', user_id: 24, completed: false, date_completed: null},
 //   ...
 // }
 
-export const createUserFullProgressMap = (userClassesMap) => {
+export const createUserFullProgressMap = (userClassesMap: ProductProgress) => {
   const userProductsMap = JSON.parse(JSON.stringify(productsMap));
-// {
-//   "3b":   {
-//   productId: "3b",
-//   productName: "3B Series 3 Davit - Bitt Mount",
-//   classProgress: {},
-//   assigned: false
-//   },
-//   ...
-// }
+  // {
+  //   "3b":   {
+  //   productId: "3b",
+  //   productName: "3B Series 3 Davit - Bitt Mount",
+  //   classProgress: {},
+  //   assigned: false
+  //   },
+  //   ...
+  // }
   for (let key in userClassesMap) {
     let productCode = key.slice(0, 2);
     let classType = key.slice(3, 4);
@@ -41,15 +41,19 @@ export const createUserFullProgressMap = (userClassesMap) => {
       classProgress[`${productCode}_d`] = userClassesMap[`${productCode}_d`];
     }
   }
-  
+
   return userProductsMap;
+};
+
+interface Params {
+  queryKey: [string, number];
 }
 
-export const getFullUserProductProgressMap = async (params) => {
+export const getFullUserProductProgressMap = async (params: Params) => {
   const userId = params.queryKey[1];
   const userClasses = await fetchUserClasses(userId);
   const userClassesMap = createUserClassesMap(userClasses.data);
   const userFullProgressMap = createUserFullProgressMap(userClassesMap);
 
   return userFullProgressMap;
-}
+};

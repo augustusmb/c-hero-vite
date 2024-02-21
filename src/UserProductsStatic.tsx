@@ -1,9 +1,9 @@
-import { UserProductData } from "./types/types";
+import { UserProducts } from "./types/types";
 
 const UserProductsStatic = ({
   userProductData,
 }: {
-  userProductData: UserProductData;
+  userProductData: UserProducts;
 }) => {
   return (
     <div className="flex flex-col items-start">

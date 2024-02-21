@@ -1,7 +1,7 @@
 import apiClient from "./apiClient.ts";
 import { FormattedUserFormData, UpdatedUserInfo } from "../types/types.ts";
 
-export const fetchUserClasses = async (userId: string) => {
+export const fetchUserClasses = async (userId: number) => {
   const usersClasses = await apiClient.get(`api/routes/classes`, {
     params: { userId },
   });

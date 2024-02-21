@@ -13,18 +13,7 @@ import {
 import { classTypesMap } from "./messages.ts";
 import { useClassId } from "./hooks/useClassId.tsx";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
-import { CompletedTestData } from "./types/types.ts";
-
-type TestQuestion = {
-  id: number;
-  title: string;
-  correct_answer: string;
-  incorrect_answer1: string;
-  incorrect_answer2: string;
-  incorrect_answer3: string;
-  true_or_false: string;
-  answerOptions: string[];
-};
+import { CompletedTestData, TestQuestion } from "./types/types.ts";
 
 const TestTakingPage = () => {
   const { handleSubmit, reset } = useForm();
@@ -42,7 +31,7 @@ const TestTakingPage = () => {
   let navigate = useNavigate();
 
   const { level, name, phone, id } = loggedInUserInfo || {};
-  const { classId } = useParams();
+  const { classId = "" } = useParams();
   const { testInfo, testType } = useClassId(classId);
 
   const {
@@ -51,7 +40,7 @@ const TestTakingPage = () => {
     data: questions,
     error,
   } = useQuery({
-    queryKey: ["get-test-questions", classId || ""],
+    queryKey: ["get-test-questions", classId],
     queryFn: getTestQuestions,
   });
 
@@ -66,7 +55,7 @@ const TestTakingPage = () => {
 
   useEffect(() => {
     if (questions) {
-      let randomQuestions = randomizeArray(questions.data, level);
+      let randomQuestions = randomizeArray(questions.data, level || "");
       randomQuestions.forEach((question: TestQuestion) => {
         question.answerOptions = prepareAnswerOptions(question);
       });

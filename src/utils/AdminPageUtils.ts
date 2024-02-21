@@ -3,11 +3,11 @@ import {
   NewlyRemovedProducts,
   UserType,
   RawUserFormData,
-  UserProductData,
+  UserProducts,
 } from "../types/types";
 
 export function compareProducts(
-  userProductData: UserProductData,
+  userProductData: UserProducts,
   formData: RawUserFormData,
 ) {
   const newlyAddedProducts: NewlyAddedProducts = {};
