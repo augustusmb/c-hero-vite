@@ -37,7 +37,7 @@ const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
         <div>
           {!editMode ? (
             <>
-              <UserInfoStatic userInfo={userInfo} />
+              <UserInfoStatic userInfoToEdit={userInfoToEdit} />
               <div className="mb-8 flex">
                 <button
                   className="text-slate-950 h-9 w-24 rounded border border-slate-500 bg-slate-050 font-semibold hover:border-transparent hover:bg-slate-600 hover:text-slate-050"
@@ -49,7 +49,7 @@ const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
             </>
           ) : (
             <UserInfoEdit
-              userInfo={userInfo}
+              userInfoToEdit={userInfoToEdit}
               handleUserToEdit={handleUserToEdit}
               toggleEditMode={toggleEditMode}
             />

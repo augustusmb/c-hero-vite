@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserByPhone } from "./api/user.ts";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
+import { UserType } from "./types/types.ts";
 
 const HomePage = () => {
   const { loggedInUserInfo, setLoggedInUserInfo } = useLoggedInUserContext();
@@ -29,7 +30,7 @@ const HomePage = () => {
   return (
     <div className="grid lg:grid-cols-2">
       <div>
-        <UserInfoSection userInfo={loggedInUserInfo} />
+        <UserInfoSection userInfo={loggedInUserInfo ?? ({} as UserType)} />
       </div>
       <div>
         {loggedInUserInfo?.terms_accepted ? (

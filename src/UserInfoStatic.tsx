@@ -7,7 +7,11 @@ import MapIcon from "./assets/icons/icon-map.svg?react";
 import UserIcon from "./assets/icons/icon-user-circle.svg?react";
 import { UserType } from "./types/types";
 
-const UserInfoStatic = ({ userInfo }: { userInfo: UserType }) => {
+const UserInfoStatic = ({
+  userInfoToEdit: userInfo,
+}: {
+  userInfoToEdit: UserType;
+}) => {
   const infoMissing = (
     <span className="italic text-slate-400">info missing</span>
   );

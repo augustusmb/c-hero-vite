@@ -7,12 +7,12 @@ import { UserType, UpdatedUserInfo } from "./types/types.ts";
 
 interface UserInfoEditProps {
   toggleEditMode: () => void;
-  userInfo: UserType;
+  userInfoToEdit: UserType;
   handleUserToEdit: (userToEdit: UserType) => void;
 }
 
 const UserInfoEdit: React.FC<UserInfoEditProps> = ({
-  userInfo: user,
+  userInfoToEdit: user,
   toggleEditMode,
   handleUserToEdit,
 }) => {
