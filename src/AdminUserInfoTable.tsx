@@ -12,7 +12,9 @@ interface AdminTableProps {
   handleUserToEdit: (user: UserType) => void;
 }
 
-const AdminUserInfoTable: React.FC<AdminTableProps> = ({ handleUserToEdit }) => {
+const AdminUserInfoTable: React.FC<AdminTableProps> = ({
+  handleUserToEdit,
+}) => {
   // const gridRef = useRef();
   const gridRef = useRef<AgGridReact | null>(null);
 

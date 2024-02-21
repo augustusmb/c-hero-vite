@@ -1,35 +1,56 @@
-import { NewlyAddedProducts, NewlyRemovedProducts } from "../types/types";
+import {
+  NewlyAddedProducts,
+  NewlyRemovedProducts,
+  UserType,
+  RawUserFormData,
+  UserProductData,
+} from "../types/types";
 
-export function compareProducts(userProductData: any, data: any) {
+export function compareProducts(
+  userProductData: UserProductData,
+  formData: RawUserFormData,
+) {
   const newlyAddedProducts: NewlyAddedProducts = {};
   const newlyRemovedProducts: NewlyRemovedProducts = {};
 
-  for (const key in userProductData) {
-    if (userProductData[key].assigned === false && data[key] === true) {
+  console.log("userProductData: ", userProductData);
+  console.log("formData: ", formData);
+
+  for (const key in formData.assignedProductChange) {
+    if (
+      userProductData[key].assigned === false &&
+      formData.assignedProductChange[key] === true
+    ) {
       newlyAddedProducts[key] = true;
     }
-    if (userProductData[key].assigned === true && data[key] === false) {
+    if (
+      userProductData[key].assigned === true &&
+      formData.assignedProductChange[key] === false
+    ) {
       newlyRemovedProducts[key] = true;
     }
   }
+
+  console.log("newlyAddedProducts: ", newlyAddedProducts);
+  console.log("newlyRemovedProducts: ", newlyRemovedProducts);
 
   return { newlyAddedProducts, newlyRemovedProducts };
 }
 
 export function createUserInfo(
-  data: any,
-  user: any,
+  formData: RawUserFormData,
+  userToEdit: UserType,
   newlyAddedProducts: NewlyAddedProducts,
   newlyRemovedProducts: NewlyRemovedProducts,
 ) {
   return {
-    name: data.name || user.name,
-    email: data.email || user.email,
-    title: data.title || user.title,
-    company: data.company || user.company,
-    vessel: data.vessel || user.vessel,
-    port: data.port || user.port,
-    id: user.id,
+    name: formData.name || userToEdit.name,
+    email: formData.email || userToEdit.email,
+    title: formData.title || userToEdit.title,
+    company: formData.company || userToEdit.company,
+    vessel: formData.vessel || userToEdit.vessel,
+    port: formData.port || userToEdit.port,
+    id: userToEdit.id,
     newlyAddedProducts,
     newlyRemovedProducts,
   };

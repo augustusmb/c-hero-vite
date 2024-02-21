@@ -1,16 +1,14 @@
-//@ts-nocheck
-
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserInfoAndProducts, deleteUser } from "./api/user.ts";
 import { labels } from "./messages.ts";
 import {
   UserType,
   UserProductData,
-  UpdatedUserInfoProducts,
+  FormattedUserFormData,
+  RawUserFormData,
 } from "./types/types.ts";
 import { compareProducts, createUserInfo } from "./utils/AdminPageUtils.ts";
 
@@ -19,24 +17,23 @@ interface AdminEditUserStaticProps {
   editMode: boolean;
   userInfo: UserType;
   data: UserProductData;
-  handleUserToEdit: (user: UserType) => void;
+  handleUserToEdit: (userToEdit: UserType) => void;
 }
 
 const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
-  userInfo: user,
+  userInfo: userToEdit,
   toggleEditMode,
   editMode,
   data: userProductData,
   handleUserToEdit,
 }) => {
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register } = useForm<RawUserFormData>();
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   const updateUserInfoMutation = useMutation({
-    mutationFn: async (updatedUserInfoProducts: UpdatedUserInfoProducts) => {
-      updateUserInfoAndProducts(updatedUserInfoProducts);
+    mutationFn: async (formattedUserFormData: FormattedUserFormData) => {
+      updateUserInfoAndProducts(formattedUserFormData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["all-users"] });
@@ -58,8 +55,8 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
   };
 
   const handleDeleteUser = () => {
-    toast.success(`${user.name} has been deleted from the database.`);
-    deleteUserMutation.mutate(user.id);
+    toast.success(`${userToEdit.name} has been deleted from the database.`);
+    deleteUserMutation.mutate(userToEdit.id);
     handleUserToEdit({
       id: 0,
       name: "",
@@ -74,21 +71,21 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
     });
   };
 
-  const onSubmit = (formData: UpdatedUserInfoProducts) => {
+  const onSubmit = (formData: RawUserFormData) => {
     const { newlyAddedProducts, newlyRemovedProducts } = compareProducts(
       userProductData,
       formData,
     );
-    const userInfo = createUserInfo(
+    const formattedUserFormData = createUserInfo(
       formData,
-      user,
+      userToEdit,
       newlyAddedProducts,
       newlyRemovedProducts,
     );
 
-    toast.success(`${user.name}'s account has been updated.`);
-    updateUserInfoMutation.mutate(userInfo);
-    handleUserToEdit(Object.assign({}, user, userInfo));
+    toast.success(`${userToEdit.name}'s account has been updated.`);
+    updateUserInfoMutation.mutate(formattedUserFormData);
+    handleUserToEdit(Object.assign({}, userToEdit, formattedUserFormData));
   };
 
   return (
@@ -115,8 +112,8 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
                   {labels.map((label) => (
                     <input
                       key={label}
-                      {...register(label)}
-                      placeholder={user[label]}
+                      {...register(label as keyof RawUserFormData)}
+                      placeholder={userToEdit[label]}
                       className="w-4/5 text-lg"
                     />
                   ))}
@@ -131,12 +128,17 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
                 {Object.values(userProductData).map((product) => {
                   return (
                     <div key={product.productId}>
-                      <label className="text-md italic text-slate-700 lg:text-lg">
+                      <label
+                        htmlFor={product.productId}
+                        className="text-md italic text-slate-700 lg:text-lg"
+                      >
                         <input
                           type="checkbox"
-                          name={product.productId}
+                          id={product.productId}
                           defaultChecked={product.assigned}
-                          {...register(product.productId)}
+                          {...register(
+                            `assignedProductChange.${product.productId}`,
+                          )}
                           className="accent-orange-500"
                         />
                         {` ${product.productName}`}

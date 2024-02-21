@@ -1,32 +1,36 @@
-//@ts-nocheck
-
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserInfo } from "./api/user.ts";
 import { useNavigate } from "react-router-dom";
 import { labels } from "./messages.ts";
+import { UserType, UpdatedUserInfo } from "./types/types.ts";
 
-const UserInfoEdit = ({
+interface UserInfoEditProps {
+  toggleEditMode: () => void;
+  userInfo: UserType;
+  handleUserToEdit: (userToEdit: UserType) => void;
+}
+
+const UserInfoEdit: React.FC<UserInfoEditProps> = ({
   userInfo: user,
-  triggerEditMode,
-  editMode,
+  toggleEditMode,
   handleUserToEdit,
 }) => {
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register } = useForm<UpdatedUserInfo>();
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
 
   const updateUserInfoMutation = useMutation({
-    mutationFn: (updatedUserInfo) => {
+    mutationFn: async (updatedUserInfo: UpdatedUserInfo) => {
       updateUserInfo(updatedUserInfo);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["all-users"]);
+      queryClient.invalidateQueries({ queryKey: ["all-users"] });
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: UpdatedUserInfo) => {
     let userInfo = {
       name: data.name || user.name,
       email: data.email || user.email,
@@ -37,7 +41,7 @@ const UserInfoEdit = ({
       id: user.id,
     };
     updateUserInfoMutation.mutate(userInfo);
-    triggerEditMode(!editMode);
+    toggleEditMode();
     navigate("/home");
     handleUserToEdit(Object.assign(user, userInfo));
   };
@@ -56,7 +60,7 @@ const UserInfoEdit = ({
           {labels.map((label) => (
             <input
               key={label}
-              {...register(label)}
+              {...register(label as keyof UpdatedUserInfo)}
               placeholder={user[label]}
               className="w-4/5 text-lg"
             />
@@ -66,7 +70,7 @@ const UserInfoEdit = ({
       <div className="col-span-4 mb-8 flex items-start">
         <button
           className="hover:bg-blue-500 text-blue-700 hover:text-white border-blue-500 h-9 w-24 rounded border bg-transparent font-semibold hover:border-transparent"
-          onClick={() => triggerEditMode()}
+          onClick={() => toggleEditMode()}
         >
           Cancel
         </button>

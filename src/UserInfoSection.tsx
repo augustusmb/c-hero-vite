@@ -1,11 +1,16 @@
-//@ts-nocheck
-
 import { useState } from "react";
 import UserInfoStatic from "./UserInfoStatic.jsx";
 import UserInfoEdit from "./UserInfoEdit.jsx";
 import { useAuth0 } from "@auth0/auth0-react";
+import { UserType } from "./types/types.ts";
 
-const UserInfoSection = ({ userInfo }) => {
+interface UserInfoSectionStaticProps {
+  userInfo: UserType;
+}
+
+const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
+  userInfo,
+}) => {
   const { user, isLoading } = useAuth0();
   const [editMode, setEditMode] = useState(false);
   const [userInfoToEdit, setUserToEdit] = useState(userInfo);
@@ -14,12 +19,12 @@ const UserInfoSection = ({ userInfo }) => {
     return <div>Login to view your account info</div>;
   }
 
-  const handleUserToEdit = (user) => {
+  const handleUserToEdit = (user: UserType) => {
     setUserToEdit(user);
     setEditMode(false);
   };
 
-  const triggerEditMode = () => {
+  const toggleEditMode = () => {
     setEditMode(!editMode);
   };
 
@@ -32,15 +37,11 @@ const UserInfoSection = ({ userInfo }) => {
         <div>
           {!editMode ? (
             <>
-              <UserInfoStatic
-                userInfo={userInfo}
-                editMode={editMode}
-                triggerEditMode={triggerEditMode}
-              />
+              <UserInfoStatic userInfo={userInfo} />
               <div className="mb-8 flex">
                 <button
                   className="text-slate-950 h-9 w-24 rounded border border-slate-500 bg-slate-050 font-semibold hover:border-transparent hover:bg-slate-600 hover:text-slate-050"
-                  onClick={() => triggerEditMode()}
+                  onClick={() => toggleEditMode()}
                 >
                   Edit
                 </button>
@@ -49,9 +50,8 @@ const UserInfoSection = ({ userInfo }) => {
           ) : (
             <UserInfoEdit
               userInfo={userInfo}
-              editMode={editMode}
               handleUserToEdit={handleUserToEdit}
-              triggerEditMode={triggerEditMode}
+              toggleEditMode={toggleEditMode}
             />
           )}
         </div>

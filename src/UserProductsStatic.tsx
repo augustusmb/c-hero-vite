@@ -1,15 +1,16 @@
-//@ts-nocheck
+import { UserProductData } from "./types/types";
 
-import PropTypes from "prop-types";
-
-const UserProductsStatic = ({ userProductData }) => {
-
+const UserProductsStatic = ({
+  userProductData,
+}: {
+  userProductData: UserProductData;
+}) => {
   return (
     <div className="flex flex-col items-start">
       {Object.values(userProductData).map((product) => {
         return (
           <div key={product.productId}>
-            <label className="text-md lg:text-lg text-slate-700 italic">
+            <label className="text-md italic text-slate-700 lg:text-lg">
               <input
                 type="checkbox"
                 name={product.productId}

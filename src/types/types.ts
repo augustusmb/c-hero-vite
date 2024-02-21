@@ -5,7 +5,8 @@ export interface AdminEditUserStaticProps {
   data: UserProductData;
 }
 
-export type UserType = {
+export interface UserType {
+  [key: string]: any;
   id: number;
   name: string;
   email: string;
@@ -16,7 +17,7 @@ export type UserType = {
   vessel: string;
   port: string;
   terms_accepted: boolean;
-};
+}
 
 export type CompletedTestData = {
   classId: string;
@@ -46,7 +47,21 @@ export interface UserProductData {
   };
 }
 
-export type UpdatedUserInfoProducts = {
+export type RawUserFormData = {
+  name: string;
+  email: string;
+  title: string;
+  company: string;
+  vessel: string;
+  port: string;
+  assignedProductChange: AssignedProductChange;
+};
+
+export interface AssignedProductChange {
+  [key: string]: boolean;
+}
+
+export type FormattedUserFormData = {
   name: string;
   email: string;
   title: string;
