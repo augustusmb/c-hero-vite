@@ -27,8 +27,8 @@ const informTestResult = (questionsMissed, name, phone, classId) => {
   console.log('# of Questions missed: ', questionsMissed)
   console.log('Typeof ', typeof questionsMissed)
   let message = ''
-  if (questionsMissed !== 0) message = `Hi, notifying you that ${name} (${phone}) just attempted and FAILED test ${classId})`
-  else if (questionsMissed === 0) message = `Hi, notifying you that ${name} (${phone}) just attempted and PASSED test ${classId})`
+  if (questionsMissed.length !== 0) message = `Hi, notifying you that ${name} (${phone}) just attempted and FAILED test ${classId})`
+  else if (questionsMissed.length === 0) message = `Hi, notifying you that ${name} (${phone}) just attempted and PASSED test ${classId})`
 
   client.messages.create({
     body: message,
