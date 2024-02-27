@@ -40,7 +40,7 @@ const HomePage = () => {
           <TermsAndConditions userId={loggedInUserInfo?.id || 0} />
         )}
       </div>
-      <div className="col-span-2">
+      <div className="lg:col-span-2">
         <DashboardProgressSection />
       </div>
       {/* <div className="mb-16 flex justify-start">
