@@ -1,27 +1,9 @@
 import db from '../../db/db.js';
 import path from 'path';
 import pLimit from 'p-limit';
-// import dotenv from 'dotenv';
-// dotenv.config()
-
-// import { defineConfig, loadEnv } from 'vite';
-
-// const env = loadEnv(
-//   'all',
-//   process.cwd()
-// );
 
 const QueryFile = db.$config.pgp.QueryFile;
 const __dirname = path.resolve();
-
-// const sql = (file) => {
-//   let fullPath = path.join(__dirname, '/db/queries/users/', file)
-  
-//   if (environment === 'production') {
-//     fullPath = path.join(__dirname, '/db/queries/users/', file);
-//   }
-//   return new QueryFile(fullPath, {minify: true});
-// }
 
 const sql = (file) => {
   const fullPath = path.join(__dirname, '/db/queries/users/', file);
@@ -65,8 +47,6 @@ export async function signUpUser(req, res) {
   try {
     const [{ id: user_id }] = await db.query(queries.insertUser, { name, phone, email, company, port, vessel, title, level });
 
-
-
     const usersProducts = []
 
     if (checkValidDavitAndMount(rescueDavit, mount)) {
@@ -94,7 +74,6 @@ export async function signUpUser(req, res) {
     res.status(500).json('error inserting user and assigning products, check if duplicate phone exists in the database.');
   }
 }
-
 
 function checkValidRescuePole(rescuePole) {
   const validRescuePoles = ['RK', 'VR14', 'RS14', 'HR14'];
