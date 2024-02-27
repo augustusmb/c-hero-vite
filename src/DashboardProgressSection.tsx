@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AgGridReact } from "ag-grid-react"; // React Grid Logic
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
@@ -30,14 +30,14 @@ const DashboardProgressSection = () => {
   }, []);
 
   // Column Definitions: Defines the columns to be displayed.
-  const [colDefs, setColDefs] = useState([
+  const colDefs = [
     { field: "name" },
     { field: "phone" },
     { field: "company" },
     { field: "vessel" },
     { field: "testsCompleted" },
     { field: "totalTests" },
-  ]);
+  ];
 
   const getRowStyle = useCallback((params: any) => {
     if (params.node.rowIndex % 2 === 0) {
