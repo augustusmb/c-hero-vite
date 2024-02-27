@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserByPhone } from "./api/user.ts";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
+import DashboardProgressSection from "./DashboardProgressSection.tsx";
 
 const HomePage = () => {
   const { loggedInUserInfo, setLoggedInUserInfo } = useLoggedInUserContext();
@@ -38,6 +39,9 @@ const HomePage = () => {
         ) : (
           <TermsAndConditions userId={loggedInUserInfo?.id || 0} />
         )}
+      </div>
+      <div className="col-span-2">
+        <DashboardProgressSection />
       </div>
       {/* <div className="mb-16 flex justify-start">
         <MobileBrowserNote />
