@@ -7,6 +7,7 @@ import { getUserByPhone } from "./api/user.ts";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import DashboardProgressSection from "./DashboardProgressSection.tsx";
+import BeatLoader from "react-spinners/BeatLoader";
 
 const HomePage = () => {
   const { loggedInUserInfo, setLoggedInUserInfo } = useLoggedInUserContext();
@@ -24,7 +25,7 @@ const HomePage = () => {
     }
   }, [data, setLoggedInUserInfo]);
 
-  if (isLoading) return <span>Loading...</span>;
+  if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
   if (isError) return <span>Error: {error.message}</span>;
 
   return (

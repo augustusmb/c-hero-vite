@@ -14,6 +14,7 @@ import { classTypesMap } from "./messages.ts";
 import { useClassId } from "./hooks/useClassId.tsx";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import { CompletedTestData, TestQuestion } from "./types/types.ts";
+import BeatLoader from "react-spinners/BeatLoader";
 
 const TestTakingPage = () => {
   const { handleSubmit, reset } = useForm();
@@ -68,7 +69,7 @@ const TestTakingPage = () => {
     }
   }, [classId, questionOrder, questions]);
 
-  if (isLoading) return <span>Loading...</span>;
+  if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
   if (isError) return <span>Error: {error.message}</span>;
 
   const submitForm = () => {

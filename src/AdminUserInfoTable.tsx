@@ -5,6 +5,7 @@ import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 import { fetchAllUsers } from "./api/user.ts";
 import { UserType } from "./types/types.ts";
+import BeatLoader from "react-spinners/BeatLoader";
 
 interface AdminTableProps {
   handleUserToEdit: (user: UserType) => void;
@@ -108,7 +109,7 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
     queryFn: fetchAllUsers,
   });
 
-  if (isLoading) return <span>Loading...</span>;
+  if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
   if (isError) return <span>Error: {error.message}</span>;
 
   return (

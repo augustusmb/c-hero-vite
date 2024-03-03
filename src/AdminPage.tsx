@@ -8,6 +8,7 @@ import AdminUserInfoTable from "./AdminUserInfoTable.jsx";
 import { useQuery } from "@tanstack/react-query";
 import { getFullUserProductProgressMap } from "./utils/user.ts";
 import { UserType } from "./types/types.ts";
+import BeatLoader from "react-spinners/BeatLoader";
 
 const AdminPage = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const AdminPage = () => {
     queryFn: getFullUserProductProgressMap,
   });
 
-  if (isLoading) return <span>Loading...</span>;
+  if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
   if (isError) return <span>Error: {error.message}</span>;
 
   const handleUserToEdit = (user: UserType) => {

@@ -4,6 +4,7 @@ import { getFullUserProductProgressMap } from "./utils/user.ts";
 import CheckIcon from "./assets/icons/icon-check.svg?react";
 import { ProductData } from "./types/types.ts";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
+import BeatLoader from "react-spinners/BeatLoader";
 
 const ClassCardSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
@@ -13,7 +14,7 @@ const ClassCardSection = () => {
     queryFn: getFullUserProductProgressMap,
   });
 
-  if (isLoading) return <span>Loading...</span>;
+  if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
   if (isError) return <span>Error: {error.message}</span>;
 
   const getClassCardSection = () => {

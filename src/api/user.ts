@@ -46,7 +46,5 @@ export const getDashboardUsers = async ({ queryKey }: any) => {
     params: { level, id, vessel, company },
   });
 
-  console.log("users: ", users);
-
   return users;
 };
