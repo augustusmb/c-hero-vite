@@ -5,16 +5,16 @@ import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the 
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import { getDashboardUsers } from "./api/user.ts";
+import BeatLoader from "react-spinners/BeatLoader";
+import CrewProgressBarCellRenderer from "./tableCellRenderers/CrewProgressBarCellRenderer.tsx";
+import ClassProgressDatesCellRenderer, {
+  getDateFormat,
+} from "./tableCellRenderers/ClassProgressDatesCellRenderer.tsx";
 
 const DashboardProgressSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
   const { level, id, vessel, company } = loggedInUserInfo || {};
   const gridRef = useRef<AgGridReact | null>(null);
-
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["dashboard-users", level, id, vessel, company],
-    queryFn: getDashboardUsers,
-  });
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,16 +29,6 @@ const DashboardProgressSection = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Column Definitions: Defines the columns to be displayed.
-  const colDefs = [
-    { field: "name" },
-    { field: "phone" },
-    { field: "company" },
-    { field: "vessel" },
-    { field: "testsCompleted" },
-    { field: "totalTests" },
-  ];
-
   const getRowStyle = useCallback((params: any) => {
     if (params.node.rowIndex % 2 === 0) {
       return { background: "#f8f8f8" };
@@ -46,20 +36,104 @@ const DashboardProgressSection = () => {
     return { background: "#ffffff" };
   }, []);
 
-  if (isLoading) return <span>Loading...</span>;
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["dashboard-users", level, id, vessel, company],
+    queryFn: getDashboardUsers,
+    enabled: !!vessel,
+  });
+
+  if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
   if (isError) return <span>Error: {error.message}</span>;
+
+  const vesselProducts = data?.data.vesselProducts || [];
+  const vesselProduct1 = vesselProducts[0]?.product_id;
+  const vesselProduct2 = vesselProducts[1]?.product_id;
+
+  const colDefs = [
+    {
+      headerName: data?.data.vesselName,
+      children: [
+        {
+          headerName: "Crew",
+          field: "name",
+          cellRenderer: CrewProgressBarCellRenderer,
+          width: 200,
+        },
+        { headerName: "Port", field: "port" },
+        { headerName: "Title", field: "title" },
+        {
+          headerName: "Date Started",
+          valueGetter: (params: { data: { date_signed_up: Date } }) => {
+            return getDateFormat(params.data.date_signed_up);
+          },
+        },
+        {
+          headerName: "MOB Equipment",
+          cellRenderer: () => {
+            return (
+              <div>
+                <div>{vesselProduct1.toUpperCase()}</div>
+                <div>{vesselProduct2.toUpperCase()}</div>
+              </div>
+            );
+          },
+        },
+        {
+          headerName: "Date Classes Completed",
+          children: [
+            {
+              headerName: "Setup",
+              cellRenderer: ClassProgressDatesCellRenderer(
+                "a",
+                vesselProduct1,
+                vesselProduct2,
+              ),
+            },
+            {
+              headerName: "Operations",
+              cellRenderer: ClassProgressDatesCellRenderer(
+                "b",
+                vesselProduct1,
+                vesselProduct2,
+              ),
+            },
+            {
+              headerName: "Inspection",
+              cellRenderer: ClassProgressDatesCellRenderer(
+                "c",
+                vesselProduct1,
+                vesselProduct2,
+              ),
+            },
+            {
+              headerName: "Drill",
+              cellRenderer: ClassProgressDatesCellRenderer(
+                "d",
+                vesselProduct1,
+                vesselProduct2,
+              ),
+            },
+          ],
+        },
+      ],
+    },
+  ];
 
   return (
     <div
-      className="ag-theme-quartz" // applying the grid theme
-      style={{ height: 500 }} // the grid will fill the size of the parent container
+      className="ag-theme-quartz mb-10" // applying the grid theme
+      style={{ height: 500, width: "100%" }} // the grid will fill the size of the parent container
     >
-      <AgGridReact
-        getRowStyle={getRowStyle}
-        ref={gridRef}
-        rowData={data?.data}
-        columnDefs={colDefs}
-      />
+      <div className="shadow-xl" style={{ height: 500, width: "100%" }}>
+        <AgGridReact
+          getRowStyle={getRowStyle}
+          ref={gridRef}
+          rowData={data?.data.usersWithProductProgressMaps}
+          columnDefs={colDefs}
+          defaultColDef={{ cellStyle: { textAlign: "left" }, width: 125 }}
+          rowHeight={82}
+        />
+      </div>
     </div>
   );
 };
