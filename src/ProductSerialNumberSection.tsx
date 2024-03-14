@@ -162,10 +162,10 @@ const ProductSerialNumberSection = () => {
           {data.map((serial: ProductSerialNumber) => {
             return (
               <TableRow key={serial.product_id}>
-                <TableCell className="px-4 py-1 text-start">
+                <TableCell className="px-3 py-1 text-start">
                   {productsMap[serial.product_id].productName}
                 </TableCell>
-                <TableCell className="px-3 py-1 text-start">
+                <TableCell className="py-2 pl-1 text-start">
                   {serial.serial_number}
                 </TableCell>
                 <TableCell className="px-0 py-1 text-end">
@@ -198,7 +198,7 @@ const ProductSerialNumberSection = () => {
                         <FormItem>
                           <FormControl>
                             <Select {...field} onValueChange={field.onChange}>
-                              <SelectTrigger className="w-[230px] lg:w-[230px]">
+                              <SelectTrigger className="w-[230px] pl-2 lg:w-[230px]">
                                 <SelectValue placeholder="Select Product" />
                               </SelectTrigger>
                               <SelectContent>
@@ -207,6 +207,7 @@ const ProductSerialNumberSection = () => {
                                     <SelectItem
                                       key={product.code}
                                       value={product.code}
+                                      className="pl-2"
                                     >
                                       {product.name}
                                     </SelectItem>
@@ -227,7 +228,7 @@ const ProductSerialNumberSection = () => {
                             <Input
                               type="text"
                               placeholder="Serial Code"
-                              className="w-[60px] lg:w-[120px]"
+                              className="w-[60px] pl-2 lg:w-[120px]"
                               {...field}
                             />
                           </FormControl>
