@@ -146,7 +146,7 @@ const ProductSerialNumberSection = () => {
   };
 
   return (
-    <div className="flex w-full flex-col pb-4 lg:pr-4">
+    <div className="flex w-full flex-col rounded-md pb-4 lg:pr-4">
       <h4 className="self-start text-xl font-semibold text-slate-900 underline lg:text-xl">
         Product Serial Codes
       </h4>

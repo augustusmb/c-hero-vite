@@ -31,7 +31,7 @@ const HomePage = () => {
 
   return (
     /*  */
-    <div className="grid lg:grid-cols-2">
+    <div className="grid gap-2 lg:grid-cols-2">
       <div>
         {loggedInUserInfo && <UserInfoSection userInfo={loggedInUserInfo} />}
         <ProductSerialNumberSection />
