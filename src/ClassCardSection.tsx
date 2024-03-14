@@ -34,7 +34,7 @@ const ClassCardSection = () => {
   return (
     <div className="flex flex-col pb-10">
       <h4 className="self-start text-xl font-semibold text-slate-900 underline lg:text-xl">
-        Assigned Classes Below:
+        Assigned Classes
       </h4>
       <div className="text-md my-2 flex flex-col lg:text-lg">
         <div className="flex">

@@ -1,11 +1,11 @@
 import express from 'express'
 import { getQuestions } from './routes/Questions.js'
-import { getUserByPhone, updateUserInfo, deleteUser, acceptTermsAndConditions, fetchAllUsers } from './routes/Users.js'
+import { getUserByPhone, updateUserInfo, deleteUser, acceptTermsAndConditions, fetchAllUsers, updateUserInfoAndProducts } from './routes/Users.js'
 import { submitTest } from './routes/SubmitTest.js'
 import { getUsersAssignedClasses } from './routes/Classes.js'
 import { getDashboardUsers } from './routes/Dashboard.js';
-import { updateUserInfoAndProducts } from './routes/Users.js'
 import { signUpUser } from './routes/SignUp.js'
+import { getSerialNumbers, addSerialNumber, deleteSerialNumber } from './routes/Products.js'
 
 
 const router = express.Router()
@@ -38,5 +38,10 @@ router.route('/classes')
 
 router.route('/dashboard')
   .get(getDashboardUsers)
+
+router.route('/product-serial-numbers')
+  .get(getSerialNumbers)
+  .post(addSerialNumber)
+  .delete(deleteSerialNumber)
 
 export default router

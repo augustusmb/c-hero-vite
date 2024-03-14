@@ -48,3 +48,43 @@ export const getDashboardUsers = async ({ queryKey }: any) => {
 
   return users;
 };
+
+export const getSerialNumbers = async ({ queryKey }: any) => {
+  const [_key, id] = queryKey;
+  const serialNumbers = await apiClient.get(
+    `api/routes/product-serial-numbers`,
+    {
+      params: { userId: id },
+    },
+  );
+
+  return serialNumbers.data;
+};
+
+export const deleteSerialNumber = async ({
+  userId,
+  serialNumber,
+}: {
+  userId: number;
+  serialNumber: string;
+}) => {
+  return await apiClient.delete("api/routes/product-serial-numbers", {
+    params: { userId, serialNumber },
+  });
+};
+
+export const addSerialNumber = async ({
+  userId,
+  productId,
+  serialNumber,
+}: {
+  userId: number;
+  productId: string;
+  serialNumber: string;
+}) => {
+  return await apiClient.post("api/routes/product-serial-numbers", {
+    userId,
+    productId,
+    serialNumber,
+  });
+};

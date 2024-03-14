@@ -124,6 +124,9 @@ const DashboardProgressSection = () => {
       className="ag-theme-quartz mb-10" // applying the grid theme
       style={{ height: 500, width: "100%" }} // the grid will fill the size of the parent container
     >
+      <h4 className="mt-8 self-start text-xl font-semibold text-slate-900 underline lg:text-xl">
+        Vessel's Crew Progress Dashboard
+      </h4>{" "}
       <div className="shadow-xl" style={{ height: 500, width: "100%" }}>
         <AgGridReact
           getRowStyle={getRowStyle}

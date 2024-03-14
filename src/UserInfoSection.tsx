@@ -31,9 +31,9 @@ const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
   return (
     <div className="col-span-1">
       <div className="flex flex-col">
-        <h3 className="mb-2 self-start text-lg font-semibold text-slate-900 underline lg:text-xl">
+        <h4 className="mb-2 self-start text-xl font-semibold text-slate-900 underline lg:text-xl">
           Account Info
-        </h3>
+        </h4>
         <div>
           {!editMode ? (
             <>

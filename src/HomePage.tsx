@@ -8,6 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import DashboardProgressSection from "./DashboardProgressSection.tsx";
 import BeatLoader from "react-spinners/BeatLoader";
+import ProductSerialNumberSection from "./ProductSerialNumberSection.tsx";
 
 const HomePage = () => {
   const { loggedInUserInfo, setLoggedInUserInfo } = useLoggedInUserContext();
@@ -33,6 +34,7 @@ const HomePage = () => {
     <div className="grid lg:grid-cols-2">
       <div>
         {loggedInUserInfo && <UserInfoSection userInfo={loggedInUserInfo} />}
+        <ProductSerialNumberSection />
       </div>
       <div>
         {loggedInUserInfo?.terms_accepted ? (

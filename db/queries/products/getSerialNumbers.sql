@@ -1,0 +1,1 @@
+select * from product_serial_numbers where user_id = ${userId}
