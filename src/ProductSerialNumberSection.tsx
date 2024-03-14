@@ -68,7 +68,7 @@ const ProductSerialNumberSection = () => {
       });
       return { previousData };
     },
-    onError: (error, variables, context) => {
+    onError: (_error, variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(
           ["get-serial-numbers", variables.userId],
@@ -113,7 +113,7 @@ const ProductSerialNumberSection = () => {
 
       return { previousData };
     },
-    onError: (error, variables, context) => {
+    onError: (_error, variables, context) => {
       queryClient.setQueryData(
         ["get-serial-numbers", variables.userId],
         context?.previousData ?? [],
