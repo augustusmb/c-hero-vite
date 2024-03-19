@@ -2,12 +2,12 @@ import UserInfoStatic from "./UserInfoStatic.jsx";
 import UserProductsStatic from "./UserProductsStatic.jsx";
 import { UserType, UserProducts } from "./types/types.ts";
 
-interface AdminEditUserStaticProps {
+type AdminEditUserStaticProps = {
   toggleEditMode: (editMode: boolean) => void;
   editMode: boolean;
   userInfo: UserType;
   data: UserProducts;
-}
+};
 
 const AdminEditUserStatic: React.FC<AdminEditUserStaticProps> = ({
   userInfo: user,
@@ -31,7 +31,7 @@ const AdminEditUserStatic: React.FC<AdminEditUserStaticProps> = ({
       </div>
       <div className="col-span-2 mt-3 flex items-start lg:mt-0">
         <button
-          className="text-slate-950 w-24 rounded border border-slate-500 bg-slate-050 px-3 py-1 font-semibold hover:border-transparent hover:bg-slate-600 hover:text-slate-050 lg:w-36 lg:self-center"
+          className="w-24 rounded border border-slate-500 bg-slate-050 px-3 py-1 font-semibold text-slate-950 hover:border-transparent hover:bg-slate-600 hover:text-slate-050 lg:w-36 lg:self-center"
           onClick={() => toggleEditMode(!editMode)}
         >
           Edit

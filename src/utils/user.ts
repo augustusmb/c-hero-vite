@@ -44,9 +44,9 @@ export const createUserFullProgressMap = (userClassesMap: ProductProgress) => {
   return userProductsMap;
 };
 
-interface Params {
+type Params = {
   queryKey: [string, number];
-}
+};
 
 export const getFullUserProductProgressMap = async (params: Params) => {
   const userId = params.queryKey[1];

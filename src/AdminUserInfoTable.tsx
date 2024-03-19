@@ -7,9 +7,9 @@ import { fetchAllUsers } from "./api/user.ts";
 import { UserType } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 
-interface AdminTableProps {
+type AdminTableProps = {
   handleUserToEdit: (user: UserType) => void;
-}
+};
 
 const AdminUserInfoTable: React.FC<AdminTableProps> = ({
   handleUserToEdit,
@@ -118,7 +118,7 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
         <div className="flex items-baseline rounded bg-yellow-200 text-lg">
           <label
             htmlFor="filter-text-box"
-            className="text-slate-950 mx-4 text-lg font-bold"
+            className="mx-4 text-lg font-bold text-slate-950"
           >
             {`Filter Search: `}
           </label>

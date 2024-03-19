@@ -1,11 +1,11 @@
-export interface AdminEditUserStaticProps {
+export type AdminEditUserStaticProps = {
   toggleEditMode: (editMode: boolean) => void;
   editMode: boolean;
   userInfo: UserType;
   data: UserProducts;
-}
+};
 
-export interface UserType {
+export type UserType = {
   [key: string]: any;
   id: number;
   name: string;
@@ -17,7 +17,7 @@ export interface UserType {
   vessel: string;
   port: string;
   terms_accepted: boolean;
-}
+};
 
 export type CompletedTestData = {
   classId: string;
@@ -27,32 +27,32 @@ export type CompletedTestData = {
   questionsMissed: any;
 };
 
-export interface UserProducts {
+export type UserProducts = {
   [key: string]: {
     assigned: boolean;
     classProgress: ProductProgress;
     productId: string;
     productName: string;
   };
-}
+};
 
-export interface ProductData {
+export type ProductData = {
   productId: string;
   productName: string;
   assigned: boolean;
   classProgress: ProductProgress;
-}
+};
 
-export interface ProductProgress {
+export type ProductProgress = {
   [key: string]: ClassProgress;
-}
+};
 
-export interface ClassProgress {
+export type ClassProgress = {
   product_id: string;
   user_id: number;
   completed: boolean;
   data_completed: string | null;
-}
+};
 
 export type RawUserFormData = {
   name: string;
@@ -64,9 +64,9 @@ export type RawUserFormData = {
   assignedProductChange: AssignedProductChange;
 };
 
-export interface AssignedProductChange {
+export type AssignedProductChange = {
   [key: string]: boolean;
-}
+};
 
 export type FormattedUserFormData = {
   name: string;
@@ -80,13 +80,13 @@ export type FormattedUserFormData = {
   newlyRemovedProducts: NewlyRemovedProducts;
 };
 
-export interface NewlyAddedProducts {
+export type NewlyAddedProducts = {
   [key: string]: boolean;
-}
+};
 
-export interface NewlyRemovedProducts {
+export type NewlyRemovedProducts = {
   [key: string]: boolean;
-}
+};
 
 export type UpdatedUserInfo = {
   name: string;

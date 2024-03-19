@@ -1,18 +1,18 @@
 import { Link } from "react-router-dom";
 import { ProductProgress, ClassProgress } from "./types/types";
 
-interface ClassCardItemsProps {
+type ClassCardItemsProps = {
   item: ClassProgress;
-}
+};
 type product = {
   productId: string;
   productName: string;
   assigned: boolean;
   classProgress: ProductProgress;
 };
-interface ClassTypesMap {
+type ClassTypesMap = {
   [key: string]: string;
-}
+};
 const classTypesMapping: ClassTypesMap = {
   a: "Setup",
   b: "Operation",
@@ -42,7 +42,7 @@ const ClassCardItem: React.FC<ClassCardItemsProps> = ({ item }) => {
       className={`${
         item.completed
           ? "mb-1 w-full rounded-sm  bg-orange-200 text-sm text-slate-800 line-through lg:text-lg"
-          : "text-slate-950 mb-1 w-full rounded-sm  bg-slate-200 text-sm drop-shadow-2xl hover:bg-slate-500 hover:text-slate-050 lg:text-lg	"
+          : "mb-1 w-full rounded-sm bg-slate-200  text-sm text-slate-950 drop-shadow-2xl hover:bg-slate-500 hover:text-slate-050 lg:text-lg	"
       }`}
     >
       <p>{classTypesMapping[item.product_id.slice(3, 4)]}</p>

@@ -12,13 +12,13 @@ import {
 } from "./types/types.ts";
 import { compareProducts, createUserInfo } from "./utils/AdminPageUtils.ts";
 
-interface AdminEditUserStaticProps {
+type AdminEditUserStaticProps = {
   toggleEditMode: (editMode: boolean) => void;
   editMode: boolean;
   userInfo: UserType;
   data: UserProducts;
   handleUserToEdit: (userToEdit: UserType) => void;
-}
+};
 
 const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
   userInfo: userToEdit,
@@ -150,7 +150,7 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
             </div>
             <div className="col-span-2 mt-3 flex items-start gap-1 lg:mt-0">
               <p
-                className="hover:bg-blue-500 text-blue-700 hover:text-white border-blue-500 w-36 rounded border bg-transparent px-3 py-1 font-semibold hover:border-transparent"
+                className="w-36 rounded border border-blue-500 bg-transparent px-3 py-1 font-semibold text-blue-700 hover:border-transparent hover:bg-blue-500 hover:text-white"
                 onClick={() => toggleEditMode(!editMode)}
               >
                 Cancel
@@ -163,14 +163,14 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
               <div>
                 {confirmDelete ? (
                   <p
-                    className="text-slate-950 w-36 rounded bg-orange-050 px-3 py-1 font-semibold hover:bg-orange-200 hover:text-orange-600"
+                    className="w-36 rounded bg-orange-050 px-3 py-1 font-semibold text-slate-950 hover:bg-orange-200 hover:text-orange-600"
                     onClick={() => handleDeleteUser()}
                   >
                     Confirm Delete
                   </p>
                 ) : (
                   <p
-                    className="hover:border-slate-950 w-36 rounded border border-slate-400 bg-slate-050 px-3 py-1 font-semibold text-orange-500 hover:bg-orange-100 hover:text-orange-700"
+                    className="w-36 rounded border border-slate-400 bg-slate-050 px-3 py-1 font-semibold text-orange-500 hover:border-slate-950 hover:bg-orange-100 hover:text-orange-700"
                     onClick={() => toggleConfirmDelete()}
                   >
                     Delete User

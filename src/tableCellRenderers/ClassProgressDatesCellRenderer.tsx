@@ -1,20 +1,20 @@
-interface ClassProgress {
+type ClassProgress = {
   date_completed: Date;
-}
+};
 
-interface UserFullProgressMap {
+type UserFullProgressMap = {
   [x: string]: {
     classProgress: {
       [x: string]: ClassProgress;
     };
   };
-}
+};
 
-interface ClassProgressParams {
+type ClassProgressParams = {
   data: {
     userFullProgressMap: UserFullProgressMap;
   };
-}
+};
 
 export function getDateFormat(date: Date) {
   if (!date) return "X";

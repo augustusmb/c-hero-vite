@@ -4,9 +4,9 @@ import UserInfoEdit from "./UserInfoEdit.jsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import { UserType } from "./types/types.ts";
 
-interface UserInfoSectionStaticProps {
+type UserInfoSectionStaticProps = {
   userInfo: UserType;
-}
+};
 
 const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
   userInfo,
@@ -40,7 +40,7 @@ const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
               <UserInfoStatic userInfoToEdit={userInfoToEdit} />
               <div className="mb-8 flex">
                 <button
-                  className="text-slate-950 h-9 w-24 rounded border border-slate-500 bg-slate-050 font-semibold hover:border-transparent hover:bg-slate-600 hover:text-slate-050"
+                  className="h-9 w-24 rounded border border-slate-500 bg-slate-050 font-semibold text-slate-950 hover:border-transparent hover:bg-slate-600 hover:text-slate-050"
                   onClick={() => toggleEditMode()}
                 >
                   Edit

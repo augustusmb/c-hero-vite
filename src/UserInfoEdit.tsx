@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { labels } from "./messages.ts";
 import { UserType, UpdatedUserInfo } from "./types/types.ts";
 
-interface UserInfoEditProps {
+type UserInfoEditProps = {
   toggleEditMode: () => void;
   userInfoToEdit: UserType;
   handleUserToEdit: (userToEdit: UserType) => void;
-}
+};
 
 const UserInfoEdit: React.FC<UserInfoEditProps> = ({
   userInfoToEdit: user,
@@ -69,7 +69,7 @@ const UserInfoEdit: React.FC<UserInfoEditProps> = ({
       </div>
       <div className="col-span-4 mb-8 flex items-start">
         <button
-          className="hover:bg-blue-500 text-blue-700 hover:text-white border-blue-500 h-9 w-24 rounded border bg-transparent font-semibold hover:border-transparent"
+          className="h-9 w-24 rounded border border-blue-500 bg-transparent font-semibold text-blue-700 hover:border-transparent hover:bg-blue-500 hover:text-white"
           onClick={() => toggleEditMode()}
         >
           Cancel

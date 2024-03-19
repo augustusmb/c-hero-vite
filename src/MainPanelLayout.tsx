@@ -6,10 +6,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { setAuthToken } from "./api/apiClient.ts";
 import { UserType } from "./types/types.ts";
 
-interface LoggedInUserContextType {
+type LoggedInUserContextType = {
   loggedInUserInfo: UserType | null;
   setLoggedInUserInfo: (user: any) => void;
-}
+};
 
 export const LoggedInUserContext =
   createContext<LoggedInUserContextType | null>(null);
