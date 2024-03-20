@@ -75,16 +75,13 @@ export const deleteSerialNumber = async ({
 
 export const addSerialNumber = async ({
   userId,
-  productId,
   serialNumber,
 }: {
   userId: number;
-  productId: string;
   serialNumber: string;
 }) => {
   return await apiClient.post("api/routes/product-serial-numbers", {
     userId,
-    productId,
     serialNumber,
   });
 };

@@ -36,9 +36,9 @@ export function deleteSerialNumber(req, res) {
 }
 
 export function addSerialNumber(req, res) {
-  const { userId, serialNumber, productId } = req.body
+  const { userId, serialNumber } = req.body
 
-  db.none(queries.addSerialNumber, { userId, serialNumber, productId })
+  db.none(queries.addSerialNumber, { userId, serialNumber })
   .then(() => {
     res.status(200).json('Serial number added for user')
   })

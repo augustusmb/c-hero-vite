@@ -1,11 +1,11 @@
-import { productsArray, productsMap } from "./messages";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./@/components/ui/select.tsx";
+// import { productsArray, productsMap } from "./messages";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "./@/components/ui/select.tsx";
 import { Button } from "./@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import {
@@ -45,7 +45,6 @@ const ProductSerialNumberSection = () => {
   const queryClient = useQueryClient();
   const form = useForm();
   const { watch } = form;
-  const selectedProduct = watch("selectedProduct");
   const serialNumber = watch("serialNumber");
 
   const deleteSerialNumberMutation = useMutation({
@@ -81,16 +80,14 @@ const ProductSerialNumberSection = () => {
   const addSerialNumberMutation = useMutation({
     mutationFn: async ({
       userId,
-      productId,
       serialNumber,
     }: {
       userId: number;
-      productId: string;
       serialNumber: string;
     }) => {
-      addSerialNumber({ userId, productId, serialNumber });
+      addSerialNumber({ userId, serialNumber });
     },
-    onMutate: async ({ userId, productId, serialNumber }) => {
+    onMutate: async ({ userId, serialNumber }) => {
       await queryClient.cancelQueries({
         queryKey: ["get-serial-numbers", userId],
       });
@@ -104,7 +101,7 @@ const ProductSerialNumberSection = () => {
         return [
           ...old,
           {
-            product_id: productId,
+            // product_id: productId,
             serial_number: serialNumber,
             user_id: userId,
           },
@@ -136,11 +133,10 @@ const ProductSerialNumberSection = () => {
   if (isError) return <span>Error: {error.message}</span>;
 
   const handleAddSerialNumber = (formData: FieldValues) => {
-    const { selectedProduct, serialNumber } = formData;
+    const { serialNumber } = formData;
 
     addSerialNumberMutation.mutate({
       userId: id!,
-      productId: selectedProduct,
       serialNumber: serialNumber,
     });
   };
@@ -148,24 +144,24 @@ const ProductSerialNumberSection = () => {
   return (
     <div className="flex w-full flex-col rounded-md pb-4 lg:pr-4">
       <h4 className="self-start text-xl font-semibold text-slate-900 underline lg:text-xl">
-        Product Serial Codes
+        Product Serial Numbers
       </h4>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[240px] px-2">Product Name</TableHead>
-            <TableHead className="px-2">Serial Code</TableHead>
+            {/* <TableHead className="w-[240px] px-2">Product Name</TableHead> */}
+            <TableHead className="px-4">Serial Number</TableHead>
             <TableHead className="pr-4 text-end">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.map((serial: ProductSerialNumber) => {
             return (
-              <TableRow key={serial.product_id}>
-                <TableCell className="px-3 py-1 text-start">
+              <TableRow key={serial.serial_number}>
+                {/* <TableCell className="px-3 py-1 text-start">
                   {productsMap[serial.product_id].productName}
-                </TableCell>
-                <TableCell className="py-2 pl-1 text-start">
+                </TableCell> */}
+                <TableCell className="py-2 pl-4 text-start">
                   {serial.serial_number}
                 </TableCell>
                 <TableCell className="px-0 py-1 text-end">
@@ -187,11 +183,11 @@ const ProductSerialNumberSection = () => {
             );
           })}
           <TableRow className="text-end">
-            <TableCell className="px-1 py-1" colSpan={3}>
+            <TableCell className="py-1 pl-2 pr-0" colSpan={3}>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(handleAddSerialNumber)}>
                   <div className="flex gap-1">
-                    <FormField
+                    {/* <FormField
                       control={form.control}
                       name="selectedProduct"
                       render={({ field }) => (
@@ -218,7 +214,7 @@ const ProductSerialNumberSection = () => {
                           </FormControl>
                         </FormItem>
                       )}
-                    />
+                    /> */}
                     <FormField
                       control={form.control}
                       name="serialNumber"
@@ -227,7 +223,7 @@ const ProductSerialNumberSection = () => {
                           <FormControl>
                             <Input
                               type="text"
-                              placeholder="Serial Code"
+                              placeholder="Serial Number"
                               className="w-[60px] pl-2 lg:w-[120px]"
                               {...field}
                             />
@@ -240,7 +236,7 @@ const ProductSerialNumberSection = () => {
                       type="submit"
                       variant={"outline"}
                       className="ml-auto w-20"
-                      disabled={!selectedProduct || !serialNumber}
+                      disabled={!serialNumber}
                     >
                       Add
                     </Button>

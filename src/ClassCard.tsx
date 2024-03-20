@@ -4,6 +4,9 @@ import { ProductProgress, ClassProgress } from "./types/types";
 type ClassCardItemsProps = {
   item: ClassProgress;
 };
+type ClassCardProps = {
+  product: product;
+};
 type product = {
   productId: string;
   productName: string;
@@ -20,7 +23,7 @@ const classTypesMapping: ClassTypesMap = {
   d: "Inspection & Storage",
 };
 
-const ClassCard = ({ product }: { product: product }) => {
+const ClassCard: React.FC<ClassCardProps> = ({ product }) => {
   return (
     <div className="overflow-hidden rounded-lg  bg-slate-050 shadow-lg shadow-slate-300">
       <h4 className="w-100 mb-2 bg-slate-100 py-1 text-xs font-semibold text-slate-800 underline lg:text-lg">
