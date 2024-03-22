@@ -223,7 +223,7 @@ const ProductSerialNumberSection = () => {
                           <FormControl>
                             <Input
                               type="text"
-                              placeholder="Serial Number"
+                              placeholder="Serial #"
                               className="w-[60px] pl-2 lg:w-[120px]"
                               {...field}
                             />
