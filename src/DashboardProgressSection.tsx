@@ -72,8 +72,8 @@ const DashboardProgressSection = () => {
           cellRenderer: () => {
             return (
               <div>
-                <div>{vesselProduct1.toUpperCase()}</div>
-                <div>{vesselProduct2.toUpperCase()}</div>
+                <div>{vesselProduct1?.toUpperCase() || "N/A"}</div>
+                <div>{vesselProduct2?.toUpperCase() || "N/A"}</div>
               </div>
             );
           },
