@@ -32,6 +32,7 @@ import {
 } from "./api/user.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import { FieldValues, useForm } from "react-hook-form";
+import { QueryKeys } from "./utils/QueryKeys.ts";
 
 type ProductSerialNumber = {
   product_id: string;
@@ -59,18 +60,21 @@ const ProductSerialNumberSection = () => {
     },
     onMutate: async ({ userId, serialNumber }) => {
       const previousData = queryClient.getQueryData([
-        "get-serial-numbers",
+        QueryKeys.LIST_SERIAL_NUMBERS,
         userId,
       ]);
-      queryClient.setQueryData(["get-serial-numbers", userId], (old: any) => {
-        return old.filter((item: any) => item.serial_number !== serialNumber);
-      });
+      queryClient.setQueryData(
+        [QueryKeys.LIST_SERIAL_NUMBERS, userId],
+        (old: any) => {
+          return old.filter((item: any) => item.serial_number !== serialNumber);
+        },
+      );
       return { previousData };
     },
     onError: (_error, variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(
-          ["get-serial-numbers", variables.userId],
+          [QueryKeys.LIST_SERIAL_NUMBERS, variables.userId],
           context.previousData,
         );
       }
@@ -89,43 +93,48 @@ const ProductSerialNumberSection = () => {
     },
     onMutate: async ({ userId, serialNumber }) => {
       await queryClient.cancelQueries({
-        queryKey: ["get-serial-numbers", userId],
+        queryKey: [QueryKeys.LIST_SERIAL_NUMBERS, userId],
       });
 
       const previousData = queryClient.getQueryData([
-        "get-serial-numbers",
+        QueryKeys.LIST_SERIAL_NUMBERS,
         userId,
       ]);
 
-      queryClient.setQueryData(["get-serial-numbers", userId], (old: any) => {
-        return [
-          ...old,
-          {
-            // product_id: productId,
-            serial_number: serialNumber,
-            user_id: userId,
-          },
-        ];
-      });
+      queryClient.setQueryData(
+        [QueryKeys.LIST_SERIAL_NUMBERS, userId],
+        (old: any) => {
+          return [
+            ...old,
+            {
+              // product_id: productId,
+              serial_number: serialNumber,
+              user_id: userId,
+            },
+          ];
+        },
+      );
 
       return { previousData };
     },
     onError: (_error, variables, context) => {
       queryClient.setQueryData(
-        ["get-serial-numbers", variables.userId],
+        [QueryKeys.LIST_SERIAL_NUMBERS, variables.userId],
         context?.previousData ?? [],
       );
     },
     onSettled: () => {
       form.reset({ serialNumber: "", selectedProduct: "" });
       setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["get-serial-numbers", id] });
+        queryClient.invalidateQueries({
+          queryKey: [QueryKeys.LIST_SERIAL_NUMBERS, id],
+        });
       }, 1000); // Delay of 1 second
     },
   });
 
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["get-serial-numbers", id],
+    queryKey: [QueryKeys.LIST_SERIAL_NUMBERS, id],
     queryFn: getSerialNumbers,
   });
 

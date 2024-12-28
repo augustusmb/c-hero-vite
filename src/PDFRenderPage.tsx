@@ -134,7 +134,6 @@ const PDFRenderPage = () => {
               key={`page_${index + 1}`}
               pageNumber={index + 1}
               renderAnnotationLayer={true}
-              onRenderAnnotationLayerSuccess={console.log}
               onRenderAnnotationLayerError={console.error}
               onGetAnnotationsError={console.error}
               width={panelWidth}
@@ -146,7 +145,7 @@ const PDFRenderPage = () => {
         <div className="m-10">
           <Link
             to={`/test/${classId}`}
-            className="text-slate-950 drop-shadow-orange-900 rounded bg-orange-300 px-2 py-2 text-lg font-bold drop-shadow-2xl hover:bg-orange-500 hover:text-slate-050 lg:text-2xl"
+            className="drop-shadow-orange-900 rounded bg-orange-300 px-2 py-2 text-lg font-bold text-slate-950 drop-shadow-2xl hover:bg-orange-500 hover:text-slate-050 lg:text-2xl"
           >
             Take the test
           </Link>

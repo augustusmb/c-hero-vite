@@ -9,13 +9,14 @@ import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import DashboardProgressSection from "./DashboardProgressSection.tsx";
 import BeatLoader from "react-spinners/BeatLoader";
 import ProductSerialNumberSection from "./ProductSerialNumberSection.tsx";
+import { QueryKeys } from "./utils/QueryKeys.ts";
 
 const HomePage = () => {
   const { loggedInUserInfo, setLoggedInUserInfo } = useLoggedInUserContext();
   const { isLoading: authLoading, user, isAuthenticated } = useAuth0();
 
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["get-user-info", user?.name ?? ""],
+    queryKey: [QueryKeys.GET_USER, user?.name ?? ""],
     queryFn: getUserByPhone,
     enabled: !authLoading && Boolean(user?.name) && isAuthenticated,
   });

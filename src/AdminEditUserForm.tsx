@@ -11,6 +11,7 @@ import {
   RawUserFormData,
 } from "./types/types.ts";
 import { compareProducts, createUserInfo } from "./utils/AdminPageUtils.ts";
+import { QueryKeys } from "./utils/QueryKeys.ts";
 
 type AdminEditUserStaticProps = {
   toggleEditMode: (editMode: boolean) => void;
@@ -36,8 +37,10 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
       updateUserInfoAndProducts(formattedUserFormData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["all-users"] });
-      queryClient.invalidateQueries({ queryKey: ["get-user-products"] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.LIST_USERS] });
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.LIST_USER_PRODUCTS],
+      });
     },
   });
 
@@ -46,7 +49,7 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
       deleteUser(userId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["all-users"] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.LIST_USERS] });
     },
   });
 

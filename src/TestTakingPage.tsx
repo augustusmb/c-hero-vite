@@ -15,6 +15,7 @@ import { useClassId } from "./hooks/useClassId.tsx";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import { CompletedTestData, TestQuestion } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
+import { QueryKeys } from "./utils/QueryKeys.ts";
 
 const TestTakingPage = () => {
   const { handleSubmit, reset } = useForm();
@@ -41,7 +42,7 @@ const TestTakingPage = () => {
     data: questions,
     error,
   } = useQuery({
-    queryKey: ["get-test-questions", classId],
+    queryKey: [QueryKeys.LIST_TEST_QUESTIONS, classId],
     queryFn: getTestQuestions,
   });
 
@@ -50,7 +51,9 @@ const TestTakingPage = () => {
       submitCompletedTest(completedTestData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["get-user-products"] });
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.LIST_USER_PRODUCTS],
+      });
     },
   });
 
@@ -245,7 +248,7 @@ const TestTakingPage = () => {
         </div>
         <div>
           <input
-            className="text-slate-950 drop-shadow-orange-900 mt-10 w-40 rounded bg-orange-300 px-2 py-2 text-lg font-bold drop-shadow-2xl hover:bg-orange-500 hover:text-slate-050 lg:text-2xl"
+            className="drop-shadow-orange-900 mt-10 w-40 rounded bg-orange-300 px-2 py-2 text-lg font-bold text-slate-950 drop-shadow-2xl hover:bg-orange-500 hover:text-slate-050 lg:text-2xl"
             type="submit"
           ></input>
         </div>
@@ -255,13 +258,13 @@ const TestTakingPage = () => {
         <div>
           {testPassed ? (
             <Link to={"/"}>
-              <button className="text-md text-slate-950 rounded bg-orange-300 px-2 py-2 font-bold hover:bg-orange-500 hover:text-slate-050">
+              <button className="text-md rounded bg-orange-300 px-2 py-2 font-bold text-slate-950 hover:bg-orange-500 hover:text-slate-050">
                 Return to home page
               </button>
             </Link>
           ) : (
             <Link to={`/class/${classId}`}>
-              <button className="text-slate-950 rounded bg-orange-300 px-2 py-2 text-lg font-bold hover:bg-orange-500 hover:text-slate-050">
+              <button className="rounded bg-orange-300 px-2 py-2 text-lg font-bold text-slate-950 hover:bg-orange-500 hover:text-slate-050">
                 Return to class PDF
               </button>
             </Link>

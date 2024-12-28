@@ -3,9 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { AgGridReact } from "ag-grid-react"; // React Grid Logic
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
-import { fetchAllUsers } from "./api/user.ts";
+import { listUsers } from "./api/user.ts";
 import { UserType } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
+import { QueryKeys } from "./utils/QueryKeys.ts";
 
 type AdminTableProps = {
   handleUserToEdit: (user: UserType) => void;
@@ -105,8 +106,8 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
   };
 
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["all-users"],
-    queryFn: fetchAllUsers,
+    queryKey: [QueryKeys.LIST_USERS],
+    queryFn: listUsers,
   });
 
   if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;

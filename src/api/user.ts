@@ -15,7 +15,7 @@ export const getUserByPhone = async (params: { queryKey: string[] }) => {
   return await apiClient.get("api/routes/users", { params: { phone } });
 };
 
-export const fetchAllUsers = async () => {
+export const listUsers = async () => {
   const users = await apiClient.get(`api/routes/fetch-all-users`);
 
   return users;

@@ -5,12 +5,13 @@ import CheckIcon from "./assets/icons/icon-check.svg?react";
 import { ProductData } from "./types/types.ts";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import BeatLoader from "react-spinners/BeatLoader";
+import { QueryKeys } from "./utils/QueryKeys.ts";
 
 const ClassCardSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
 
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["products", loggedInUserInfo?.id || 0],
+    queryKey: [QueryKeys.GET_USER_PRODUCTS_MAP, loggedInUserInfo?.id || 0],
     queryFn: getFullUserProductProgressMap,
   });
 

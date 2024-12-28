@@ -4,6 +4,7 @@ import { updateUserInfo } from "./api/user.ts";
 import { useNavigate } from "react-router-dom";
 import { labels } from "./messages.ts";
 import { UserType, UpdatedUserInfo } from "./types/types.ts";
+import { QueryKeys } from "./utils/QueryKeys.ts";
 
 type UserInfoEditProps = {
   toggleEditMode: () => void;
@@ -26,7 +27,7 @@ const UserInfoEdit: React.FC<UserInfoEditProps> = ({
       updateUserInfo(updatedUserInfo);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["all-users"] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.LIST_USERS] });
     },
   });
 

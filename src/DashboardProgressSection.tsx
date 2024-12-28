@@ -10,6 +10,7 @@ import CrewProgressBarCellRenderer from "./tableCellRenderers/CrewProgressBarCel
 import ClassProgressDatesCellRenderer, {
   getDateFormat,
 } from "./tableCellRenderers/ClassProgressDatesCellRenderer.tsx";
+import { QueryKeys } from "./utils/QueryKeys.ts";
 
 const DashboardProgressSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
@@ -37,7 +38,7 @@ const DashboardProgressSection = () => {
   }, []);
 
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["dashboard-users", level, id, vessel, company],
+    queryKey: [QueryKeys.LIST_USERS_DASHBOARD, level, id, vessel, company],
     queryFn: getDashboardUsers,
     enabled: !!vessel,
   });

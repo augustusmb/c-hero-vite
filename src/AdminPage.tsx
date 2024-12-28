@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getFullUserProductProgressMap } from "./utils/user.ts";
 import { UserType } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
+import { QueryKeys } from "./utils/QueryKeys.ts";
 
 const AdminPage = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const AdminPage = () => {
   }, [userToEdit, loggedInUserInfo, navigate]);
 
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["get-user-products", userToEdit.id],
+    queryKey: [QueryKeys.LIST_USER_PRODUCTS, userToEdit.id],
     queryFn: getFullUserProductProgressMap,
   });
 
