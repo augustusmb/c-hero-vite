@@ -10,6 +10,7 @@ import DashboardProgressSection from "./DashboardProgressSection.tsx";
 import BeatLoader from "react-spinners/BeatLoader";
 import ProductSerialNumberSection from "./ProductSerialNumberSection.tsx";
 import { QueryKeys } from "./utils/QueryKeys.ts";
+import { strings } from "./utils/strings.ts";
 
 const HomePage = () => {
   const { loggedInUserInfo, setLoggedInUserInfo } = useLoggedInUserContext();
@@ -28,7 +29,8 @@ const HomePage = () => {
   }, [data, setLoggedInUserInfo]);
 
   if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
-  if (isError) return <span>Error: {error.message}</span>;
+  if (isError)
+    return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
   return (
     /*  */

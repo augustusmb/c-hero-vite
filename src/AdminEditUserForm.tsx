@@ -12,6 +12,7 @@ import {
 } from "./types/types.ts";
 import { compareProducts, createUserInfo } from "./utils/AdminPageUtils.ts";
 import { QueryKeys } from "./utils/QueryKeys.ts";
+import { strings } from "./utils/strings.ts";
 
 type AdminEditUserStaticProps = {
   toggleEditMode: (editMode: boolean) => void;
@@ -100,8 +101,8 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="col-span-2 flex flex-col">
-              <h3 className="mb-3 self-start text-lg font-bold underline lg:text-xl">
-                Account Info
+              <h3 className="mb-3 self-start text-lg font-bold underline lg:text-3xl">
+                {strings["account.info"]}
               </h3>
               <div className="grid h-60 grid-cols-4">
                 <div className="flex flex-col items-start">
@@ -124,8 +125,8 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
               </div>
             </div>
             <div className="col-span-1 flex flex-col">
-              <h3 className="mb-3 self-start text-lg font-bold underline lg:text-xl">
-                Account Assigned Products
+              <h3 className="mb-3 self-start text-lg font-bold underline lg:text-3xl">
+                {strings["account.assigned.products"]}
               </h3>
               <div className="col-span-3 flex flex-col items-start">
                 {Object.values(userProductData).map((product) => {
@@ -156,7 +157,7 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
                 className="w-36 rounded border border-blue-500 bg-transparent px-3 py-1 font-semibold text-blue-700 hover:border-transparent hover:bg-blue-500 hover:text-white"
                 onClick={() => toggleEditMode(!editMode)}
               >
-                Cancel
+                {strings["common.cancel"]}
               </p>
               <input
                 className="w-36 rounded border border-slate-500 bg-slate-700 px-3 py-1 font-semibold text-slate-050 hover:border-transparent hover:bg-slate-600 hover:text-slate-100"
@@ -169,14 +170,14 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
                     className="w-36 rounded bg-orange-050 px-3 py-1 font-semibold text-slate-950 hover:bg-orange-200 hover:text-orange-600"
                     onClick={() => handleDeleteUser()}
                   >
-                    Confirm Delete
+                    {strings["common.confirm.delete"]}
                   </p>
                 ) : (
                   <p
                     className="w-36 rounded border border-slate-400 bg-slate-050 px-3 py-1 font-semibold text-orange-500 hover:border-slate-950 hover:bg-orange-100 hover:text-orange-700"
                     onClick={() => toggleConfirmDelete()}
                   >
-                    Delete User
+                    {strings["common.delete"]}
                   </p>
                 )}
               </div>

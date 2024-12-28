@@ -1,4 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import { strings } from "./utils/strings.ts";
 
 const AuthenticationButton = () => {
   const { isAuthenticated } = useAuth0();
@@ -11,10 +12,10 @@ const LoginButton = () => {
 
   return (
     <button
-      className="text-slate-950 w-18 rounded bg-orange-200 px-2 py-2 text-sm font-bold hover:bg-orange-300 lg:w-28 lg:text-lg"
+      className="rounded bg-orange-200 p-6 text-sm font-bold text-slate-950 hover:bg-orange-300 lg:text-2xl"
       onClick={() => loginWithRedirect()}
     >
-      Log In
+      {strings["common.login"]}
     </button>
   );
 };
@@ -26,7 +27,7 @@ const LogoutButton = () => {
 
   return (
     <button
-      className="text-slate-950 w-18 rounded-lg border-2 border-slate-600 bg-slate-050 px-2 py-1 text-sm font-bold hover:bg-slate-200 hover:text-slate-050 lg:w-28 lg:text-lg"
+      className="rounded-lg bg-slate-050 p-6 text-sm font-bold text-slate-950 hover:bg-slate-200 hover:text-slate-050 lg:text-2xl"
       onClick={() =>
         logout({
           clientId: clientId,
@@ -34,7 +35,7 @@ const LogoutButton = () => {
         })
       }
     >
-      Log Out
+      {strings["common.logout"]}
     </button>
   );
 };

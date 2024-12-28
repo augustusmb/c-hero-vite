@@ -10,6 +10,7 @@ import { getFullUserProductProgressMap } from "./utils/user.ts";
 import { UserType } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import { QueryKeys } from "./utils/QueryKeys.ts";
+import { strings } from "./utils/strings.ts";
 
 const AdminPage = () => {
   const navigate = useNavigate();
@@ -40,7 +41,8 @@ const AdminPage = () => {
   });
 
   if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
-  if (isError) return <span>Error: {error.message}</span>;
+  if (isError)
+    return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
   const handleUserToEdit = (user: UserType) => {
     setUserToEdit(user);

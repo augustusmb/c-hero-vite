@@ -33,6 +33,8 @@ import {
 import BeatLoader from "react-spinners/BeatLoader";
 import { FieldValues, useForm } from "react-hook-form";
 import { QueryKeys } from "./utils/QueryKeys.ts";
+import { strings } from "./utils/strings.ts";
+import TrashIcon from "./assets/icons/icon-trash.svg?react";
 
 type ProductSerialNumber = {
   product_id: string;
@@ -139,7 +141,8 @@ const ProductSerialNumberSection = () => {
   });
 
   if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
-  if (isError) return <span>Error: {error.message}</span>;
+  if (isError)
+    return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
   const handleAddSerialNumber = (formData: FieldValues) => {
     const { serialNumber } = formData;
@@ -152,15 +155,19 @@ const ProductSerialNumberSection = () => {
 
   return (
     <div className="flex w-full flex-col rounded-md pb-4 lg:pr-4">
-      <h4 className="self-start text-xl font-semibold text-slate-900 underline lg:text-xl">
-        Product Serial Numbers
-      </h4>
+      <h3 className="self-start text-xl font-semibold text-slate-900 underline lg:text-3xl">
+        {strings["serial.number.section.header"]}
+      </h3>
       <Table>
         <TableHeader>
           <TableRow>
             {/* <TableHead className="w-[240px] px-2">Product Name</TableHead> */}
-            <TableHead className="px-4">Serial Number</TableHead>
-            <TableHead className="pr-4 text-end">Actions</TableHead>
+            <TableHead className="px-4">
+              {strings["serial.number.table.header"]}
+            </TableHead>
+            <TableHead className="pr-4 text-end">
+              {strings["serial.number.actions"]}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -177,7 +184,7 @@ const ProductSerialNumberSection = () => {
                   <Button
                     variant={"secondary"}
                     size={"sm"}
-                    className="mt-0 w-20 hover:bg-orange-100"
+                    className="mt-0 w-14 hover:bg-orange-050"
                     onClick={() =>
                       deleteSerialNumberMutation.mutate({
                         userId: serial.user_id,
@@ -185,7 +192,9 @@ const ProductSerialNumberSection = () => {
                       })
                     }
                   >
-                    Remove
+                    <TrashIcon className="h-5 w-5 fill-indigo-050 stroke-indigo-400" />
+
+                    {/* {strings["common.remove"]} */}
                   </Button>
                 </TableCell>
               </TableRow>
@@ -247,7 +256,7 @@ const ProductSerialNumberSection = () => {
                       className="ml-auto w-20"
                       disabled={!serialNumber}
                     >
-                      Add
+                      {strings["common.add"]}
                     </Button>
                   </div>
                 </form>

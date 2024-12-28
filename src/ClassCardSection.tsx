@@ -6,6 +6,7 @@ import { ProductData } from "./types/types.ts";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import { QueryKeys } from "./utils/QueryKeys.ts";
+import { strings } from "./utils/strings.ts";
 
 const ClassCardSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
@@ -16,7 +17,8 @@ const ClassCardSection = () => {
   });
 
   if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
-  if (isError) return <span>Error: {error.message}</span>;
+  if (isError)
+    return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
   const getClassCardSection = () => {
     const productsList: ProductData[] = Object.values(data);
@@ -34,8 +36,8 @@ const ClassCardSection = () => {
 
   return (
     <div className="flex flex-col pb-10">
-      <h4 className="self-start text-xl font-semibold text-slate-900 underline lg:text-xl">
-        Assigned Classes
+      <h4 className="self-start text-xl font-semibold text-slate-900 underline lg:text-3xl">
+        {strings["assigned.classes"]}
       </h4>
       <div className="text-md my-2 flex flex-col lg:text-lg">
         <div className="flex">

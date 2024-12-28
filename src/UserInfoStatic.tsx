@@ -6,6 +6,7 @@ import BuoyIcon from "./assets/icons/icon-buoy.svg?react";
 import MapIcon from "./assets/icons/icon-map.svg?react";
 import UserIcon from "./assets/icons/icon-user-circle.svg?react";
 import { UserType } from "./types/types";
+import { strings } from "./utils/strings";
 
 const UserInfoStatic = ({
   userInfoToEdit: userInfo,
@@ -13,7 +14,7 @@ const UserInfoStatic = ({
   userInfoToEdit: UserType;
 }) => {
   const infoMissing = (
-    <span className="italic text-slate-400">info missing</span>
+    <span className="italic text-slate-400">{strings["info.missing"]}</span>
   );
 
   if (userInfo?.name?.length === 0) {
@@ -21,7 +22,7 @@ const UserInfoStatic = ({
       <div className="mb-4 flex items-center justify-center">
         <UserIcon className="h-8 w-8 fill-red-050 stroke-red-500 stroke-1 lg:h-10 lg:w-10" />
         <span className="ml-2 text-center text-lg italic text-slate-400 lg:ml-4 lg:text-2xl">
-          Please select a user to begin editing
+          {strings["select.user.editing"]}
         </span>
       </div>
     );

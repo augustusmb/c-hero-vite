@@ -7,6 +7,7 @@ import { listUsers } from "./api/user.ts";
 import { UserType } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import { QueryKeys } from "./utils/QueryKeys.ts";
+import { strings } from "./utils/strings.ts";
 
 type AdminTableProps = {
   handleUserToEdit: (user: UserType) => void;
@@ -111,7 +112,8 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
   });
 
   if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
-  if (isError) return <span>Error: {error.message}</span>;
+  if (isError)
+    return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
   return (
     <div className="ag-theme-quartz" style={{ height: 600 }}>

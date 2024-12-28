@@ -5,6 +5,7 @@ import MainPanelRouter from "./MainPanelRouter.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import { setAuthToken } from "./api/apiClient.ts";
 import { UserType } from "./types/types.ts";
+import { strings } from "./utils/strings.ts";
 
 type LoggedInUserContextType = {
   loggedInUserInfo: UserType | null;
@@ -40,7 +41,7 @@ const MainPanelLayout = () => {
             <MainPanelRouter />
           ) : (
             <div className="mt-10 text-2xl italic">
-              Please Login to continue
+              {strings["please.login"]}
             </div>
           )}
         </div>

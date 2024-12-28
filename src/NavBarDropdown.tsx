@@ -3,6 +3,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
+import { strings } from "./utils/strings.ts";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -14,8 +15,8 @@ export default function NavbarDropDown() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="w-18 inline-flex justify-center gap-x-1.5 rounded-lg border-2 border-slate-600 bg-slate-050 px-2 py-1 text-sm font-bold text-slate-800 hover:bg-slate-200 lg:w-28 lg:text-lg">
-          More
+        <Menu.Button className="inline-flex justify-center gap-x-1.5 rounded-lg bg-slate-050 p-6 text-xl font-bold text-slate-800 hover:bg-slate-200 lg:text-3xl">
+          {strings["nav.more"]}
           <ChevronDownIcon
             className="-mr-1 h-5 w-5 text-slate-800"
             aria-hidden="true"
@@ -32,7 +33,7 @@ export default function NavbarDropDown() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="ring-black absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-indigo-050 shadow-xl ring-1 ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-indigo-050 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             {loggedInUserInfo?.level === "0" ? (
               <Menu.Item>
@@ -44,7 +45,7 @@ export default function NavbarDropDown() {
                       "block px-4 py-2 text-sm",
                     )}
                   >
-                    Admin
+                    {strings["nav.admin"]}
                   </Link>
                 )}
               </Menu.Item>
@@ -60,7 +61,7 @@ export default function NavbarDropDown() {
                     "block px-4 py-2 text-sm",
                   )}
                 >
-                  Safety
+                  {strings["nav.safety"]}
                 </Link>
               )}
             </Menu.Item>
@@ -73,7 +74,7 @@ export default function NavbarDropDown() {
                     "block px-4 py-2 text-sm",
                   )}
                 >
-                  Troubleshooting
+                  {strings["nav.troubleshooting"]}
                 </Link>
               )}
             </Menu.Item>
@@ -86,7 +87,7 @@ export default function NavbarDropDown() {
                     "block px-4 py-2 text-sm",
                   )}
                 >
-                  MOB Inspection Checklist
+                  {strings["nav.mob.inspection.checklist"]}
                 </Link>
               )}
             </Menu.Item>
@@ -99,7 +100,7 @@ export default function NavbarDropDown() {
                     "block px-4 py-2 text-sm",
                   )}
                 >
-                  MOB Drill Log
+                  {strings["nav.mob.drill.log"]}
                 </Link>
               )}
             </Menu.Item>
@@ -112,7 +113,7 @@ export default function NavbarDropDown() {
                     "block px-4 py-2 text-sm",
                   )}
                 >
-                  Certification
+                  {strings["nav.certification"]}
                 </Link>
               )}
             </Menu.Item>

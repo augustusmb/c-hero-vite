@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { labels } from "./messages.ts";
 import { UserType, UpdatedUserInfo } from "./types/types.ts";
 import { QueryKeys } from "./utils/QueryKeys.ts";
+import { strings } from "./utils/strings.ts";
 
 type UserInfoEditProps = {
   toggleEditMode: () => void;
@@ -73,7 +74,7 @@ const UserInfoEdit: React.FC<UserInfoEditProps> = ({
           className="h-9 w-24 rounded border border-blue-500 bg-transparent font-semibold text-blue-700 hover:border-transparent hover:bg-blue-500 hover:text-white"
           onClick={() => toggleEditMode()}
         >
-          Cancel
+          {strings["common.cancel"]}
         </button>
         <input
           className="ml-1 h-9 w-24 rounded border border-slate-500 bg-slate-700 font-semibold text-slate-050 hover:border-transparent hover:bg-slate-600 hover:text-slate-100"
@@ -81,7 +82,7 @@ const UserInfoEdit: React.FC<UserInfoEditProps> = ({
           value="Save"
         />
         <p className="lg:text-md col-span-2 ml-4 text-left text-xs italic lg:pr-8">
-          Only change what is needed, rest of the values will remain.
+          {strings["only.change.needed"]}
         </p>
       </div>
     </form>

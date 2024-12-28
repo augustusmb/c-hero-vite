@@ -11,6 +11,7 @@ import ClassProgressDatesCellRenderer, {
   getDateFormat,
 } from "./tableCellRenderers/ClassProgressDatesCellRenderer.tsx";
 import { QueryKeys } from "./utils/QueryKeys.ts";
+import { strings } from "./utils/strings.ts";
 
 const DashboardProgressSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
@@ -44,7 +45,8 @@ const DashboardProgressSection = () => {
   });
 
   if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
-  if (isError) return <span>Error: {error.message}</span>;
+  if (isError)
+    return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
   const vesselProducts = data?.data.vesselProducts || [];
   const vesselProduct1 = vesselProducts[0]?.product_id;
@@ -125,8 +127,8 @@ const DashboardProgressSection = () => {
       className="ag-theme-quartz mb-10" // applying the grid theme
       style={{ height: 500, width: "100%" }} // the grid will fill the size of the parent container
     >
-      <h4 className="mt-8 self-start text-xl font-semibold text-slate-900 underline lg:text-xl">
-        Vessel's Crew Progress Dashboard
+      <h4 className="mt-8 self-start text-xl font-semibold text-slate-900 underline lg:text-3xl">
+        {strings["dashboard.title"]}
       </h4>{" "}
       <div className="shadow-xl" style={{ height: 500, width: "100%" }}>
         <AgGridReact
