@@ -12,7 +12,7 @@ const LoginButton = () => {
 
   return (
     <button
-      className="rounded bg-orange-200 p-6 text-sm font-bold text-slate-950 hover:bg-orange-300 lg:text-2xl"
+      className="rounded bg-orange-200 text-lg font-bold text-slate-950 hover:bg-orange-300 lg:p-6 lg:text-2xl"
       onClick={() => loginWithRedirect()}
     >
       {strings["common.login"]}
@@ -27,7 +27,7 @@ const LogoutButton = () => {
 
   return (
     <button
-      className="rounded-lg bg-slate-050 p-6 text-sm font-bold text-slate-950 hover:bg-slate-200 hover:text-slate-050 lg:text-2xl"
+      className="rounded-lg bg-slate-050 text-lg font-bold text-slate-950 hover:bg-slate-200 hover:text-slate-050 lg:p-6 lg:text-2xl"
       onClick={() =>
         logout({
           clientId: clientId,

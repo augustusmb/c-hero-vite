@@ -6,16 +6,16 @@ import { strings } from "./utils/strings.ts";
 
 const HeaderNavigation = () => {
   return (
-    <div className="grid h-28 grid-cols-3 border-b-4 border-red-400 bg-slate-050 shadow-lg">
+    <div className="grid grid-cols-3 border-b-4 border-red-400 bg-slate-050 shadow-lg lg:h-28">
       <div>
         <Link to="/">
-          <img src={eTrainingIcon} className="m-4 h-14 lg:h-20" />
+          <img src={eTrainingIcon} className="m-1 h-14 lg:m-4 lg:h-20" />
         </Link>
       </div>
-      <div className="col-span-2 flex flex-wrap items-center justify-between px-1">
+      <div className="col-span-2 flex flex-wrap items-center justify-around px-1">
         <Link
           to="/"
-          className="rounded-lg bg-slate-050 p-6 text-xl font-bold text-slate-800 hover:bg-slate-200 lg:text-3xl"
+          className="rounded-lg bg-slate-050 text-xl font-bold text-slate-800 hover:bg-slate-200 lg:p-6 lg:text-3xl"
         >
           {strings["common.home"]}
         </Link>
