@@ -15,7 +15,7 @@ const HeaderNavigation = () => {
       <div className="col-span-2 flex flex-wrap items-center justify-around px-1">
         <Link
           to="/"
-          className="rounded-lg bg-slate-050 text-xl font-bold text-slate-800 hover:bg-slate-200 lg:p-6 lg:text-3xl"
+          className="rounded-lg bg-slate-050 p-1 text-xl font-bold text-slate-800 hover:bg-slate-200 lg:p-6 lg:text-3xl"
         >
           {strings["common.home"]}
         </Link>
