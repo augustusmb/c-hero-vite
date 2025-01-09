@@ -15,7 +15,7 @@ export const strings = {
   "common.remove": "Remove",
   "assigned.classes": "Assigned Classes",
   "dashboard.title": "Crew Progress Dashboard",
-  "please.login": "Please Login to continue",
+  "please.login": "Please click below to Login",
   "nav.more": "More",
   "nav.admin": "Admin",
   "nav.safety": "Safety",

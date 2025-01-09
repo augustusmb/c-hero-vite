@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import AdminEditUserStatic from "./AdminEditUserStatic.js";
 import AdminEditUserForm from "./AdminEditUserForm.js";
-import AdminUserInfoTable from "./AdminUserInfoTable.jsx";
+import AdminUserInfoTable from "./AdminUserInfoTable.js";
 import { useQuery } from "@tanstack/react-query";
 import { getFullUserProductProgressMap } from "./utils/user.ts";
 import { UserType } from "./types/types.ts";
@@ -18,6 +18,8 @@ const AdminPage = () => {
   const [userToEdit, setUserToEdit] = useState<UserType>({
     id: 0,
     name: "",
+    first_name: "",
+    last_name: "",
     email: "",
     phone: "",
     level: "",

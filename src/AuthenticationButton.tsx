@@ -1,18 +1,33 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { strings } from "./utils/strings.ts";
 
-const AuthenticationButton = () => {
-  const { isAuthenticated } = useAuth0();
-
-  return <div>{isAuthenticated ? <LogoutButton /> : <LoginButton />}</div>;
+type ButtonVariant = "header" | "body";
+type AuthButtonProps = {
+  variant?: ButtonVariant;
 };
 
-const LoginButton = () => {
+const buttonStyles = {
+  header:
+    "rounded bg-orange-200 p-1 text-lg font-bold text-slate-950 hover:bg-orange-300 lg:p-6 lg:text-2xl",
+  body: "rounded bg-orange-200 p-1 text-lg font-bold text-slate-950 hover:bg-orange-300 lg:px-10 lg:py-4 lg:text-2xl w-full",
+};
+
+const AuthenticationButton = ({ variant = "body" }: AuthButtonProps) => {
+  const { isAuthenticated } = useAuth0();
+
+  return (
+    <div>
+      {isAuthenticated ? <LogoutButton /> : <LoginButton variant={variant} />}
+    </div>
+  );
+};
+
+const LoginButton = ({ variant = "body" }: AuthButtonProps) => {
   const { loginWithRedirect } = useAuth0();
 
   return (
     <button
-      className="rounded bg-orange-200 p-1 text-lg font-bold text-slate-950 hover:bg-orange-300 lg:p-6 lg:text-2xl"
+      className={buttonStyles[variant]}
       onClick={() => loginWithRedirect()}
     >
       {strings["common.login"]}

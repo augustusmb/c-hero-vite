@@ -6,4 +6,5 @@ export const QueryKeys = Object.freeze({
   GET_USER_PRODUCTS_MAP: "products",
   LIST_SERIAL_NUMBERS: "get-serial-numbers",
   LIST_TEST_QUESTIONS: "get-test-questions",
+  FORM_OPTIONS: "form-options",
 });

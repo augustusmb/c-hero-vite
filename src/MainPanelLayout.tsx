@@ -5,7 +5,7 @@ import MainPanelRouter from "./MainPanelRouter.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import { setAuthToken } from "./api/apiClient.ts";
 import { UserType } from "./types/types.ts";
-import { strings } from "./utils/strings.ts";
+import AuthLayout from "./AuthLayout.tsx";
 
 type LoggedInUserContextType = {
   loggedInUserInfo: UserType | null;
@@ -40,8 +40,8 @@ const MainPanelLayout = () => {
           {isAuthenticated ? (
             <MainPanelRouter />
           ) : (
-            <div className="mt-10 text-2xl italic">
-              {strings["please.login"]}
+            <div className="mx-auto mt-4 text-2xl italic lg:w-1/2">
+              <AuthLayout />
             </div>
           )}
         </div>

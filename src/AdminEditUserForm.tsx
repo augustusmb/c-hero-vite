@@ -59,7 +59,9 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
   };
 
   const handleDeleteUser = () => {
-    toast.success(`${userToEdit.name} has been deleted from the database.`);
+    toast.success(
+      `${userToEdit.first_name} ${userToEdit.last_name} has been deleted from the database.`,
+    );
     deleteUserMutation.mutate(userToEdit.id);
     handleUserToEdit({
       id: 0,
@@ -87,7 +89,9 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
       newlyRemovedProducts,
     );
 
-    toast.success(`${userToEdit.name}'s account has been updated.`);
+    toast.success(
+      `${userInfo?.first_name} ${userInfo?.last_name}'s account has been updated.`,
+    );
     updateUserInfoMutation.mutate(formattedUserFormData);
     handleUserToEdit(Object.assign({}, userToEdit, formattedUserFormData));
   };

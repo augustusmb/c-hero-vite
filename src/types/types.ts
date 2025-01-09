@@ -8,7 +8,8 @@ export type AdminEditUserStaticProps = {
 export type UserType = {
   [key: string]: any;
   id: number;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   phone: string;
   level: string;

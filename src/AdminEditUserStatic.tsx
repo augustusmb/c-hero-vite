@@ -32,7 +32,11 @@ const AdminEditUserStatic: React.FC<AdminEditUserStaticProps> = ({
       </div>
       <div className="col-span-2 mt-3 flex items-start lg:mt-0">
         <button
-          className="w-24 rounded border border-slate-500 bg-slate-050 px-3 py-1 font-semibold text-slate-950 hover:border-transparent hover:bg-slate-600 hover:text-slate-050 lg:w-36 lg:self-center"
+          disabled
+          className="h-9 w-24 rounded border border-slate-500 bg-slate-050 font-semibold text-slate-950 
+hover:border-transparent hover:bg-slate-600 hover:text-slate-050
+disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500 disabled:opacity-50 
+disabled:hover:border-slate-500 disabled:hover:bg-slate-200 disabled:hover:text-slate-500"
           onClick={() => toggleEditMode(!editMode)}
         >
           {strings["common.edit"]}

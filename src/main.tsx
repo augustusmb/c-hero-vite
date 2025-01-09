@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
+import App from "./App.js";
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 import { Auth0Provider } from "@auth0/auth0-react";

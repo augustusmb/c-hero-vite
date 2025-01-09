@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import TestTakingPage from "./TestTakingPage.jsx";
 import PDFRenderPage from "./PDFRenderPage.jsx";
 import CertificatePage from "./textComponents/CertificatePage.jsx";
-import AdminPage from "./AdminPage.jsx";
+import AdminPage from "./AdminPage.tsx";
 import HomePage from "./HomePage.jsx";
 
 const MainPanelRouter = () => {

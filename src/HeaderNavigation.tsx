@@ -20,7 +20,7 @@ const HeaderNavigation = () => {
           {strings["common.home"]}
         </Link>
         <NavBarDropdown />
-        <AuthenticationButton />
+        <AuthenticationButton variant="header" />
       </div>
     </div>
   );

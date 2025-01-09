@@ -17,7 +17,7 @@ const UserInfoStatic = ({
     <span className="italic text-slate-400">{strings["info.missing"]}</span>
   );
 
-  if (userInfo?.name?.length === 0) {
+  if (userInfo?.first_name?.length === 0) {
     return (
       <div className="mb-4 flex items-center justify-center">
         <UserIcon className="h-8 w-8 fill-red-050 stroke-red-500 stroke-1 lg:h-10 lg:w-10" />
@@ -37,7 +37,7 @@ const UserInfoStatic = ({
     <div className="grid h-60 grid-cols-1">
       <div className="col-span-1 flex flex-col items-start">
         <span className="text-2xl text-red-400 lg:text-4xl">
-          {userInfo?.name || infoMissing}
+          {`${userInfo?.first_name} ${userInfo?.last_name}` || infoMissing}
         </span>
         <div className="flex items-center">
           <MailIcon className="h-5 w-5 fill-indigo-050 stroke-indigo-600" />
