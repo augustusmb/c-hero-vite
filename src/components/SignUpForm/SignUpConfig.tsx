@@ -1,15 +1,15 @@
 import { z } from "zod";
 
-import rkImage from "@/assets/RK-S.jpeg";
-import vrImage from "@/assets/VR14.jpeg";
-import rsImage from "@/assets/RS14.jpeg";
-import hrImage from "@/assets/HR14-S.jpeg";
-import bittMountImage from "@/assets/Tugboat-Bitt-Mount.jpeg";
-import flatMountImage from "@/assets/Side-Boat-Flat-Mount.jpeg";
-import series3Image from "@/assets/Series-3-Fixed-Davit.jpeg";
-import series5Image from "@/assets/Series-5-Hinged-Davit.jpeg";
-import series7Image from "@/assets/Series-7-Swivel-Davit.jpeg";
-import series9Image from "@/assets/Series-9-Man-Rated.jpeg";
+import rkImage from "./assets/RK-S.jpeg";
+import vrImage from "./assets/VR14.jpeg";
+import rsImage from "./assets/RS14.jpeg";
+import hrImage from "./assets/HR14-S.jpeg";
+import bittMountImage from "./assets/Tugboat-Bitt-Mount.jpeg";
+import flatMountImage from "./assets/Side-Boat-Flat-Mount.jpeg";
+import series3Image from "./assets/Series-3-Fixed-Davit.jpeg";
+import series5Image from "./assets/Series-5-Hinged-Davit.jpeg";
+import series7Image from "./assets/Series-7-Swivel-Davit.jpeg";
+import series9Image from "./assets/Series-9-Man-Rated.jpeg";
 
 export const inputStyles =
   "rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500";
