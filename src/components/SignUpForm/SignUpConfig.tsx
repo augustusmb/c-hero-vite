@@ -1,14 +1,25 @@
 import { z } from "zod";
 
+import rkImage from "@/assets/RK-S.jpeg";
+import vrImage from "@/assets/VR14.jpeg";
+import rsImage from "@/assets/RS14.jpeg";
+import hrImage from "@/assets/HR14-S.jpeg";
+import bittMountImage from "@/assets/Tugboat-Bitt-Mount.jpeg";
+import flatMountImage from "@/assets/Side-Boat-Flat-Mount.jpeg";
+import series3Image from "@/assets/Series-3-Fixed-Davit.jpeg";
+import series5Image from "@/assets/Series-5-Hinged-Davit.jpeg";
+import series7Image from "@/assets/Series-7-Swivel-Davit.jpeg";
+import series9Image from "@/assets/Series-9-Man-Rated.jpeg";
+
 export const inputStyles =
   "rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500";
 export const errorStyles = "text-red-500 text-sm mt-1";
 
 export const rescuePoleOptions = [
-  { value: "rk", label: "RK", image: "../assets/RK-S.jpeg" },
-  { value: "vr", label: "VR14", image: "../assets/VR14.jpeg" },
-  { value: "rs", label: "RS14", image: "../assets/RS14.jpeg" },
-  { value: "hr", label: "HR14", image: "../assets/HR14-S.jpeg" },
+  { value: "rk", label: "RK", image: rkImage },
+  { value: "vr", label: "VR14", image: vrImage },
+  { value: "rs", label: "RS14", image: rsImage },
+  { value: "hr", label: "HR14", image: hrImage },
 ];
 
 export enum PositionType {
@@ -27,12 +38,12 @@ export const rescueDavitMountingOptions = [
   {
     value: "b",
     label: "Tugboat Bitt Mount",
-    image: "../assets/Tugboat-Bitt-Mount.jpeg",
+    image: bittMountImage,
   },
   {
     value: "f",
     label: "Side of Boat Flat Mount",
-    image: "../assets/Side-Boat-Flat-Mount.jpeg",
+    image: flatMountImage,
   },
 ];
 
@@ -40,22 +51,22 @@ export const rescueDavitOptions = [
   {
     value: "3",
     label: "Series 3 Fixed Davit",
-    image: "../assets/Series-3-Fixed-Davit.jpeg",
+    image: series3Image,
   },
   {
     value: "5",
     label: "Series 5 Hinged Davit",
-    image: "../assets/Series-5-Hinged-Davit.jpeg",
+    image: series5Image,
   },
   {
     value: "7",
     label: "Series 7 Swivel Davit",
-    image: "../assets/Series-7-Swivel-Davit.jpeg",
+    image: series7Image,
   },
   {
     value: "9",
     label: "Series 9 Man Rated",
-    image: "../assets/Series-9-Man-Rated.jpeg",
+    image: series9Image,
   },
 ];
 
