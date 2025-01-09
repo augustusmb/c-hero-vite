@@ -11,14 +11,15 @@ import {
   inputStyles,
   errorStyles,
   TSignUpSchema,
+  TCreateableSelectOptions,
   TCreateableSelectOption,
 } from "./SignUpConfig";
 import { PhoneInput } from "./PhoneInput";
 
 type SignUpFormProps = {
-  companies: TCreateableSelectOption;
-  ports: TCreateableSelectOption;
-  vessels: TCreateableSelectOption;
+  companies: TCreateableSelectOptions;
+  ports: TCreateableSelectOptions;
+  vessels: TCreateableSelectOptions;
   signUpUserMutation: (data: TSignUpSchema) => void;
   setActiveTab: (tab: string) => void;
 };

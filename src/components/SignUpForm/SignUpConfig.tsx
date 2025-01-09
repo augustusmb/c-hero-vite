@@ -158,4 +158,10 @@ export const signUpSchema = z.object({
 
 export type TSignUpSchema = z.infer<typeof signUpSchema>;
 
-export type TCreateableSelectOption = { value: string; label: string };
+export type TCreateableSelectOption = {
+  value: string | number;
+  label: string;
+  __isNew__?: boolean;
+};
+
+export type TCreateableSelectOptions = readonly TCreateableSelectOption[];
