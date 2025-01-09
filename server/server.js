@@ -1,30 +1,27 @@
-import dotenv from 'dotenv';
-import router from './routes.js'
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import path from 'path';
-import express from 'express';
-import jwt from 'jsonwebtoken';
-import jwksClient from 'jwks-rsa';
+import dotenv from "dotenv";
+import { publicRouter, protectedRouter } from "./routes.js";
+import bodyParser from "body-parser";
+import cors from "cors";
+import path from "path";
+import express from "express";
+import jwt from "jsonwebtoken";
+import jwksClient from "jwks-rsa";
 
-dotenv.config()
+dotenv.config();
 const __dirname = path.resolve();
 
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv } from "vite";
 
-const env = loadEnv(
-  'all',
-  process.cwd()
-);
+const env = loadEnv("all", process.cwd());
 
-const app = express()
+const app = express();
 
 const client = jwksClient({
-  jwksUri: `https://${env.VITE_AUTH0_DOMAIN}/.well-known/jwks.json`
+  jwksUri: `https://${env.VITE_AUTH0_DOMAIN}/.well-known/jwks.json`,
 });
 
-function getKey(header, callback){
-  client.getSigningKey(header.kid, function(err, key) {
+function getKey(header, callback) {
+  client.getSigningKey(header.kid, function (err, key) {
     var signingKey = key.publicKey || key.rsaPublicKey;
     callback(null, signingKey);
   });
@@ -34,11 +31,11 @@ const checkJwt = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (authHeader) {
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.split(" ")[1];
 
-    jwt.verify(token, getKey, { algorithms: ['RS256'] }, (err, user) => {
+    jwt.verify(token, getKey, { algorithms: ["RS256"] }, (err, user) => {
       if (err) {
-        console.log('err: ', err)
+        console.log("err: ", err);
         return res.status(403).send(err.message);
       }
 
@@ -46,7 +43,7 @@ const checkJwt = (req, res, next) => {
       next();
     });
   } else {
-    console.log(`No auth header`)
+    console.log(`No auth header`);
     return res.sendStatus(401);
   }
 };
@@ -58,26 +55,33 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const corsOrigin = env.VITE_NODE_ENV === 'local' ? 'http://localhost:5173/' : 'https://c-herotraining.com/'
+const corsOrigin =
+  env.VITE_NODE_ENV === "local"
+    ? "http://localhost:5173/"
+    : "https://c-herotraining.com/";
 app.use(cors({ origin: corsOrigin }));
-const port = env.PORT || 8080
+const port = env.PORT || 8080;
 
-app.use('/api/routes/sign-up', router)
-app.use('/api/routes', checkJwt, router)
+app.use("/api/public/sign-up", publicRouter);
+app.use("/api/routes", checkJwt, protectedRouter);
+
+app.use("/api/*", (req, res) => {
+  res.status(404).json({ message: "API endpoint not found" });
+});
 
 if (env.VITE_NODE_ENV === "production") {
   app.use(express.static("dist"));
 }
 
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/dist/index.html"));
 });
 
-app.use((req, res) => {
-  const indexPath = path.join(__dirname, '/dist/index.html');
-  res.sendFile(indexPath);
+app.listen(port, () => {
+  console.log("listening on port: ", port);
 });
 
-app.listen(port, () => {
-  console.log('listening on port: ', port)
-})
+app.use((req, res) => {
+  const indexPath = path.join(__dirname, "/dist/index.html");
+  res.sendFile(indexPath);
+});

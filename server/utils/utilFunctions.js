@@ -52,7 +52,6 @@ export const appendUserFullProductProgressMap = async (dashUser) => {
   
   const userClasses = await db.query('select * from users_products where user_id = $1', [id]);
   const { totalTests, testsCompleted } = await getUserTestsCompletedNumber(userClasses);
-  console.log('totalTests: ', totalTests)
   const userClassesMap = createUserClassesMap(userClasses);
   const userFullProgressMap = createUserFullProgressMap(userClassesMap);
 

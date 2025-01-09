@@ -19,23 +19,34 @@ import { appendUserFullProductProgressMap } from "../utils/utilFunctions.js";
 export async function getDashboardUsers(req, res) {
   let { vessel } = req.query;
 
-  let vesselData = await db.one("SELECT * FROM vessels WHERE vessel_name = $1", [vessel]);
+  let vesselData = await db.one("SELECT * FROM vessels WHERE name = $1", [
+    vessel,
+  ]);
   // { vessel_name: 'Catch Me If You Can', id: 1 }
-  let vesselProducts = await db.any("SELECT * FROM vessels_products WHERE vessel_id = $1", [vesselData.id]);
+  let vesselProducts = await db.any(
+    "SELECT * FROM vessels_products WHERE vessel_id = $1",
+    [vesselData.id],
+  );
   //[
   // { vessel_id: 1, product_id: 'hr' },
   // { vessel_id: 1, product_id: '3b' }
   // ]
-  let dashboardUsers = await db.any("Select * FROM users where vessel = $1", [vessel]);
+  let dashboardUsers = await db.any("Select * FROM users where vessel = $1", [
+    vessel,
+  ]);
   // [ {...userData}, {...userData} ]
-  let usersWithProductProgressMaps = await Promise.all(dashboardUsers.map(dashUser => appendUserFullProductProgressMap(dashUser)))
-    // [ {...userData, userFullProgressMap}, {...userData, userFullProgressMap} ]
+  let usersWithProductProgressMaps = await Promise.all(
+    dashboardUsers.map((dashUser) =>
+      appendUserFullProductProgressMap(dashUser),
+    ),
+  );
+  // [ {...userData, userFullProgressMap}, {...userData, userFullProgressMap} ]
 
   const vesselDashboardData = {
-    vesselName: vesselData.vessel_name,
+    vesselName: vesselData.name,
     vesselProducts,
-    usersWithProductProgressMaps
-  }
+    usersWithProductProgressMaps,
+  };
 
   // if (level === "1" || level === "0") {
   //   let dashboardUsers = await db.any(queries.getDashboardUsersForShoreside, { id, company, });
@@ -46,13 +57,13 @@ export async function getDashboardUsers(req, res) {
   // else if (level === "2") {
   //   let dashboardUsers = await db.any(queries.getDashboardUsersForCaptain, { id, vessel });
   //   let usersWithTestData = await Promise.all(dashboardUsers.map(dashUser => getUserTestData(dashUser)))
-    
+
   //   res.status(200).json(usersWithTestData);
   // }
   // else if (level === "3") {
   //   let dashboardUsers = await db.any(queries.getDashboardUsersForCrew, { id, vessel });
   //   let usersWithTestData = await Promise.all(dashboardUsers.map(dashUser => getUserTestData(dashUser)))
-    
+
   //   res.status(200).json(usersWithTestData);
   // }
   res.status(200).json(vesselDashboardData);
