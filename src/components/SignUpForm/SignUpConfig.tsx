@@ -5,10 +5,10 @@ export const inputStyles =
 export const errorStyles = "text-red-500 text-sm mt-1";
 
 export const rescuePoleOptions = [
-  { value: "rk", label: "RK", image: "src/assets/RK-S.jpeg" },
-  { value: "vr", label: "VR14", image: "src/assets/VR14.jpeg" },
-  { value: "rs", label: "RS14", image: "src/assets/RS14.jpeg" },
-  { value: "hr", label: "HR14", image: "src/assets/HR14-S.jpeg" },
+  { value: "rk", label: "RK", image: "../assets/RK-S.jpeg" },
+  { value: "vr", label: "VR14", image: "../assets/VR14.jpeg" },
+  { value: "rs", label: "RS14", image: "../assets/RS14.jpeg" },
+  { value: "hr", label: "HR14", image: "../assets/HR14-S.jpeg" },
 ];
 
 export enum PositionType {
@@ -27,12 +27,12 @@ export const rescueDavitMountingOptions = [
   {
     value: "b",
     label: "Tugboat Bitt Mount",
-    image: "src/assets/Tugboat-Bitt-Mount.jpeg",
+    image: "../assets/Tugboat-Bitt-Mount.jpeg",
   },
   {
     value: "f",
     label: "Side of Boat Flat Mount",
-    image: "src/assets/Side-Boat-Flat-Mount.jpeg",
+    image: "../assets/Side-Boat-Flat-Mount.jpeg",
   },
 ];
 
@@ -40,22 +40,22 @@ export const rescueDavitOptions = [
   {
     value: "3",
     label: "Series 3 Fixed Davit",
-    image: "src/assets/Series-3-Fixed-Davit.jpeg",
+    image: "../assets/Series-3-Fixed-Davit.jpeg",
   },
   {
     value: "5",
     label: "Series 5 Hinged Davit",
-    image: "src/assets/Series-5-Hinged-Davit.jpeg",
+    image: "../assets/Series-5-Hinged-Davit.jpeg",
   },
   {
     value: "7",
     label: "Series 7 Swivel Davit",
-    image: "src/assets/Series-7-Swivel-Davit.jpeg",
+    image: "../assets/Series-7-Swivel-Davit.jpeg",
   },
   {
     value: "9",
     label: "Series 9 Man Rated",
-    image: "src/assets/Series-9-Man-Rated.jpeg",
+    image: "../assets/Series-9-Man-Rated.jpeg",
   },
 ];
 
