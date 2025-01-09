@@ -33,7 +33,7 @@ const TestTakingPage = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
   let navigate = useNavigate();
 
-  const { level, name, phone, id } = loggedInUserInfo || {};
+  const { level, first_name, phone, id } = loggedInUserInfo || {};
   const { classId = "" } = useParams();
   const { testInfo, testType } = useClassId(classId);
 
@@ -91,13 +91,13 @@ const TestTakingPage = () => {
     questionsMissed.sort(
       (a: any[], b: any[]) => a[0].slotIndex - b[0].slotIndex,
     );
-    if (!classId || !name || !phone || !id) {
+    if (!classId || !first_name || !phone || !id) {
       // Handle the error here, e.g., show an error message to the user
       console.error("All fields must be filled out");
     } else {
       const completedTestData: CompletedTestData = {
         classId,
-        name,
+        first_name,
         phone,
         userId: id,
         questionsMissed,
