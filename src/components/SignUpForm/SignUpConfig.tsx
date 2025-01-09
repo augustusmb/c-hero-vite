@@ -10,20 +10,32 @@ export enum PositionType {
   CREW = "crew",
 }
 
+export type RescuePoleType = "rk" | "vr" | "rs" | "hr";
+export type RescueDavitMountType = "b" | "f";
+export type RescueDavitType = "3" | "5" | "7" | "9";
+
 export const positionOptions = [
   { value: PositionType.CREW, label: "Crew" },
   { value: PositionType.CAPTAIN, label: "Captain" },
   { value: PositionType.SHORESIDE, label: "Shoreside" },
 ];
 
-export const rescuePoleOptions = [
+export const rescuePoleOptions: Array<{
+  value: RescuePoleType;
+  label: string;
+  image: string;
+}> = [
   { value: "rk", label: "RK", image: "/assets/RK-S.jpeg" },
   { value: "vr", label: "VR14", image: "/assets/VR14.jpeg" },
   { value: "rs", label: "RS14", image: "/assets/RS14.jpeg" },
   { value: "hr", label: "HR14", image: "/assets/HR14-S.jpeg" },
 ];
 
-export const rescueDavitMountingOptions = [
+export const rescueDavitMountingOptions: Array<{
+  value: RescueDavitMountType;
+  label: string;
+  image: string;
+}> = [
   {
     value: "b",
     label: "Tugboat Bitt Mount",
@@ -36,7 +48,11 @@ export const rescueDavitMountingOptions = [
   },
 ];
 
-export const rescueDavitOptions = [
+export const rescueDavitOptions: Array<{
+  value: RescueDavitType;
+  label: string;
+  image: string;
+}> = [
   {
     value: "3",
     label: "Series 3 Fixed Davit",

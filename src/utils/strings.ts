@@ -30,4 +30,15 @@ export const strings = {
   "serial.number.section.header": "Product Serial Numbers",
   "serial.number.table.header": "Serial Number",
   "serial.number.actions": "Actions",
+  "sms.consent":
+    "I consent to receive SMS verification codes from Twilio for logging into c-herotraining.com",
+  "rescueDavitMount.title": "Rescue Davit Mounting",
+  "rescueDavitMount.description":
+    "The Davits can be mounted in 2 ways. Choose ONE of the following mounts:",
+  "rescueDavit.title": "Rescue Davits",
+  "rescueDavit.description":
+    "The 4 Davit types differ in how the winch plate is attached to the davit base. Choose ONE of the following Rescue Davits:",
+  "rescuePole.title": "Rescue Poles",
+  "rescuePole.description":
+    "Our 4 Rescue Poles differ in how the strap is attached to the Hoop. Choose ONE of the following Rescue Poles:",
 };

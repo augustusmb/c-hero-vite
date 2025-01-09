@@ -13,8 +13,13 @@ import {
   TSignUpSchema,
   TCreateableSelectOptions,
   TCreateableSelectOption,
+  RescuePoleType,
+  RescueDavitMountType,
+  RescueDavitType,
 } from "./SignUpConfig";
 import { PhoneInput } from "./PhoneInput";
+import { RadioImageGroup } from "./RadioImageGroup";
+import { strings } from "../../utils/strings";
 
 type SignUpFormProps = {
   companies: TCreateableSelectOptions;
@@ -36,6 +41,8 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     control,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<TSignUpSchema>({
     resolver: zodResolver(signUpSchema),
@@ -226,122 +233,33 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         {errors.position && (
           <p className={errorStyles}>{errors.position.message}</p>
         )}
-        <div className="flex flex-col gap-2 pb-2 pt-4">
-          <label className="inline-block border-b-2 border-blue-500 pb-2 text-3xl font-semibold text-gray-900">
-            Rescue Poles:
-          </label>
-          <p className="mb-4 max-w-2xl text-lg italic leading-relaxed text-gray-600">
-            Our 4 Rescue Poles differ in how the strap is attached to the Hoop.
-            <br />
-            Choose ONE of the following Rescue Poles:
-          </p>
-          <div className="grid grid-cols-2 gap-2 lg:gap-4">
-            {rescuePoleOptions.map((item) => (
-              <div
-                key={item.value}
-                className="flex flex-col items-center gap-2 rounded-lg border p-4"
-              >
-                <label htmlFor={item.value} className="text-center font-medium">
-                  {item.label}
-                </label>
-                <div className="flex items-center gap-4">
-                  <img
-                    src={item.image}
-                    alt={item.label}
-                    className="h-24 w-24 rounded-md object-cover"
-                  />
-                  <input
-                    {...register("rescuePole")}
-                    type="radio"
-                    value={item.value}
-                    id={item.value}
-                    className="h-4 w-4 text-blue-600"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-          {errors.rescuePole && (
-            <p className={errorStyles}>{errors.rescuePole.message}</p>
-          )}
-        </div>
-        <div className="flex flex-col gap-2 py-2">
-          <label className="inline-block border-b-2 border-blue-500 pb-2 text-3xl font-semibold text-gray-900">
-            Rescue Davit Mounting:
-          </label>
-          <p className="mb-4 max-w-2xl text-lg italic leading-relaxed text-gray-600">
-            The Davits can be mounted in 2 ways. <br />
-            Choose ONE of the following mounts:
-          </p>
-          <div className="grid grid-cols-2 gap-2 lg:gap-4">
-            {rescueDavitMountingOptions.map((item) => (
-              <div
-                key={item.value}
-                className="flex flex-col items-center gap-2 rounded-lg border p-4"
-              >
-                <label htmlFor={item.value} className="text-center font-medium">
-                  {item.label}
-                </label>
-                <div className="flex items-center gap-4">
-                  <img
-                    src={item.image}
-                    alt={item.label}
-                    className="h-24 w-24 rounded-md object-cover"
-                  />
-                  <input
-                    {...register("rescueDavitMount")}
-                    type="radio"
-                    value={item.value}
-                    id={item.value}
-                    className="h-4 w-4 text-blue-600"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-          {errors.rescueDavitMount && (
-            <p className={errorStyles}>{errors.rescueDavitMount.message}</p>
-          )}
-        </div>
-        <div className="flex flex-col gap-2 pb-2 pt-2">
-          <label className="inline-block border-b-2 border-blue-500 pb-2 text-3xl font-semibold text-gray-900">
-            Rescue Davits:
-          </label>
-          <p className="mb-4 max-w-2xl text-lg italic leading-relaxed text-gray-600">
-            The 4 Davit types differ in how the winch plate is attached to the
-            davit base. <br />
-            Choose ONE of the following Rescue Davits:
-          </p>
-          <div className="grid grid-cols-2 gap-2 lg:gap-4">
-            {rescueDavitOptions.map((item) => (
-              <div
-                key={item.value}
-                className="flex flex-col items-center gap-2 rounded-lg border p-4"
-              >
-                <label htmlFor={item.value} className="text-center font-medium">
-                  {item.label}
-                </label>
-                <div className="flex items-center gap-4">
-                  <img
-                    src={item.image}
-                    alt={item.label}
-                    className="h-24 w-24 rounded-md object-cover"
-                  />
-                  <input
-                    {...register("rescueDavit")}
-                    type="radio"
-                    value={item.value}
-                    id={item.value}
-                    className="h-4 w-4 text-blue-600"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-          {errors.rescueDavit && (
-            <p className={errorStyles}>{errors.rescueDavit.message}</p>
-          )}
-        </div>
+        <RadioImageGroup<RescuePoleType>
+          title={strings["rescuePole.title"]}
+          description={strings["rescuePole.description"]}
+          options={rescuePoleOptions}
+          name="rescuePole"
+          selected={watch("rescuePole")}
+          onSelect={(value) => setValue("rescuePole", value)}
+          error={errors.rescuePole?.message}
+        />
+        <RadioImageGroup<RescueDavitMountType>
+          title={strings["rescueDavitMount.title"]}
+          description={strings["rescueDavitMount.description"]}
+          options={rescueDavitMountingOptions}
+          name="rescueDavitMount"
+          selected={watch("rescueDavitMount")}
+          onSelect={(value) => setValue("rescueDavitMount", value)}
+          error={errors.rescueDavitMount?.message}
+        />
+        <RadioImageGroup<RescueDavitType>
+          title={strings["rescueDavit.title"]}
+          description={strings["rescueDavit.description"]}
+          options={rescueDavitOptions}
+          name="rescueDavit"
+          selected={watch("rescueDavit")}
+          onSelect={(value) => setValue("rescueDavit", value)}
+          error={errors.rescueDavit?.message}
+        />
         <div className="flex items-start gap-4">
           <input
             {...register("consentSMS")}
@@ -351,11 +269,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
           />
           <label
             htmlFor="consentSMS"
-            className="text-sm leading-relaxed text-gray-600"
+            className="text-left text-sm leading-relaxed text-gray-600"
           >
-            By checking this box and signing up, I consent to receive text
-            messages to my phone number that will be used for logging into the
-            c-herotraining.com website (via 4 digit code sent from Twilio)
+            {strings["sms.consent"]}
           </label>
         </div>
         {errors.consentSMS && (
