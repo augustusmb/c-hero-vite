@@ -66,6 +66,8 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
     handleUserToEdit({
       id: 0,
       name: "",
+      first_name: "",
+      last_name: "",
       email: "",
       phone: "",
       level: "",
@@ -90,7 +92,7 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
     );
 
     toast.success(
-      `${userInfo?.first_name} ${userInfo?.last_name}'s account has been updated.`,
+      `${userToEdit?.first_name} ${userToEdit?.last_name}'s account has been updated.`,
     );
     updateUserInfoMutation.mutate(formattedUserFormData);
     handleUserToEdit(Object.assign({}, userToEdit, formattedUserFormData));
