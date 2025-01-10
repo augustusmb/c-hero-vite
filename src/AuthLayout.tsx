@@ -47,7 +47,7 @@ const AuthLayout = () => {
             {activeTab === "login" ? (
               <div className="flex h-full flex-col items-center justify-center rounded-lg py-4">
                 <h1 className="mb-8 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-3xl font-bold text-transparent lg:text-4xl">
-                  C-Hero Training Login
+                  Welcome Back
                 </h1>
                 <div className="w-64 lg:w-96">
                   {" "}

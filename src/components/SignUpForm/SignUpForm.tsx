@@ -74,9 +74,17 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
           <h1 className="mb-2 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-3xl font-bold text-transparent lg:text-4xl">
             Welcome to C-Hero eTraining
           </h1>
-          <p>
-            Please sign up if you are a new user, <br /> or login if you are
-            returning.{" "}
+          <p className="mb-4 text-center text-gray-600">
+            Please sign up below,
+            <br />
+            or{" "}
+            <span
+              className="cursor-pointer text-blue-600 hover:underline"
+              onClick={() => setActiveTab("login")}
+            >
+              login
+            </span>{" "}
+            if you are returning.
           </p>
         </div>
         <input
