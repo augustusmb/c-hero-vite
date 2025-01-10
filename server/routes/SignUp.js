@@ -1,6 +1,7 @@
 import db from "../../db/db.js";
 import path from "path";
 import pLimit from "p-limit";
+import { newUserSignUpToWayne } from "../sms.js";
 
 const QueryFile = db.$config.pgp.QueryFile;
 const __dirname = path.resolve();
@@ -123,7 +124,7 @@ export async function signUpUserNew(req, res) {
         );
 
         await Promise.all(productPromises);
-
+        newUserSignUpToWayne(firstName, lastName, phone, company, vessel, port);
         return newUser; // Return the created user data
       } catch (innerError) {
         // Log specific error within transaction
