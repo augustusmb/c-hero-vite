@@ -40,7 +40,7 @@ const MainPanelLayout = () => {
           {isAuthenticated ? (
             <MainPanelRouter />
           ) : (
-            <div className="mx-auto mt-4 text-2xl italic lg:w-1/2">
+            <div className="mx-auto mt-4 text-2xl lg:w-1/2">
               <AuthLayout />
             </div>
           )}

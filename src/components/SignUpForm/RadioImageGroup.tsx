@@ -36,7 +36,7 @@ export function RadioImageGroup<T extends string>({
             onClick={() => onSelect(item.value)}
             className={`flex cursor-pointer flex-col items-center gap-2 rounded-lg border p-4 ${
               selected === item.value
-                ? "border-2 border-blue-500"
+                ? "border-2 border-blue-500 bg-blue-50"
                 : "border-gray-200"
             }`}
           >

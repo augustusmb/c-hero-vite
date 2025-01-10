@@ -70,9 +70,15 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         className="flex flex-col gap-y-2 p-4 lg:p-4"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h1 className="mb-8 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-3xl font-bold text-transparent lg:text-4xl">
-          C-Hero Training Sign Up
-        </h1>
+        <div className="mb-4">
+          <h1 className="mb-2 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-3xl font-bold text-transparent lg:text-4xl">
+            Welcome to C-Hero eTraining
+          </h1>
+          <p>
+            Please sign up if you are a new user, <br /> or login if you are
+            returning.{" "}
+          </p>
+        </div>
         <input
           {...register("firstName")}
           placeholder="First name"
