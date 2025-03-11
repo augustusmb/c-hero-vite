@@ -1,26 +1,29 @@
 import db from "../../db/db.js";
-// import path from "path";
+import path from "path";
 import { appendUserFullProductProgressMap } from "../utils/utilFunctions.js";
 
-// const QueryFile = db.$config.pgp.QueryFile;
-// const __dirname = path.resolve();
+const QueryFile = db.$config.pgp.QueryFile;
+const __dirname = path.resolve();
 
-// const sql = (file) => {
-//   const fullPath = path.join(__dirname, '/db/queries/dashboard/', file);
-//   return new QueryFile(fullPath, {minify: true});
-// }
+const sql = (file) => {
+  const fullPath = path.join(__dirname, "/db/queries/dashboard/", file);
+  return new QueryFile(fullPath, { minify: true });
+};
 
-// const queries = {
-//   getDashboardUsersForShoreside: sql("getDashboardUsersForShoreside.sql"),
-//   getDashboardUsersForCaptain: sql("getDashboardUsersForCaptain.sql"),
-//   getDashboardUsersForCrew: sql("getDashboardUsersForCrew.sql")
-// };
+const queries = {
+  getDashboardUsersForShoreside: sql("getDashboardUsersForShoreside.sql"),
+  getDashboardUsersForCaptain: sql("getDashboardUsersForCaptain.sql"),
+  getDashboardUsersForCrew: sql("getDashboardUsersForCrew.sql"),
+  getDashboardUsers: sql("getDashboardUsers.sql"),
+};
 
 export async function getDashboardUsers(req, res) {
-  let { vessel } = req.query;
+  let { vessel_id } = req.query;
 
-  let vesselData = await db.one("SELECT * FROM vessels WHERE name = $1", [
-    vessel,
+  console.log("vessel_id HERE", vessel_id);
+
+  let vesselData = await db.one("SELECT * FROM vessels WHERE id = $1", [
+    vessel_id,
   ]);
   // { vessel_name: 'Catch Me If You Can', id: 1 }
   let vesselProducts = await db.any(
@@ -31,9 +34,7 @@ export async function getDashboardUsers(req, res) {
   // { vessel_id: 1, product_id: 'hr' },
   // { vessel_id: 1, product_id: '3b' }
   // ]
-  let dashboardUsers = await db.any("Select * FROM users where vessel = $1", [
-    vessel,
-  ]);
+  let dashboardUsers = await db.query(queries.getDashboardUsers, [vessel_id]);
   // [ {...userData}, {...userData} ]
   let usersWithProductProgressMaps = await Promise.all(
     dashboardUsers.map((dashUser) =>
