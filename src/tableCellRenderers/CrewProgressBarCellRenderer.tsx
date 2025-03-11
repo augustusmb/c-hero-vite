@@ -1,7 +1,7 @@
 const PROGRESS_BAR_MIN_WIDTH = 30;
 
 const CrewProgressBarCellRenderer = (params: any) => {
-  const { name, totalTests, testsCompleted } = params.data;
+  const { first_name, last_name, totalTests, testsCompleted } = params.data;
 
   const percentageComplete =
     Math.round((testsCompleted / totalTests) * 100) || 0;
@@ -16,7 +16,7 @@ const CrewProgressBarCellRenderer = (params: any) => {
 
   return (
     <div>
-      <div>{name}</div>
+      <div>{`${first_name} ${last_name}`}</div>
       <div
         className={`flex justify-center ${bgColor} rounded-md`}
         style={{

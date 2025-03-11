@@ -55,19 +55,20 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
   const colDefs = [
     {
       headerName: "Name / Phone",
-      field: "name",
-      cellRenderer: TwoValuesCellRenderer,
+      field: "first_name",
+      cellRenderer: threeValuesCellRenderer,
       cellRendererParams: {
-        field1: "name",
-        field2: "phone",
+        field1: `first_name`,
+        field2: `last_name`,
+        field3: "phone",
       },
     },
     {
-      headerName: "Title / Vessel",
-      field: "name",
+      headerName: "Position / Vessel",
+      field: "position",
       cellRenderer: TwoValuesCellRenderer,
       cellRendererParams: {
-        field1: "title",
+        field1: "position",
         field2: "vessel",
       },
     },
@@ -82,6 +83,27 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
     },
   ];
 
+  function threeValuesCellRenderer(params: {
+    colDef: any;
+    field1: string;
+    field2: string;
+    field3: string;
+    data: UserType;
+  }) {
+    const field1 = params.colDef.cellRendererParams.field1;
+    const field2 = params.colDef.cellRendererParams.field2;
+    const field3 = params.colDef.cellRendererParams.field3;
+
+    return (
+      <div className="flex flex-col leading-7">
+        <span className="text-xs font-semibold lg:text-xl">
+          {`${params.data[field1]} ${params.data[field2]}`}
+        </span>
+        <span className="text-xs italic lg:text-lg">{params.data[field3]}</span>
+      </div>
+    );
+  }
+
   function TwoValuesCellRenderer(params: {
     colDef: any;
     field1: string;
@@ -94,7 +116,8 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
     return (
       <div className="flex flex-col leading-7">
         <span className="text-xs font-semibold lg:text-xl">
-          {params.data[field1]}
+          {params.data[field1].charAt(0).toUpperCase() +
+            params.data[field1].slice(1)}
         </span>
         <span className="text-xs italic lg:text-lg">{params.data[field2]}</span>
       </div>
@@ -114,6 +137,8 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
   if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
   if (isError)
     return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
+
+  console.log("data: ", data);
 
   return (
     <div className="ag-theme-quartz" style={{ height: 600 }}>

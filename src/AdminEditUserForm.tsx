@@ -74,6 +74,9 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
       title: "",
       company: "",
       vessel: "",
+      vessel_id: 0,
+      company_id: 0,
+      port_id: 0,
       port: "",
       terms_accepted: false,
     });
@@ -112,18 +115,22 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
               </h3>
               <div className="grid h-60 grid-cols-4">
                 <div className="flex flex-col items-start">
-                  {labels.map((label) => (
-                    <label htmlFor={label} key={label} className="text-lg">
-                      {label[0].toUpperCase() + label.slice(1)}:
+                  {labels.map((item) => (
+                    <label
+                      htmlFor={item.value}
+                      key={item.value}
+                      className="text-lg"
+                    >
+                      {item.label}:
                     </label>
                   ))}
                 </div>
                 <div className="col-span-3 flex flex-col items-start">
-                  {labels.map((label) => (
+                  {labels.map((item) => (
                     <input
-                      key={label}
-                      {...register(label as keyof RawUserFormData)}
-                      placeholder={userToEdit[label]}
+                      key={item.value}
+                      {...register(item.value as keyof RawUserFormData)}
+                      placeholder={userToEdit[item.value]}
                       className="w-4/5 text-lg"
                     />
                   ))}

@@ -84,13 +84,14 @@ export const productsArray = [
 ];
 
 export const labels = [
-  "name",
-  "email",
-  "phone",
-  "title",
-  "company",
-  "vessel",
-  "port",
+  { value: "first_name", label: "First name" },
+  { value: "last_name", label: "Last name" },
+  { value: "email", label: "Email" },
+  { value: "phone", label: "Phone" },
+  { value: "position", label: "Position" },
+  { value: "company", label: "Company" },
+  { value: "vessel", label: "Vessel" },
+  { value: "port", label: "Port" },
 ];
 
 export const productsMap: UserProducts = {

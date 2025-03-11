@@ -25,6 +25,9 @@ const AdminPage = () => {
     level: "",
     title: "",
     company: "",
+    vessel_id: 0,
+    company_id: 0,
+    port_id: 0,
     vessel: "",
     port: "",
     terms_accepted: false,
@@ -52,7 +55,7 @@ const AdminPage = () => {
   };
 
   const toggleEditMode = () => {
-    if (!userToEdit.name)
+    if (!userToEdit.first_name)
       toast.error("Please first select a user to edit from the table below.");
     else setEditMode(!editMode);
   };

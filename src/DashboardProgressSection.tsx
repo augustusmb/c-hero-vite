@@ -15,7 +15,7 @@ import { strings } from "./utils/strings.ts";
 
 const DashboardProgressSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
-  const { level, id, vessel, company } = loggedInUserInfo || {};
+  const { level, id, vessel, vessel_id, company } = loggedInUserInfo || {};
   const gridRef = useRef<AgGridReact | null>(null);
 
   useEffect(() => {
@@ -39,9 +39,9 @@ const DashboardProgressSection = () => {
   }, []);
 
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: [QueryKeys.LIST_USERS_DASHBOARD, level, id, vessel, company],
+    queryKey: [QueryKeys.LIST_USERS_DASHBOARD, level, id, vessel_id, company],
     queryFn: getDashboardUsers,
-    enabled: !!vessel,
+    enabled: !!vessel_id,
   });
 
   if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
@@ -63,7 +63,7 @@ const DashboardProgressSection = () => {
           width: 200,
         },
         { headerName: "Port", field: "port" },
-        { headerName: "Title", field: "title" },
+        { headerName: "Position", field: "position" },
         {
           headerName: "Date Started",
           valueGetter: (params: { data: { date_signed_up: Date } }) => {

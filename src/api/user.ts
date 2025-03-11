@@ -40,10 +40,10 @@ export const deleteUser = async (userId: number) => {
 };
 
 export const getDashboardUsers = async ({ queryKey }: any) => {
-  const [_key, level, id, vessel, company] = queryKey;
+  const [_key, level, id, vessel_id, company] = queryKey;
 
   const users = await apiClient.get(`api/routes/dashboard`, {
-    params: { level, id, vessel, company },
+    params: { level, id, vessel_id, company },
   });
 
   return users;

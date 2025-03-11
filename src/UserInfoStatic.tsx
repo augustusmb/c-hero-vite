@@ -54,7 +54,7 @@ const UserInfoStatic = ({
       </div>
       <div className="col-span-1 mt-2 flex flex-col items-start lg:mt-4">
         <span className="text-xl text-red-400 lg:text-3xl">
-          {userInfo?.title || infoMissing}
+          {userInfo?.position || infoMissing}
         </span>
         <div className="flex items-center">
           <FactoryIcon className="h-5 w-5 fill-indigo-050 stroke-indigo-600" />

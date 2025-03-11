@@ -39,6 +39,8 @@ export function createUserInfo(
 ) {
   return {
     name: formData.name || userToEdit.name,
+    first_name: formData.first_name || userToEdit.first_name,
+    last_name: formData.last_name || userToEdit.last_name,
     email: formData.email || userToEdit.email,
     title: formData.title || userToEdit.title,
     company: formData.company || userToEdit.company,

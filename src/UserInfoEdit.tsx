@@ -52,18 +52,18 @@ const UserInfoEdit: React.FC<UserInfoEditProps> = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="box-shadow-lg grid h-60 grid-cols-4 rounded-lg">
         <div className="flex flex-col items-start">
-          {labels.map((label) => (
-            <label htmlFor={label} key={label} className="text-lg">
-              {label[0].toUpperCase() + label.slice(1)}:
+          {labels.map((item) => (
+            <label htmlFor={item.value} key={item.value} className="text-lg">
+              {item.label}:
             </label>
           ))}
         </div>
         <div className="col-span-3 flex flex-col items-start">
-          {labels.map((label) => (
+          {labels.map((item) => (
             <input
-              key={label}
-              {...register(label as keyof UpdatedUserInfo)}
-              placeholder={user[label]}
+              key={item.value}
+              {...register(item.value as keyof UpdatedUserInfo)}
+              placeholder={user[item.value]}
               className="w-4/5 text-lg"
             />
           ))}
