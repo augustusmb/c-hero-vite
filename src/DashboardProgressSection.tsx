@@ -15,7 +15,7 @@ import { strings } from "./utils/strings.ts";
 
 const DashboardProgressSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
-  const { level, id, vessel, vessel_id, company } = loggedInUserInfo || {};
+  const { level, id, vessel_id, company } = loggedInUserInfo || {};
   const gridRef = useRef<AgGridReact | null>(null);
 
   useEffect(() => {
