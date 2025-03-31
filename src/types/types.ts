@@ -26,6 +26,7 @@ export type UserType = {
 export type CompletedTestData = {
   classId: string;
   first_name: string;
+  last_name: string;
   phone: string;
   userId: number;
   questionsMissed: any;

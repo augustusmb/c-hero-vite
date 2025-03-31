@@ -24,15 +24,18 @@ const CHERO_TRAINING_INFO_EMAIL = "info@c-herotraining.com";
 
 sgMail.setApiKey(sendGridApiKey);
 
-const informTestResult = (questionsMissed, name, phone, classId) => {
-  console.log("Hello in the Texting Body");
-  console.log("# of Questions missed: ", questionsMissed);
-  console.log("Typeof ", typeof questionsMissed);
+const informTestResult = (
+  questionsMissed,
+  first_name,
+  last_name,
+  phone,
+  classId,
+) => {
   let message = "";
   if (questionsMissed.length !== 0)
-    message = `Hi, notifying you that ${name} (${phone}) just attempted and FAILED test ${classId})`;
+    message = `Hi, notifying you that ${first_name} ${last_name} (${phone}) just attempted and FAILED test ${classId})`;
   else if (questionsMissed.length === 0)
-    message = `Hi, notifying you that ${name} (${phone}) just attempted and PASSED test ${classId})`;
+    message = `Hi, notifying you that ${first_name} ${last_name} (${phone}) just attempted and PASSED test ${classId})`;
 
   const phoneNumbers = ["+16503808229", "+14159945256"];
 
