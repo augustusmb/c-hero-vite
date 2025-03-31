@@ -6,7 +6,7 @@ import SignUpPage from "./components/SignUpForm/SignUpPage.tsx";
 import BuoyIcon from "./assets/icons/icon-buoy.svg?react";
 
 const AuthLayout = () => {
-  const [activeTab, setActiveTab] = useState("signup");
+  const [activeTab, setActiveTab] = useState("login");
 
   return (
     <div className="min-h-screen">
@@ -14,19 +14,6 @@ const AuthLayout = () => {
         <CardContent className="p-0">
           {/* Tab Navigation */}
           <div className="flex items-center px-4">
-            <button
-              onClick={() => setActiveTab("signup")}
-              className={`flex-1 rounded-t-lg p-4 text-center font-medium transition-all ${
-                activeTab === "signup"
-                  ? "border-b-2 border-blue-600 bg-blue-100 font-black text-blue-700 lg:-mr-4"
-                  : "text-gray-400 hover:bg-gray-50 hover:text-gray-700"
-              }`}
-            >
-              Sign Up
-            </button>
-
-            <Separator orientation="vertical" className="h-8" />
-
             <button
               onClick={() => setActiveTab("login")}
               className={`flex-1 rounded-t-lg p-4 text-center font-medium transition-colors ${
@@ -36,6 +23,19 @@ const AuthLayout = () => {
               }`}
             >
               Login
+            </button>
+
+            <Separator orientation="vertical" className="h-8" />
+
+            <button
+              onClick={() => setActiveTab("signup")}
+              className={`flex-1 rounded-t-lg p-4 text-center font-medium transition-all ${
+                activeTab === "signup"
+                  ? "border-b-2 border-blue-600 bg-blue-100 font-black text-blue-700 lg:-mr-4"
+                  : "text-gray-400 hover:bg-gray-50 hover:text-gray-700"
+              }`}
+            >
+              Sign Up
             </button>
           </div>
 
