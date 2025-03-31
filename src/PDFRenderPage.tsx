@@ -47,6 +47,7 @@ import class_vr_a from "./assets/c-hero-classes/vr/vr_a.pdf";
 import class_vr_b from "./assets/c-hero-classes/vr/vr_b.pdf";
 import class_vr_c from "./assets/c-hero-classes/vr/vr_c.pdf";
 import class_vr_d from "./assets/c-hero-classes/vr/vr_d.pdf";
+import class_vr_p from "./assets/c-hero-classes/vr/vr_p.pdf";
 import safetyPDF from "./assets/c-hero-classes/safety/z_safety.pdf";
 import troubleshootingPDF from "./assets/c-hero-classes/troubleshooting/troubleshooting.pdf";
 import MobDrillLog from "./assets/MOBDrillLog.pdf";
@@ -99,6 +100,7 @@ let pdfMap = {
   vr_b: class_vr_b,
   vr_c: class_vr_c,
   vr_d: class_vr_d,
+  vr_p: class_vr_p,
   safety: safetyPDF,
   troubleshooting: troubleshootingPDF,
   MobDrillLog: MobDrillLog,

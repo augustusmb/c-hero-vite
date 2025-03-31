@@ -38,6 +38,9 @@ export const createUserFullProgressMap = (userClassesMap: ProductProgress) => {
       classProgress[`${productCode}_b`] = userClassesMap[`${productCode}_b`];
       classProgress[`${productCode}_c`] = userClassesMap[`${productCode}_c`];
       classProgress[`${productCode}_d`] = userClassesMap[`${productCode}_d`];
+      productCode === "vr" &&
+        (classProgress[`${productCode}_p`] =
+          userClassesMap[`${productCode}_p`]);
     }
   }
 

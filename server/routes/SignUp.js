@@ -35,10 +35,16 @@ export async function fetchFormOptions(req, res) {
   }
 }
 
-const SUFFIXES = Object.freeze(["a", "b", "c", "d"]);
+const SUFFIXES = Object.freeze(["a", "b", "c", "d", "p"]);
 
 const generateClassIds = (product) =>
-  SUFFIXES.map((suffix) => `${product}_${suffix}`);
+  SUFFIXES.map((suffix) =>
+    product === "vr"
+      ? `${product}_${suffix}`
+      : suffix !== "p"
+      ? `${product}_${suffix}`
+      : null,
+  ).filter(Boolean);
 
 export async function signUpUserNew(req, res) {
   const {

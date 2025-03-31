@@ -120,12 +120,11 @@ function updateUserProducts(products, user_id) {
 
   let classes = [];
   products.forEach((product) => {
-    classes.push([
-      `${product}_a`,
-      `${product}_b`,
-      `${product}_c`,
-      `${product}_d`,
-    ]);
+    let suffixes = ["a", "b", "c", "d"];
+    if (product === "vr") {
+      suffixes.push("p");
+    }
+    classes.push(suffixes.map((suffix) => `${product}_${suffix}`));
   });
   classes = classes.flat();
 

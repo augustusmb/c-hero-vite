@@ -34,6 +34,7 @@ export const classTypesMap = {
   b: "Operation",
   c: "MOB Drills",
   d: "Inspection & Storage",
+  p: "Prusik Strap",
 };
 
 export const productsArray = [

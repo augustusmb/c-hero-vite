@@ -21,6 +21,7 @@ const classTypesMapping: ClassTypesMap = {
   b: "Operation",
   c: "MOB Drills",
   d: "Inspection & Storage",
+  p: "Prusik Strap",
 };
 
 const ClassCard: React.FC<ClassCardProps> = ({ product }) => {

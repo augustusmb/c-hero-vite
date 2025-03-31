@@ -52,7 +52,7 @@ export type ProductProgress = {
 };
 
 export type ClassProgress = {
-  product_id: string;
+  product_id: string; // Can now be e.g. "vr_p" as well as "vr_a", "vr_b" etc.
   user_id: number;
   completed: boolean;
   data_completed: string | null;
