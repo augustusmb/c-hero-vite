@@ -45,6 +45,7 @@ import class_rs_c from "./assets/c-hero-classes/rs/rs_c.pdf";
 import class_rs_d from "./assets/c-hero-classes/rs/rs_d.pdf";
 import class_vr_a from "./assets/c-hero-classes/vr/vr_a.pdf";
 import class_vr_b from "./assets/c-hero-classes/vr/vr_b.pdf";
+import class_vr_b_p from "./assets/c-hero-classes/vr/vr_b_p.pdf";
 import class_vr_c from "./assets/c-hero-classes/vr/vr_c.pdf";
 import class_vr_d from "./assets/c-hero-classes/vr/vr_d.pdf";
 import class_vr_p from "./assets/c-hero-classes/vr/vr_p.pdf";
@@ -52,6 +53,13 @@ import safetyPDF from "./assets/c-hero-classes/safety/z_safety.pdf";
 import troubleshootingPDF from "./assets/c-hero-classes/troubleshooting/troubleshooting.pdf";
 import MobDrillLog from "./assets/MOBDrillLog.pdf";
 import MobInspectionCheckList from "./assets/MOBInspectionCheckList.pdf";
+import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext";
+import { useQuery } from "@tanstack/react-query";
+import {
+  getFullUserProductProgressMap,
+  hasDavitProduct,
+} from "./utils/user.ts";
+import { QueryKeys } from "./utils/QueryKeys.ts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -98,6 +106,7 @@ let pdfMap = {
   rs_d: class_rs_d,
   vr_a: class_vr_a,
   vr_b: class_vr_b,
+  vr_b_p: class_vr_b_p,
   vr_c: class_vr_c,
   vr_d: class_vr_d,
   vr_p: class_vr_p,
@@ -108,12 +117,31 @@ let pdfMap = {
 };
 
 const PDFRenderPage = () => {
+  const { loggedInUserInfo } = useLoggedInUserContext();
+
   const [numPages, setNumpages] = useState<number | null>(1);
   const [panelWidth, setPanelWidth] = useState(500);
 
   let { classId, safety } = useParams();
 
-  const pdfKey = classId ? classId : safety;
+  const { data: userProductsMap } = useQuery({
+    queryKey: [QueryKeys.GET_USER_PRODUCTS_MAP, loggedInUserInfo?.id || 0],
+    queryFn: getFullUserProductProgressMap,
+    enabled: !!loggedInUserInfo?.id,
+  });
+
+  const getPdfKey = () => {
+    if (
+      classId === "vr_b" &&
+      userProductsMap &&
+      !hasDavitProduct(userProductsMap)
+    ) {
+      return "vr_b_p"; // Use Prusik-included operation PDF
+    }
+    return classId || safety;
+  };
+
+  const pdfKey = getPdfKey();
 
   const onPDFSuccess = ({ numPages }: { numPages: number }) => {
     setNumpages(numPages);

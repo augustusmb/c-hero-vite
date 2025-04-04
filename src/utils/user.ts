@@ -1,6 +1,10 @@
 import { productsMap } from "../messages.ts";
 import { fetchUserClasses } from "../api/user.ts";
-import { ProductProgress, ClassProgress } from "../types/types.ts";
+import {
+  ProductProgress,
+  ClassProgress,
+  UserProducts,
+} from "../types/types.ts";
 
 export const createUserClassesMap = (userClasses: ClassProgress[]) => {
   const userClassesMap: ProductProgress = {};
@@ -58,4 +62,11 @@ export const getFullUserProductProgressMap = async (params: Params) => {
   const userFullProgressMap = createUserFullProgressMap(userClassesMap);
 
   return userFullProgressMap;
+};
+
+export const hasDavitProduct = (userProductsMap: UserProducts) => {
+  const davitCodes = ["3b", "3f", "5b", "5f", "7b", "7f", "9f"];
+  return Object.keys(userProductsMap).some(
+    (code) => davitCodes.includes(code) && userProductsMap[code].assigned,
+  );
 };

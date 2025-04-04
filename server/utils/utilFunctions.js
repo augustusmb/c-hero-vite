@@ -1,5 +1,5 @@
-import db from '../../db/db.js'
-import { productsMap } from './dataUtils.js'
+import db from "../../db/db.js";
+import { productsMap } from "./dataUtils.js";
 
 export const createUserClassesMap = (userClasses) => {
   const userClassesMap = {};
@@ -48,13 +48,29 @@ export const createUserFullProgressMap = (userClassesMap) => {
 };
 
 export const appendUserFullProductProgressMap = async (dashUser) => {
-  const { id } = dashUser
-  
-  const userClasses = await db.query('select * from users_products where user_id = $1', [id]);
-  const { totalTests, testsCompleted } = await getUserTestsCompletedNumber(userClasses);
+  const { id } = dashUser;
+
+  const userClasses = await db.query(
+    "select * from users_products where user_id = $1",
+    [id],
+  );
+  const { totalTests, testsCompleted } =
+    await getUserTestsCompletedNumber(userClasses);
   const userClassesMap = createUserClassesMap(userClasses);
   const userFullProgressMap = createUserFullProgressMap(userClassesMap);
 
-  const finalUserData = { ...dashUser, userFullProgressMap, totalTests, testsCompleted };
+  const finalUserData = {
+    ...dashUser,
+    userFullProgressMap,
+    totalTests,
+    testsCompleted,
+  };
   return finalUserData;
+};
+
+export const hasDavitProduct = (userProductsMap) => {
+  const davitCodes = ["3b", "3f", "5b", "5f", "7b", "7f", "9f"];
+  return Object.keys(userProductsMap).some(
+    (code) => davitCodes.includes(code) && userProductsMap[code].assigned,
+  );
 };

@@ -2,7 +2,7 @@ import ClassCard from "./ClassCard.js";
 import { useQuery } from "@tanstack/react-query";
 import { getFullUserProductProgressMap } from "./utils/user.ts";
 import CheckIcon from "./assets/icons/icon-check.svg?react";
-import { ProductData } from "./types/types.ts";
+import { ProductData, UserProducts } from "./types/types.ts";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import { QueryKeys } from "./utils/QueryKeys.ts";
@@ -23,12 +23,24 @@ const ClassCardSection = () => {
   const getClassCardSection = () => {
     const productsList: ProductData[] = Object.values(data);
 
+    // Convert array back to object map
+    const assignedProductsMap = productsList.reduce((acc, product) => {
+      if (product.assigned) {
+        acc[product.productId] = product;
+      }
+      return acc;
+    }, {} as UserProducts);
+
     const assignedProductsList: ProductData[] = productsList.filter(
       (item: ProductData) => item.assigned,
     );
 
     const classCards = assignedProductsList.map((product: ProductData) => (
-      <ClassCard key={product.productId} product={product} />
+      <ClassCard
+        key={product.productId}
+        product={product}
+        assignedProductsMap={assignedProductsMap}
+      />
     ));
 
     return classCards;
