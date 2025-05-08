@@ -207,7 +207,7 @@ const UserInfoEdit: React.FC<UserInfoEditProps> = ({
       // Return the snapshots so we can rollback if something goes wrong
       return { previousUserData, previousListData };
     },
-    onSuccess: (result, variables) => {
+    onSuccess: (result) => {
       console.log("Mutation succeeded:", result);
     },
     onError: (err, updatedUserInfo, context) => {
@@ -231,7 +231,7 @@ const UserInfoEdit: React.FC<UserInfoEditProps> = ({
 
       console.error("Error updating user info:", err);
     },
-    onSettled: (data, error, variables) => {
+    onSettled: (_data, _error, variables) => {
       console.log("Mutation settled, invalidating queries");
 
       // Always refetch after error or success to ensure our local data is in sync with the server

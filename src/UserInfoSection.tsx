@@ -41,6 +41,20 @@ const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
     setEditMode(!editMode);
   };
 
+  // Add error handling
+  if (error) {
+    return (
+      <div className="text-red-500">
+        Error loading form options: {error.message}
+      </div>
+    );
+  }
+
+  // Check if options are still loading
+  if (isLoading) {
+    return <div className="text-slate-600">Loading form options...</div>;
+  }
+
   const companies =
     data?.data?.companies?.map((company: TSelect) => ({
       value: company.id,
