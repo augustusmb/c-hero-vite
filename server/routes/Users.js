@@ -16,6 +16,10 @@ const queries = {
   deleteUser: sql("deleteUser.sql"),
   acceptTermsAndConditions: sql("acceptTermsAndConditions.sql"),
   deleteUserSpecificClasses: sql("deleteUserSpecificClasses.sql"),
+  insertNewCompany:
+    "INSERT INTO companies (name) VALUES (${name}) RETURNING id",
+  insertNewPort: "INSERT INTO ports (name) VALUES (${name}) RETURNING id",
+  insertNewVessel: "INSERT INTO vessels (name) VALUES (${name}) RETURNING id",
 };
 
 export async function getUserByPhone(req, res) {
@@ -40,29 +44,102 @@ export function deleteUser(req, res) {
 }
 
 export async function updateUserInfo(req, res) {
-  const { id, first_name, last_name, email, title, company, vessel, port } =
-    req.body.params;
+  const {
+    id,
+    first_name,
+    last_name,
+    email,
+    phone,
+    position,
+    company,
+    vessel,
+    port,
+  } = req.body.params;
 
-  await Promise.all([
-    db.none(queries.updateUserInfo, {
-      id,
-      first_name,
-      last_name,
-      email,
-      title,
-      company,
-      vessel,
-      port,
-    }),
-  ])
-    .then(() => {
-      console.log("All SQL commands executed");
-      res.status(200).json({ message: "User info updated successfully" });
-    })
-    .catch((err) => {
-      console.log("Error updating user products: ", err);
-      res.status(500).json({ message: "Error updating user info" });
+  console.log("POSITION: ", position);
+
+  try {
+    const result = await db.tx(async (t) => {
+      try {
+        // Handle potential new entries with proper error handling
+        const companyId = company.__isNew__
+          ? await t.one(
+              queries.insertNewCompany,
+              {
+                name: company.label,
+              },
+              (row) => row.id,
+            )
+          : company.value;
+
+        const portId = port.__isNew__
+          ? await t.one(
+              queries.insertNewPort,
+              {
+                name: port.label,
+              },
+              (row) => row.id,
+            )
+          : port.value;
+
+        const vesselId = vessel.__isNew__
+          ? await t.one(
+              queries.insertNewVessel,
+              {
+                name: vessel.label,
+              },
+              (row) => row.id,
+            )
+          : vessel.value;
+
+        // Update the user with the resolved IDs
+        await t.none(queries.updateUserInfo, {
+          id,
+          first_name,
+          last_name,
+          email,
+          phone,
+          position_type: position.value,
+          company_id: companyId,
+          vessel_id: vesselId,
+          port_id: portId,
+        });
+
+        return { success: true };
+      } catch (innerError) {
+        // Log specific error within transaction
+        console.error("Transaction error:", innerError);
+        throw innerError; // Re-throw to trigger rollback
+      }
     });
+
+    res.status(200).json({
+      message: "User info updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    // Handle specific error types
+    if (error.code === "23505") {
+      // Unique constraint violation
+      res.status(409).json({
+        success: false,
+        error: "A record with this information already exists",
+      });
+    } else if (error.code === "23503") {
+      // Foreign key violation
+      res.status(400).json({
+        success: false,
+        error: "Invalid reference to related data",
+      });
+    } else {
+      console.error("Error updating user info:", error);
+      res.status(500).json({
+        success: false,
+        message: "Error updating user info",
+        error: error.message,
+      });
+    }
+  }
 }
 
 export async function updateUserInfoAndProducts(req, res) {

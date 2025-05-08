@@ -1,3 +1,5 @@
+import { TCreateableSelectOption } from "../components/SignUpForm/SignUpConfig.tsx";
+
 export type AdminEditUserStaticProps = {
   toggleEditMode: (editMode: boolean) => void;
   editMode: boolean;
@@ -98,12 +100,14 @@ export type NewlyRemovedProducts = {
 };
 
 export type UpdatedUserInfo = {
-  name: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
   email: string;
-  title: string;
-  company: string;
-  vessel: string;
-  port: string;
+  company: TCreateableSelectOption;
+  vessel: TCreateableSelectOption;
+  port: TCreateableSelectOption;
+  position: TCreateableSelectOption;
   id: number;
 };
 
