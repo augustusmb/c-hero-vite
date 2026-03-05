@@ -4,60 +4,77 @@ import sgMail from "@sendgrid/mail";
 
 dotenv.config();
 
-import { defineConfig, loadEnv } from "vite";
-dotenv.config();
-
-const env = loadEnv("all", process.cwd());
-
-const accountSid = env.VITE_TWILIO_ACCOUNT_SID;
-const authToken = env.VITE_TWILIO_AUTH_TOKEN;
-const sendGridApiKey = env.VITE_TWILIO_SENDGRID_API_KEY;
+const accountSid = process.env.VITE_TWILIO_ACCOUNT_SID;
+const authToken = process.env.VITE_TWILIO_AUTH_TOKEN;
+const sendGridApiKey = process.env.VITE_TWILIO_SENDGRID_API_KEY;
 const client = twilio(accountSid, authToken);
 
+console.log("Evironment: ", process.env.VITE_NODE_ENV);
+
+// Phone numbers
 const WAYNE_PHONE = "+14159945256";
 const AUGUSTUS_PHONE = "+16503808229";
 const AUGUSTUS_TWILIO_PHONE = "+13129975262";
 
+// Email addresses
 const CHERO_INFO_EMAIL = "info@c-hero.com";
 const AUGUSTUS_PERSONAL_EMAIL = "augustusmb@gmail.com";
 const CHERO_TRAINING_INFO_EMAIL = "info@c-herotraining.com";
+const SHANE_EMAIL = "shanechero@gmail.com";
+
+// Environment-based recipients
+// In production: send to all admins
+// In local/dev: only send to Augustus
+const isProduction = process.env.VITE_NODE_ENV === "production";
+
+const ADMIN_PHONE_NUMBERS = isProduction
+  ? [WAYNE_PHONE, AUGUSTUS_PHONE]
+  : [AUGUSTUS_PHONE];
+
+const ADMIN_EMAIL_ADDRESSES = isProduction
+  ? [CHERO_INFO_EMAIL, AUGUSTUS_PERSONAL_EMAIL, SHANE_EMAIL]
+  : [AUGUSTUS_PERSONAL_EMAIL];
 
 sgMail.setApiKey(sendGridApiKey);
 
-const informTestResult = (
+/**
+ * Helper function to send SMS to admin phone numbers
+ */
+const sendAdminSms = async (message) => {
+  try {
+    const results = await Promise.all(
+      ADMIN_PHONE_NUMBERS.map((number) =>
+        client.messages.create({
+          body: message,
+          from: AUGUSTUS_TWILIO_PHONE,
+          to: number,
+        }),
+      ),
+    );
+    results.forEach((result, index) => {
+      console.log(`SMS to ${ADMIN_PHONE_NUMBERS[index]}: ${result.status}`);
+    });
+  } catch (error) {
+    console.error("Error sending SMS:", error);
+  }
+};
+
+const informTestResult = async (
   questionsMissed,
-  first_name,
-  last_name,
+  firstName,
+  lastName,
   phone,
   classId,
 ) => {
-  let message = "";
-  if (questionsMissed.length !== 0)
-    message = `Hi, notifying you that ${first_name} ${last_name} (${phone}) just attempted and FAILED test ${classId})`;
-  else if (questionsMissed.length === 0)
-    message = `Hi, notifying you that ${first_name} ${last_name} (${phone}) just attempted and PASSED test ${classId})`;
+  const passed = questionsMissed.length === 0;
+  const status = passed ? "PASSED" : "FAILED";
+  const message = `Hi, notifying you that ${firstName} ${lastName} (${phone}) just attempted and ${status} test ${classId}`;
 
-  const phoneNumbers = ["+16503808229", "+14159945256"];
-
-  Promise.all(
-    phoneNumbers.map((number) =>
-      client.messages.create({
-        body: message,
-        from: AUGUSTUS_TWILIO_PHONE,
-        to: number,
-      }),
-    ),
-  )
-    .then((messages) =>
-      messages.forEach((message, index) =>
-        console.log(`Message ${index + 1} status:`, message.status),
-      ),
-    )
-    .catch((error) => console.error("Error sending messages:", error));
+  await sendAdminSms(message);
 };
 
 // Phone and email notifications for new sign-ups
-export const notifyCheroAdminsNewUserSignUp = async (
+export const notifyAdminsNewSignUp = async ({
   firstName,
   lastName,
   phone,
@@ -69,70 +86,53 @@ export const notifyCheroAdminsNewUserSignUp = async (
   rescuePole,
   rescueDavit,
   rescueDavitMount,
-) => {
-  // Prepare the message content
-  const messageContent = `Hello from C-Hero eTraining!\n${firstName} ${lastName} (${phone}) just signed up for C-Hero eTraining.\nCompany: ${company.label}\nVessel: ${vessel.label}\nPort: ${port.label}`;
+}) => {
+  const smsContent = `Hello from C-Hero eTraining!\n${firstName} ${lastName} (${phone}) just signed up for C-Hero eTraining.\nCompany: ${company.label}\nVessel: ${vessel.label}\nPort: ${port.label}`;
 
-  // Send SMS
-  try {
-    const phoneNumbers = [WAYNE_PHONE, AUGUSTUS_PHONE];
-    const smsPromises = phoneNumbers.map((phoneNumber) =>
-      client.messages.create({
-        body: messageContent,
-        from: AUGUSTUS_TWILIO_PHONE,
-        to: phoneNumber,
-      }),
-    );
-
-    const smsResults = await Promise.all(smsPromises);
-    smsResults.forEach((result, index) => {
-      console.log(`SMS Status for ${phoneNumbers[index]}:`, result.status);
-    });
-  } catch (error) {
-    console.error("Error sending SMS:", error);
-  }
-
-  // Prepare email content
   const emailData = {
-    to: [CHERO_INFO_EMAIL, AUGUSTUS_PERSONAL_EMAIL],
-    from: CHERO_TRAINING_INFO_EMAIL, // Must be verified in SendGrid
+    to: ADMIN_EMAIL_ADDRESSES,
+    from: CHERO_TRAINING_INFO_EMAIL,
     subject: "New C-Hero eTraining Sign-up",
-    text: messageContent,
+    text: smsContent,
     html: `
-    <h2>New C-Hero eTraining Sign-up</h2>
-    <p>A new user has signed up for C-Hero eTraining:</p>
-    
-    <h3>User Information</h3>
-    <ul>
-      <li><strong>Name:</strong> ${firstName} ${lastName}</li>
-      <li><strong>Email:</strong> ${email}</li>
-      <li><strong>Phone:</strong> ${phone}</li>
-    </ul>
-      
-      <h3>Company Information</h3>
-    <ul>
-      <li><strong>Position:</strong> ${position.label}</li>
-      <li><strong>Company:</strong> ${company.label}</li>
-      <li><strong>Vessel:</strong> ${vessel.label}</li>
-      <li><strong>Port:</strong> ${port.label}</li>
-    </ul>
+      <h2>New C-Hero eTraining Sign-up</h2>
+      <p>A new user has signed up for C-Hero eTraining:</p>
 
-    <h3>Equipment Configuration</h3>
-    <ul>
-      <li><strong>Rescue Davit:</strong> ${rescueDavit}</li>
-      <li><strong>Davit Mounting:</strong> ${rescueDavitMount}</li>
-      <li><strong>Rescue Pole:</strong> ${rescuePole}</li>
-    </ul>
-  `,
+      <h3>User Information</h3>
+      <ul>
+        <li><strong>Name:</strong> ${firstName} ${lastName}</li>
+        <li><strong>Email:</strong> ${email}</li>
+        <li><strong>Phone:</strong> ${phone}</li>
+      </ul>
+
+      <h3>Company Information</h3>
+      <ul>
+        <li><strong>Position:</strong> ${position.label}</li>
+        <li><strong>Company:</strong> ${company.label}</li>
+        <li><strong>Vessel:</strong> ${vessel.label}</li>
+        <li><strong>Port:</strong> ${port.label}</li>
+      </ul>
+
+      <h3>Equipment Configuration</h3>
+      <ul>
+        <li><strong>Rescue Davit:</strong> ${rescueDavit}</li>
+        <li><strong>Davit Mounting:</strong> ${rescueDavitMount}</li>
+        <li><strong>Rescue Pole:</strong> ${rescuePole}</li>
+      </ul>
+    `,
   };
 
-  // Send email
-  try {
-    const emailResult = await sgMail.send(emailData);
-    console.log("Email Status:", emailResult[0].statusCode);
-  } catch (error) {
-    console.error("Error sending email:", error);
-  }
+  const sendEmail = async () => {
+    try {
+      const result = await sgMail.send(emailData);
+      console.log("Email Status:", result[0].statusCode);
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
+  };
+
+  // Send SMS and email in parallel
+  await Promise.all([sendAdminSms(smsContent), sendEmail()]);
 };
 
 // not in use currently

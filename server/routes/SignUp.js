@@ -1,7 +1,7 @@
 import db from "../../db/db.js";
 import path from "path";
 import pLimit from "p-limit";
-import { notifyCheroAdminsNewUserSignUp, signUpSmsToUser } from "../sms.js";
+import { notifyAdminsNewSignUp, signUpSmsToUser } from "../sms.js";
 
 const QueryFile = db.$config.pgp.QueryFile;
 const __dirname = path.resolve();
@@ -130,14 +130,19 @@ export async function signUpUserNew(req, res) {
         );
 
         await Promise.all(productPromises);
-        notifyCheroAdminsNewUserSignUp(
+        notifyAdminsNewSignUp({
           firstName,
           lastName,
           phone,
+          email,
           company,
           vessel,
           port,
-        );
+          position,
+          rescuePole,
+          rescueDavit,
+          rescueDavitMount,
+        });
         return newUser; // Return the created user data
       } catch (innerError) {
         // Log specific error within transaction
