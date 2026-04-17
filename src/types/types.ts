@@ -15,7 +15,6 @@ export type UserType = {
   email: string;
   phone: string;
   level: string;
-  title: string;
   company: string;
   vessel: string;
   vessel_id: number;
@@ -66,7 +65,6 @@ export type RawUserFormData = {
   first_name: string;
   last_name: string;
   email: string;
-  title: string;
   company: string;
   vessel: string;
   port: string;
@@ -82,7 +80,6 @@ export type FormattedUserFormData = {
   first_name: string;
   last_name: string;
   email: string;
-  title: string;
   company: string;
   vessel: string;
   port: string;

@@ -15,10 +15,10 @@ export default function NavbarDropDown() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex justify-center gap-x-1.5 rounded-lg bg-slate-050 p-1 text-xl font-bold text-slate-800 hover:bg-slate-200 lg:p-6 lg:text-3xl">
+        <Menu.Button className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium text-slate-050 transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 lg:px-4 lg:py-2 lg:text-base">
           {strings["nav.more"]}
           <ChevronDownIcon
-            className="-mr-1 h-5 w-5 text-slate-800"
+            className="h-4 w-4 text-slate-050"
             aria-hidden="true"
           />
         </Menu.Button>
@@ -114,19 +114,6 @@ export default function NavbarDropDown() {
                   )}
                 >
                   {strings["nav.certification"]}
-                </Link>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  to="/sign-up"
-                  className={classNames(
-                    active ? "bg-slate-100 text-slate-900" : "text-slate-700",
-                    "block px-4 py-2 text-sm",
-                  )}
-                >
-                  SignUp
                 </Link>
               )}
             </Menu.Item>

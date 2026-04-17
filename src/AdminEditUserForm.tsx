@@ -1,20 +1,30 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm, Controller } from "react-hook-form";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { updateUserInfoAndProducts, deleteUser } from "./api/user.ts";
-import { labels } from "./messages.ts";
-import {
-  UserType,
-  UserProducts,
-  FormattedUserFormData,
-  RawUserFormData,
-} from "./types/types.ts";
-import { compareProducts, createUserInfo } from "./utils/AdminPageUtils.ts";
+import CreatableSelect from "react-select/creatable";
+import Select from "react-select";
+import { UserType, UserProducts, RawUserFormData } from "./types/types.ts";
+import { compareProducts } from "./utils/AdminPageUtils.ts";
 import { QueryKeys } from "./utils/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
+import { fetchOptions } from "./api/signUp.ts";
+import { Trash2 } from "lucide-react";
+import {
+  positionOptions,
+  TCreateableSelectOption,
+  TCreateableSelectOptions,
+} from "./components/SignUpForm/SignUpConfig.tsx";
+import { PhoneInput } from "./components/SignUpForm/PhoneInput.tsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
-type AdminEditUserStaticProps = {
+type AdminEditUserFormProps = {
   toggleEditMode: (editMode: boolean) => void;
   editMode: boolean;
   userInfo: UserType;
@@ -22,22 +32,70 @@ type AdminEditUserStaticProps = {
   handleUserToEdit: (userToEdit: UserType) => void;
 };
 
-const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
+type TSelect = {
+  name: string;
+  id: number;
+};
+
+const labelStyles = "mb-1 block text-sm font-medium text-slate-700";
+const inputStyles =
+  "w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500";
+const sectionHeadingStyles =
+  "text-xs font-semibold uppercase tracking-wide text-slate-500";
+
+const selectStyles = {
+  placeholder: (provided: any) => ({ ...provided, textAlign: "left" as const }),
+  control: (provided: any, state: any) => ({
+    ...provided,
+    borderRadius: "0.375rem",
+    borderColor: state.isFocused ? "#3B82F6" : "#D1D5DB",
+    boxShadow: state.isFocused ? "0 0 0 1px #3B82F6" : "none",
+    "&:hover": { borderColor: state.isFocused ? "#3B82F6" : "#D1D5DB" },
+    minHeight: "38px",
+    fontSize: "0.875rem",
+  }),
+};
+
+const AdminEditUserForm: React.FC<AdminEditUserFormProps> = ({
   userInfo: userToEdit,
   toggleEditMode,
   editMode,
   data: userProductData,
   handleUserToEdit,
 }) => {
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const { handleSubmit, register } = useForm<RawUserFormData>();
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const { handleSubmit, register, control } = useForm();
   const queryClient = useQueryClient();
 
+  const { data: optionsData, isLoading: optionsLoading } = useQuery({
+    queryKey: [QueryKeys.FORM_OPTIONS],
+    queryFn: fetchOptions,
+  });
+
+  const companies: TCreateableSelectOptions =
+    optionsData?.data?.companies?.map((c: TSelect) => ({
+      value: c.id,
+      label: c.name,
+    })) || [];
+  const vessels: TCreateableSelectOptions =
+    optionsData?.data?.vessels?.map((v: TSelect) => ({
+      value: v.id,
+      label: v.name,
+    })) || [];
+  const ports: TCreateableSelectOptions =
+    optionsData?.data?.ports?.map((p: TSelect) => ({
+      value: p.id,
+      label: p.name,
+    })) || [];
+
   const updateUserInfoMutation = useMutation({
-    mutationFn: async (formattedUserFormData: FormattedUserFormData) => {
-      updateUserInfoAndProducts(formattedUserFormData);
+    mutationFn: async (payload: any) => {
+      return updateUserInfoAndProducts(payload);
     },
-    onSuccess: () => {
+    onError: () => {
+      toast.error("Could not save changes. Please try again.");
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.LIST_USERS] });
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.LIST_USER_PRODUCTS],
@@ -54,13 +112,10 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
     },
   });
 
-  const toggleConfirmDelete = () => {
-    setConfirmDelete(!confirmDelete);
-  };
-
   const handleDeleteUser = () => {
+    setShowDeleteDialog(false);
     toast.success(
-      `${userToEdit.first_name} ${userToEdit.last_name} has been deleted from the database.`,
+      `${userToEdit.first_name} ${userToEdit.last_name} has been deleted.`,
     );
     deleteUserMutation.mutate(userToEdit.id);
     handleUserToEdit({
@@ -71,7 +126,6 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
       email: "",
       phone: "",
       level: "",
-      title: "",
       company: "",
       vessel: "",
       vessel_id: 0,
@@ -82,123 +136,385 @@ const AdminEditUserForm: React.FC<AdminEditUserStaticProps> = ({
     });
   };
 
-  const onSubmit = (formData: RawUserFormData) => {
+  const onSubmit = (formData: any) => {
     const { newlyAddedProducts, newlyRemovedProducts } = compareProducts(
       userProductData,
-      formData,
+      { assignedProductChange: formData.assignedProductChange || {} } as RawUserFormData,
     );
-    const formattedUserFormData = createUserInfo(
-      formData,
-      userToEdit,
+
+    const payload = {
+      id: userToEdit.id,
+      first_name: formData.first_name || userToEdit.first_name,
+      last_name: formData.last_name || userToEdit.last_name,
+      email: formData.email || userToEdit.email,
+      phone: formData.phone || userToEdit.phone,
+      position: formData.position || (userToEdit.position
+        ? {
+            value: userToEdit.position,
+            label: positionOptions.find((p) => p.value === userToEdit.position)?.label || userToEdit.position,
+          }
+        : null),
+      company: formData.company || (userToEdit.company
+        ? { value: userToEdit.company_id, label: userToEdit.company }
+        : null),
+      vessel: formData.vessel || (userToEdit.vessel
+        ? { value: userToEdit.vessel_id, label: userToEdit.vessel }
+        : null),
+      port: formData.port || (userToEdit.port
+        ? { value: userToEdit.port_id, label: userToEdit.port }
+        : null),
       newlyAddedProducts,
       newlyRemovedProducts,
-    );
+    };
 
-    toast.success(
-      `${userToEdit?.first_name} ${userToEdit?.last_name}'s account has been updated.`,
-    );
-    updateUserInfoMutation.mutate(formattedUserFormData);
-    handleUserToEdit(Object.assign({}, userToEdit, formattedUserFormData));
+    updateUserInfoMutation.mutate(payload, {
+      onSuccess: () => {
+        toast.success(
+          `${payload.first_name} ${payload.last_name}'s account has been updated.`,
+        );
+        handleUserToEdit({
+          ...userToEdit,
+          first_name: payload.first_name,
+          last_name: payload.last_name,
+          email: payload.email,
+          phone: payload.phone,
+          company: payload.company?.label || userToEdit.company,
+          company_id:
+            typeof payload.company?.value === "number"
+              ? payload.company.value
+              : userToEdit.company_id,
+          vessel: payload.vessel?.label || userToEdit.vessel,
+          vessel_id:
+            typeof payload.vessel?.value === "number"
+              ? payload.vessel.value
+              : userToEdit.vessel_id,
+          port: payload.port?.label || userToEdit.port,
+          port_id:
+            typeof payload.port?.value === "number"
+              ? payload.port.value
+              : userToEdit.port_id,
+          position: payload.position?.value || userToEdit.position,
+        });
+      },
+    });
   };
 
+  const assignedProducts = Object.values(userProductData).filter(
+    (p) => p.assigned,
+  );
+  const unassignedProducts = Object.values(userProductData).filter(
+    (p) => !p.assigned,
+  );
+
   return (
-    <div>
-      <div className="grid grid-cols-3">
-        <div className="col-span-3">
-          <form
-            className="grid grid-cols-1 lg:grid-cols-3"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <div className="col-span-2 flex flex-col">
-              <h3 className="mb-3 self-start text-lg font-bold underline lg:text-3xl">
-                {strings["account.info"]}
-              </h3>
-              <div className="grid h-60 grid-cols-4">
-                <div className="flex flex-col items-start">
-                  {labels.map((item) => (
-                    <label
-                      htmlFor={item.value}
-                      key={item.value}
-                      className="text-lg"
-                    >
-                      {item.label}:
-                    </label>
-                  ))}
+    <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-050 p-4 shadow-sm lg:p-5">
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-xl font-semibold text-slate-900 lg:text-2xl">
+          Edit User
+        </h3>
+        <button
+          type="button"
+          onClick={() => setShowDeleteDialog(true)}
+          className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-400"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+          Delete user
+        </button>
+      </div>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+          <div className="flex flex-col gap-5 lg:col-span-3">
+            <section className="flex flex-col gap-3">
+              <h4 className={sectionHeadingStyles}>Personal</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor="admin_first_name" className={labelStyles}>
+                    First name
+                  </label>
+                  <input
+                    id="admin_first_name"
+                    {...register("first_name")}
+                    defaultValue={userToEdit.first_name}
+                    className={inputStyles}
+                  />
                 </div>
-                <div className="col-span-3 flex flex-col items-start">
-                  {labels.map((item) => (
-                    <input
-                      key={item.value}
-                      {...register(item.value as keyof RawUserFormData)}
-                      placeholder={userToEdit[item.value]}
-                      className="w-4/5 text-lg"
-                    />
-                  ))}
+                <div>
+                  <label htmlFor="admin_last_name" className={labelStyles}>
+                    Last name
+                  </label>
+                  <input
+                    id="admin_last_name"
+                    {...register("last_name")}
+                    defaultValue={userToEdit.last_name}
+                    className={inputStyles}
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label htmlFor="admin_email" className={labelStyles}>
+                    Email
+                  </label>
+                  <input
+                    id="admin_email"
+                    {...register("email")}
+                    defaultValue={userToEdit.email}
+                    type="email"
+                    className={inputStyles}
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label htmlFor="admin_phone" className={labelStyles}>
+                    Phone
+                  </label>
+                  <Controller
+                    name="phone"
+                    control={control}
+                    defaultValue={userToEdit.phone}
+                    render={({ field }) => (
+                      <PhoneInput
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
                 </div>
               </div>
-            </div>
-            <div className="col-span-1 flex flex-col">
-              <h3 className="mb-3 self-start text-lg font-bold underline lg:text-3xl">
-                {strings["account.assigned.products"]}
-              </h3>
-              <div className="col-span-3 flex flex-col items-start">
-                {Object.values(userProductData).map((product) => {
-                  return (
-                    <div key={product.productId}>
+            </section>
+
+            <section className="flex flex-col gap-3 border-t border-slate-200 pt-5">
+              <h4 className={sectionHeadingStyles}>Work</h4>
+              <div className="flex flex-col gap-3">
+                <div>
+                  <label className={labelStyles}>Position</label>
+                  <Controller
+                    name="position"
+                    control={control}
+                    defaultValue={
+                      userToEdit.position
+                        ? {
+                            value: userToEdit.position,
+                            label:
+                              positionOptions.find(
+                                (p) => p.value === userToEdit.position,
+                              )?.label || userToEdit.position,
+                          }
+                        : null
+                    }
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={positionOptions}
+                        placeholder="Select position"
+                        styles={selectStyles}
+                      />
+                    )}
+                  />
+                </div>
+                <div>
+                  <label className={labelStyles}>Company</label>
+                  <Controller
+                    name="company"
+                    control={control}
+                    defaultValue={
+                      userToEdit.company
+                        ? {
+                            value: userToEdit.company_id,
+                            label: userToEdit.company,
+                          }
+                        : null
+                    }
+                    render={({ field }) => (
+                      <CreatableSelect
+                        {...field}
+                        placeholder="Select or create company"
+                        isClearable
+                        options={companies}
+                        isLoading={optionsLoading}
+                        isValidNewOption={(inputValue) =>
+                          companies.filter((option: TCreateableSelectOption) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(inputValue.toLowerCase()),
+                          ).length === 0
+                        }
+                        styles={selectStyles}
+                      />
+                    )}
+                  />
+                </div>
+                <div>
+                  <label className={labelStyles}>Vessel</label>
+                  <Controller
+                    name="vessel"
+                    control={control}
+                    defaultValue={
+                      userToEdit.vessel
+                        ? {
+                            value: userToEdit.vessel_id,
+                            label: userToEdit.vessel,
+                          }
+                        : null
+                    }
+                    render={({ field }) => (
+                      <CreatableSelect
+                        {...field}
+                        placeholder="Select or create vessel"
+                        isClearable
+                        options={vessels}
+                        isLoading={optionsLoading}
+                        isValidNewOption={(inputValue) =>
+                          vessels.filter((option: TCreateableSelectOption) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(inputValue.toLowerCase()),
+                          ).length === 0
+                        }
+                        styles={selectStyles}
+                      />
+                    )}
+                  />
+                </div>
+                <div>
+                  <label className={labelStyles}>Port</label>
+                  <Controller
+                    name="port"
+                    control={control}
+                    defaultValue={
+                      userToEdit.port
+                        ? { value: userToEdit.port_id, label: userToEdit.port }
+                        : null
+                    }
+                    render={({ field }) => (
+                      <CreatableSelect
+                        {...field}
+                        placeholder="Select or create port"
+                        isClearable
+                        options={ports}
+                        isLoading={optionsLoading}
+                        isValidNewOption={(inputValue) =>
+                          ports.filter((option: TCreateableSelectOption) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(inputValue.toLowerCase()),
+                          ).length === 0
+                        }
+                        styles={selectStyles}
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div className="flex flex-col gap-5 border-t border-slate-200 pt-5 lg:col-span-2 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+            <section className="flex flex-col gap-3">
+              <h4 className={sectionHeadingStyles}>Assigned Products</h4>
+              <div className="flex flex-col gap-2">
+                {assignedProducts.length > 0 && (
+                  <div className="flex flex-col gap-1.5">
+                    {assignedProducts.map((product) => (
                       <label
-                        htmlFor={product.productId}
-                        className="text-md italic text-slate-700 lg:text-lg"
+                        key={product.productId}
+                        className="flex cursor-pointer items-center gap-2.5 rounded-md border border-green-200 bg-green-050 px-3 py-2 text-sm transition-colors hover:bg-green-100"
                       >
                         <input
                           type="checkbox"
                           id={product.productId}
-                          defaultChecked={product.assigned}
+                          defaultChecked={true}
                           {...register(
                             `assignedProductChange.${product.productId}`,
                           )}
-                          className="accent-orange-500"
+                          className="h-4 w-4 accent-orange-500"
                         />
-                        {` ${product.productName}`}
+                        <span className="font-medium text-slate-800">
+                          {product.productName}
+                        </span>
                       </label>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="col-span-2 mt-3 flex items-start gap-1 lg:mt-0">
-              <p
-                className="w-36 rounded border border-blue-500 bg-transparent px-3 py-1 font-semibold text-blue-700 hover:border-transparent hover:bg-blue-500 hover:text-white"
-                onClick={() => toggleEditMode(!editMode)}
-              >
-                {strings["common.cancel"]}
-              </p>
-              <input
-                className="w-36 rounded border border-slate-500 bg-slate-700 px-3 py-1 font-semibold text-slate-050 hover:border-transparent hover:bg-slate-600 hover:text-slate-100"
-                type="submit"
-                value="Save Changes"
-              />
-              <div>
-                {confirmDelete ? (
-                  <p
-                    className="w-36 rounded bg-orange-050 px-3 py-1 font-semibold text-slate-950 hover:bg-orange-200 hover:text-orange-600"
-                    onClick={() => handleDeleteUser()}
-                  >
-                    {strings["common.confirm.delete"]}
-                  </p>
-                ) : (
-                  <p
-                    className="w-36 rounded border border-slate-400 bg-slate-050 px-3 py-1 font-semibold text-orange-500 hover:border-slate-950 hover:bg-orange-100 hover:text-orange-700"
-                    onClick={() => toggleConfirmDelete()}
-                  >
-                    {strings["common.delete"]}
-                  </p>
+                    ))}
+                  </div>
+                )}
+                {unassignedProducts.length > 0 && (
+                  <div className="flex flex-col gap-1.5">
+                    {assignedProducts.length > 0 && (
+                      <div className="my-1 border-t border-slate-200" />
+                    )}
+                    {unassignedProducts.map((product) => (
+                      <label
+                        key={product.productId}
+                        className="flex cursor-pointer items-center gap-2.5 rounded-md border border-slate-200 bg-slate-050 px-3 py-2 text-sm transition-colors hover:bg-slate-100"
+                      >
+                        <input
+                          type="checkbox"
+                          id={product.productId}
+                          defaultChecked={false}
+                          {...register(
+                            `assignedProductChange.${product.productId}`,
+                          )}
+                          className="h-4 w-4 accent-orange-500"
+                        />
+                        <span className="text-slate-600">
+                          {product.productName}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
                 )}
               </div>
-            </div>
-            <div></div>
-          </form>
+            </section>
+          </div>
         </div>
-      </div>
+
+        <div className="mt-6 flex items-center justify-end gap-2 border-t border-slate-200 pt-4">
+          <button
+            type="button"
+            onClick={() => toggleEditMode(!editMode)}
+            className="rounded-md border border-slate-300 bg-transparent px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-400"
+          >
+            {strings["common.cancel"]}
+          </button>
+          <button
+            type="submit"
+            className="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          >
+            Save Changes
+          </button>
+        </div>
+      </form>
+
+      <Dialog
+        open={showDeleteDialog}
+        onOpenChange={(open) => setShowDeleteDialog(open)}
+      >
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete user</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-slate-600">
+            Are you sure you want to delete{" "}
+            <span className="font-semibold text-slate-900">
+              {userToEdit.first_name} {userToEdit.last_name}
+            </span>
+            ? This action cannot be undone.
+          </p>
+          <div className="mt-4 flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setShowDeleteDialog(false)}
+              className="rounded-md border border-slate-300 bg-transparent px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleDeleteUser}
+              className="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
+            >
+              Delete
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

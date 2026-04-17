@@ -8,6 +8,11 @@ import { UserType } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import { QueryKeys } from "./utils/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
+import PositionBadge from "./components/PositionBadge.tsx";
+import { formatPhone } from "./utils/formatPhone.ts";
+
+const capitalizeFirst = (s: string | undefined | null) =>
+  s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
 
 type AdminTableProps = {
   handleUserToEdit: (user: UserType) => void;
@@ -56,6 +61,7 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
     {
       headerName: "Name / Phone",
       field: "first_name",
+      flex: 1.3,
       cellRenderer: threeValuesCellRenderer,
       cellRendererParams: {
         field1: `first_name`,
@@ -66,15 +72,13 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
     {
       headerName: "Position / Vessel",
       field: "position",
-      cellRenderer: TwoValuesCellRenderer,
-      cellRendererParams: {
-        field1: "position",
-        field2: "vessel",
-      },
+      flex: 0.9,
+      cellRenderer: PositionVesselCellRenderer,
     },
     {
       headerName: "Company / Port",
       field: "company",
+      flex: 1,
       cellRenderer: TwoValuesCellRenderer,
       cellRendererParams: {
         field1: "company",
@@ -94,12 +98,19 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
     const field2 = params.colDef.cellRendererParams.field2;
     const field3 = params.colDef.cellRendererParams.field3;
 
+    const displayName =
+      `${capitalizeFirst(params.data[field1])} ${capitalizeFirst(params.data[field2])}`.trim();
+    const displayPhone =
+      field3 === "phone"
+        ? formatPhone(params.data[field3])
+        : params.data[field3];
+
     return (
       <div className="flex flex-col leading-7">
-        <span className="text-xs font-semibold lg:text-xl">
-          {`${params.data[field1]} ${params.data[field2]}`}
+        <span className="text-xs font-semibold lg:text-xl">{displayName}</span>
+        <span className="text-xs italic text-slate-500 lg:text-sm">
+          {displayPhone}
         </span>
-        <span className="text-xs italic lg:text-lg">{params.data[field3]}</span>
       </div>
     );
   }
@@ -124,6 +135,15 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
     );
   }
 
+  function PositionVesselCellRenderer(params: { data: UserType }) {
+    return (
+      <div className="flex flex-col items-start justify-center gap-1 leading-7">
+        <PositionBadge value={params.data.position} />
+        <span className="text-xs italic lg:text-lg">{params.data.vessel}</span>
+      </div>
+    );
+  }
+
   const onSelectionChanged = (e: { api: any }) => {
     const selectedRowData = e.api.getSelectedNodes()[0].data;
     handleUserToEdit(selectedRowData);
@@ -138,28 +158,26 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
   if (isError)
     return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
-  console.log("data: ", data);
-
   return (
     <div className="ag-theme-quartz" style={{ height: 600 }}>
       <div className="example-wrapper">
-        <div className="flex items-baseline rounded bg-yellow-200 text-lg">
+        <div className="mb-3 flex items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-4 py-2">
           <label
             htmlFor="filter-text-box"
-            className="mx-4 text-lg font-bold text-slate-950"
+            className="text-sm font-semibold text-slate-700"
           >
-            {`Filter Search: `}
+            Filter:
           </label>
           <input
             type="text"
             id="filter-text-box"
-            placeholder="Filter..."
+            placeholder="Search users..."
             onInput={onFilterTextBoxChanged}
-            className="border-2 border-indigo-100"
+            className="flex-1 rounded border border-slate-300 bg-white px-3 py-1.5 text-sm focus:border-slate-500 focus:outline-none"
           />
         </div>
         <div
-          className="border-x-2 border-yellow-200 shadow-xl"
+          className="rounded-md border border-slate-200 shadow-sm"
           style={{ height: 500, width: "100%" }}
         >
           <AgGridReact

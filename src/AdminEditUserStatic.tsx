@@ -1,3 +1,4 @@
+import { Pencil } from "lucide-react";
 import UserInfoStatic from "./UserInfoStatic.jsx";
 import UserProductsStatic from "./UserProductsStatic.jsx";
 import { UserType, UserProducts } from "./types/types.ts";
@@ -17,29 +18,29 @@ const AdminEditUserStatic: React.FC<AdminEditUserStaticProps> = ({
   data,
 }) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3">
-      <div className="col-span-2 flex flex-col">
-        <h3 className="mb-3 self-start text-lg font-bold text-slate-900 underline lg:text-3xl">
+    <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-050 p-4 shadow-sm lg:p-5">
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-xl font-semibold text-slate-900 lg:text-2xl">
           {strings["account.info"]}
         </h3>
-        <UserInfoStatic userInfoToEdit={user} />
-      </div>
-      <div className="col-span-1 flex flex-col">
-        <h3 className="mb-3 self-start text-lg font-bold text-slate-900 underline lg:text-3xl">
-          {strings["account.assigned.products"]}
-        </h3>
-        <UserProductsStatic userProductData={data} />
-      </div>
-      <div className="col-span-2 mt-3 flex items-start lg:mt-0">
         <button
-          className="h-9 w-24 rounded border border-slate-500 bg-slate-050 font-semibold text-slate-950 
-hover:border-transparent hover:bg-slate-600 hover:text-slate-050
-disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500 disabled:opacity-50 
-disabled:hover:border-slate-500 disabled:hover:bg-slate-200 disabled:hover:text-slate-500"
           onClick={() => toggleEditMode(!editMode)}
+          aria-label="Edit user"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400"
         >
-          {strings["common.edit"]}
+          <Pencil className="h-4 w-4" />
         </button>
+      </div>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+        <div className="lg:col-span-3">
+          <UserInfoStatic userInfoToEdit={user} />
+        </div>
+        <div className="lg:col-span-2">
+          <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">
+            Assigned Products
+          </h4>
+          <UserProductsStatic userProductData={data} />
+        </div>
       </div>
     </div>
   );

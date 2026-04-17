@@ -2,6 +2,8 @@
 
 Full-stack maritime crew training platform — React frontend, Express API, PostgreSQL database.
 
+For product, domain, and business context (who the users are, how the training flow works, what the product codes mean), read [CONTEXT.md](./CONTEXT.md).
+
 ## Tech Stack
 - **Frontend:** React 18 + TypeScript, Vite, Tailwind CSS, React Query, React Hook Form + Zod, AG Grid, Radix UI (shadcn-style)
 - **Backend:** Express (Node.js, ES modules), pg-promise
@@ -46,4 +48,4 @@ Full-stack maritime crew training platform — React frontend, Express API, Post
 
 ## Environment
 - Requires `.env` with: database URL, Auth0 credentials, Twilio credentials, SendGrid API key
-- Deployed to Heroku (see `Procfile` and `static.json`)
+- Deployed to Render.com

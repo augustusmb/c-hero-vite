@@ -23,7 +23,6 @@ const AdminPage = () => {
     email: "",
     phone: "",
     level: "",
-    title: "",
     company: "",
     vessel_id: 0,
     company_id: 0,
@@ -45,7 +44,12 @@ const AdminPage = () => {
     queryFn: getFullUserProductProgressMap,
   });
 
-  if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
+  if (isLoading)
+    return (
+      <div className="flex justify-center py-10">
+        <BeatLoader color="#123abc" loading={true} size={15} />
+      </div>
+    );
   if (isError)
     return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
@@ -61,8 +65,8 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="grid grid-cols-3">
-      <div className="col-span-3 mb-10">
+    <div className="mx-auto flex max-w-6xl flex-col gap-6 pb-10">
+      <div>
         {!editMode ? (
           <AdminEditUserStatic
             userInfo={userToEdit}
@@ -80,7 +84,7 @@ const AdminPage = () => {
           />
         )}
       </div>
-      <div className="col-span-3">
+      <div>
         <AdminUserInfoTable handleUserToEdit={handleUserToEdit} />
       </div>
     </div>

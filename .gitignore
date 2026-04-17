@@ -26,3 +26,4 @@ dist-ssr
 *.env
 *.auth0config
 *.palette-19.json
+SESSION_HANDOFF.md

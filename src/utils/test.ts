@@ -1,38 +1,47 @@
 import { TestQuestion } from "../types/types";
 
-export function randomizeArray(array: [], level: string) {
-  if (level === "0") {
-    return array.sort((a: TestQuestion, b: TestQuestion) => a.id - b.id);
-  }
+const ADMIN_LEVEL = "0";
+const ALL_OF_THE_ABOVE = "All of the above";
 
-  return array.sort(() => Math.random() - 0.5);
+export function shuffle<T>(items: readonly T[]): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
 }
 
-export function prepareAnswerOptions(question: TestQuestion) {
-  let {
+export function randomizeArray(
+  questions: readonly TestQuestion[],
+  level: string,
+): TestQuestion[] {
+  if (level === ADMIN_LEVEL) {
+    return [...questions].sort((a, b) => a.id - b.id);
+  }
+  return shuffle(questions);
+}
+
+export function prepareAnswerOptions(question: TestQuestion): string[] {
+  const {
     correct_answer,
     incorrect_answer1,
     incorrect_answer2,
     incorrect_answer3,
   } = question;
-  let answers = [
+
+  const candidates = [
     correct_answer,
     incorrect_answer1,
     incorrect_answer2,
     incorrect_answer3,
-  ];
-  let answerOptions = answers
-    .filter((answer) => answer)
-    .sort(() => Math.random() - 0.5);
+  ].filter(Boolean);
 
-  answerOptions.forEach((item, idx) => {
-    if (item === "All of the above") {
-      answerOptions.splice(idx, 1);
-      answerOptions.push("All of the above");
-    }
-  });
+  const hasAllOfTheAbove = candidates.includes(ALL_OF_THE_ABOVE);
+  const shufflable = candidates.filter((a) => a !== ALL_OF_THE_ABOVE);
+  const shuffled = shuffle(shufflable);
 
-  return answerOptions;
+  return hasAllOfTheAbove ? [...shuffled, ALL_OF_THE_ABOVE] : shuffled;
 }
 
 type BlankAnswers = {
@@ -44,8 +53,8 @@ type BlankAnswers = {
   };
 };
 
-export function prepareBlankAnswers(questions: TestQuestion[]) {
-  let blankAnswers: BlankAnswers = {};
+export function prepareBlankAnswers(questions: TestQuestion[]): BlankAnswers {
+  const blankAnswers: BlankAnswers = {};
   questions.forEach((question, slotIndex) => {
     blankAnswers[question.id] = {
       title: question.title,

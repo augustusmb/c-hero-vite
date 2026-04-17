@@ -1,7 +1,6 @@
 export type UpdatedUserInfoProducts = {
   name: string
   email: string
-  title: string
   company: string
   vessel: string
   port: string
@@ -16,7 +15,6 @@ export type User = {
   email: string
   phone: string
   level: string
-  title: string
   company: string
   vessel: string
   port:  string

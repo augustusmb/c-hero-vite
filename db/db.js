@@ -10,10 +10,16 @@ const env = loadEnv(
   
   const pgp = pgPromise({});
 
+const connectionString = env.VITE_DATABASE_URL;
+if (!connectionString) {
+  throw new Error('VITE_DATABASE_URL is not set. Check your .env file.');
+}
+const isLocal = connectionString.includes('localhost');
+
 const config = {
-    connectionString: env.VITE_DATABASE_URL,
+    connectionString,
     max: 30,
-    ssl: { rejectUnauthorized: false }
+    ssl: isLocal ? false : { rejectUnauthorized: false }
   }
 
 

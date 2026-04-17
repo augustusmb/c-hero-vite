@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Pencil } from "lucide-react";
 import UserInfoStatic from "./UserInfoStatic.jsx";
 import UserInfoEdit from "./UserInfoEdit.jsx";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -23,36 +24,47 @@ const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
   const [editMode, setEditMode] = useState(false);
   const [userInfoToEdit, setUserToEdit] = useState(userInfo);
 
-  if (isAuthLoading || !user) {
-    return <div>Login to view your account info</div>;
-  }
-
   const { data, isLoading, error } = useQuery({
     queryKey: [QueryKeys.FORM_OPTIONS],
     queryFn: fetchOptions,
   });
+
+  if (isAuthLoading || !user) {
+    return (
+      <Card>
+        <SectionHeader />
+        <p className="py-6 text-center text-slate-600">
+          Login to view your account info
+        </p>
+      </Card>
+    );
+  }
 
   const handleUserToEdit = (user: UserType) => {
     setUserToEdit(user);
     setEditMode(false);
   };
 
-  const toggleEditMode = () => {
-    setEditMode(!editMode);
-  };
+  const toggleEditMode = () => setEditMode(!editMode);
 
-  // Add error handling
   if (error) {
     return (
-      <div className="text-red-500">
-        Error loading form options: {error.message}
-      </div>
+      <Card>
+        <SectionHeader />
+        <p className="py-6 text-center text-red-600">
+          Error loading form options: {error.message}
+        </p>
+      </Card>
     );
   }
 
-  // Check if options are still loading
   if (isLoading) {
-    return <div className="text-slate-600">Loading form options...</div>;
+    return (
+      <Card>
+        <SectionHeader />
+        <UserInfoSkeleton />
+      </Card>
+    );
   }
 
   const companies =
@@ -72,41 +84,67 @@ const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
     })) || [];
 
   return (
-    <div className="col-span-1">
-      <div className="flex flex-col">
-        <h4 className="mb-2 self-start text-xl font-semibold text-slate-900 underline lg:text-3xl">
-          Account Info
-        </h4>
-        <div>
-          {!editMode ? (
-            <>
-              <UserInfoStatic userInfoToEdit={userInfoToEdit} />
-              <div className="mb-8 flex">
-                <button
-                  className="h-9 w-24 rounded border border-slate-500 bg-slate-050 font-semibold text-slate-950 
-  hover:border-transparent hover:bg-slate-600 hover:text-slate-050
-  disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500 disabled:opacity-50 
-  disabled:hover:border-slate-500 disabled:hover:bg-slate-200 disabled:hover:text-slate-500"
-                  onClick={() => toggleEditMode()}
-                >
-                  Edit
-                </button>
-              </div>
-            </>
-          ) : (
-            <UserInfoEdit
-              userInfoToEdit={userInfoToEdit}
-              handleUserToEdit={handleUserToEdit}
-              toggleEditMode={toggleEditMode}
-              companies={companies}
-              ports={ports}
-              vessels={vessels}
-            />
-          )}
-        </div>
-      </div>
-    </div>
+    <Card>
+      <SectionHeader
+        action={
+          !editMode ? (
+            <button
+              onClick={toggleEditMode}
+              aria-label="Edit account info"
+              className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400"
+            >
+              <Pencil className="h-4 w-4" />
+            </button>
+          ) : null
+        }
+      />
+      {!editMode ? (
+        <UserInfoStatic userInfoToEdit={userInfoToEdit} />
+      ) : (
+        <UserInfoEdit
+          userInfoToEdit={userInfoToEdit}
+          handleUserToEdit={handleUserToEdit}
+          toggleEditMode={toggleEditMode}
+          companies={companies}
+          ports={ports}
+          vessels={vessels}
+        />
+      )}
+    </Card>
   );
 };
+
+const Card = ({ children }: { children: React.ReactNode }) => (
+  <div className="mb-6 overflow-hidden rounded-lg border border-slate-200 bg-slate-050 p-4 shadow-sm lg:p-5">
+    {children}
+  </div>
+);
+
+const SectionHeader = ({ action }: { action?: React.ReactNode }) => (
+  <div className="mb-4 flex items-center justify-between">
+    <h4 className="text-xl font-semibold text-slate-900 lg:text-2xl">
+      Account Info
+    </h4>
+    {action}
+  </div>
+);
+
+const UserInfoSkeleton = () => (
+  <div className="flex flex-col gap-4">
+    <div>
+      <div className="h-7 w-48 animate-pulse rounded bg-slate-200 lg:h-8" />
+      <div className="mt-2 h-5 w-20 animate-pulse rounded-full bg-slate-200" />
+    </div>
+    <div className="flex flex-col gap-2 border-t border-slate-200 pt-4">
+      <div className="h-5 w-3/4 animate-pulse rounded bg-slate-100" />
+      <div className="h-5 w-1/2 animate-pulse rounded bg-slate-100" />
+    </div>
+    <div className="flex flex-col gap-2 border-t border-slate-200 pt-4">
+      <div className="h-5 w-2/3 animate-pulse rounded bg-slate-100" />
+      <div className="h-5 w-1/2 animate-pulse rounded bg-slate-100" />
+      <div className="h-5 w-1/3 animate-pulse rounded bg-slate-100" />
+    </div>
+  </div>
+);
 
 export default UserInfoSection;

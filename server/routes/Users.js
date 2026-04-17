@@ -145,11 +145,11 @@ export async function updateUserInfo(req, res) {
 export async function updateUserInfoAndProducts(req, res) {
   const {
     id,
-    name,
     first_name,
     last_name,
     email,
-    title,
+    phone,
+    position,
     company,
     vessel,
     port,
@@ -157,39 +157,60 @@ export async function updateUserInfoAndProducts(req, res) {
     newlyRemovedProducts,
   } = req.body.params;
 
-  let insertQuery = updateUserProducts(
-    Object.keys(newlyAddedProducts),
-    id,
-    newlyAddedProducts,
-  );
-  let deleteQuery = deleteUserSpecificClasses(
-    Object.keys(newlyRemovedProducts),
-    id,
-  );
+  try {
+    await db.tx(async (t) => {
+      // Resolve company/vessel/port IDs from react-select objects
+      const companyId = company?.__isNew__
+        ? await t.one(queries.insertNewCompany, { name: company.label }, (row) => row.id)
+        : company?.value ?? null;
 
-  await Promise.all([
-    db.none(insertQuery),
-    db.none(deleteQuery),
-    db.none(queries.updateUserInfo, {
-      id,
-      name,
-      first_name,
-      last_name,
-      email,
-      title,
-      company,
-      vessel,
-      port,
-    }),
-  ])
-    .then(() => {
-      console.log("All SQL commands executed");
-      res.status(200).json({ message: "User info updated successfully" });
-    })
-    .catch((err) => {
-      console.log("Error updating user products: ", err);
-      res.status(500).json({ message: "Error updating user info" });
+      const portId = port?.__isNew__
+        ? await t.one(queries.insertNewPort, { name: port.label }, (row) => row.id)
+        : port?.value ?? null;
+
+      const vesselId = vessel?.__isNew__
+        ? await t.one(queries.insertNewVessel, { name: vessel.label }, (row) => row.id)
+        : vessel?.value ?? null;
+
+      // Update user info with resolved IDs
+      await t.none(queries.updateUserInfo, {
+        id,
+        first_name,
+        last_name,
+        email,
+        phone,
+        position_type: position?.value ?? null,
+        company_id: companyId,
+        vessel_id: vesselId,
+        port_id: portId,
+      });
+
+      // Handle product assignment changes
+      const insertQuery = updateUserProducts(
+        Object.keys(newlyAddedProducts),
+        id,
+        newlyAddedProducts,
+      );
+      const deleteQuery = deleteUserSpecificClasses(
+        Object.keys(newlyRemovedProducts),
+        id,
+      );
+
+      await t.none(insertQuery);
+      await t.none(deleteQuery);
     });
+
+    res.status(200).json({ message: "User info updated successfully" });
+  } catch (error) {
+    if (error.code === "23505") {
+      res.status(409).json({ success: false, error: "A record with this information already exists" });
+    } else if (error.code === "23503") {
+      res.status(400).json({ success: false, error: "Invalid reference to related data" });
+    } else {
+      console.error("Error updating user info and products:", error);
+      res.status(500).json({ success: false, message: "Error updating user info" });
+    }
+  }
 }
 
 function updateUserProducts(products, user_id) {

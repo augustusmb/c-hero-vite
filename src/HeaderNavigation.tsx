@@ -1,28 +1,40 @@
-import eTrainingIcon from "./assets/c-hero-etraining-logo-final.png";
+import { Link } from "react-router-dom";
+import { Home, LifeBuoy } from "lucide-react";
 import AuthenticationButton from "./AuthenticationButton.tsx";
 import NavBarDropdown from "./NavBarDropdown.tsx";
-import { Link } from "react-router-dom";
-import { strings } from "./utils/strings.ts";
 
 const HeaderNavigation = () => {
   return (
-    <div className="grid grid-cols-3 border-b-4 border-red-400 bg-slate-050 shadow-lg lg:h-28">
-      <div>
-        <Link to="/">
-          <img src={eTrainingIcon} className="m-1 h-14 lg:m-4 lg:h-20" />
-        </Link>
-      </div>
-      <div className="col-span-2 flex flex-wrap items-center justify-around px-1">
+    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-900 bg-slate-800 px-4 py-3 shadow-md lg:px-8 lg:py-4">
+      <Link
+        to="/"
+        aria-label="C-Hero eTraining home"
+        className="flex items-center gap-2 text-slate-050 transition-opacity hover:opacity-80"
+      >
+        <LifeBuoy
+          className="h-7 w-7 text-orange-400 lg:h-8 lg:w-8"
+          strokeWidth={2}
+        />
+        <span className="text-lg font-bold tracking-tight lg:text-xl">
+          C-Hero eTraining
+        </span>
+      </Link>
+      <div className="flex items-center gap-3 lg:gap-4">
         <Link
           to="/"
-          className="rounded-lg bg-slate-050 p-1 text-xl font-bold text-slate-800 hover:bg-slate-200 lg:p-6 lg:text-3xl"
+          aria-label="Home"
+          title="Home"
+          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-slate-050 transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 lg:px-4 lg:py-2 lg:text-base"
         >
-          {strings["common.home"]}
+          <Home className="h-4 w-4" aria-hidden="true" />
+          <span className="hidden sm:inline">Home</span>
         </Link>
         <NavBarDropdown />
-        <AuthenticationButton variant="header" />
+        <div className="flex min-w-[88px] items-center justify-end lg:min-w-[100px]">
+          <AuthenticationButton variant="header" />
+        </div>
       </div>
-    </div>
+    </header>
   );
 };
 

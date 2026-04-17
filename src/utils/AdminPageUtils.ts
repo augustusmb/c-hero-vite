@@ -42,7 +42,6 @@ export function createUserInfo(
     first_name: formData.first_name || userToEdit.first_name,
     last_name: formData.last_name || userToEdit.last_name,
     email: formData.email || userToEdit.email,
-    title: formData.title || userToEdit.title,
     company: formData.company || userToEdit.company,
     vessel: formData.vessel || userToEdit.vessel,
     port: formData.port || userToEdit.port,

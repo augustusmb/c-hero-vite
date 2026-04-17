@@ -10,6 +10,7 @@ import CrewProgressBarCellRenderer from "./tableCellRenderers/CrewProgressBarCel
 import ClassProgressDatesCellRenderer, {
   getDateFormat,
 } from "./tableCellRenderers/ClassProgressDatesCellRenderer.tsx";
+import PositionBadge from "./components/PositionBadge.tsx";
 import { QueryKeys } from "./utils/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
 
@@ -44,7 +45,6 @@ const DashboardProgressSection = () => {
     enabled: !!vessel_id,
   });
 
-  if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
   if (isError)
     return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
@@ -63,20 +63,36 @@ const DashboardProgressSection = () => {
           width: 200,
         },
         { headerName: "Port", field: "port" },
-        { headerName: "Position", field: "position" },
+        {
+          headerName: "Position",
+          field: "position",
+          cellRenderer: (params: { value?: string }) => (
+            <PositionBadge value={params.value} />
+          ),
+        },
         {
           headerName: "Date Started",
           valueGetter: (params: { data: { date_signed_up: Date } }) => {
-            return getDateFormat(params.data.date_signed_up);
+            return getDateFormat(params.data.date_signed_up) ?? "—";
           },
         },
         {
           headerName: "MOB Equipment",
+          width: 135,
           cellRenderer: () => {
+            const Badge = ({ label }: { label: string }) => (
+              <span className="inline-flex items-center rounded bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700">
+                {label}
+              </span>
+            );
             return (
-              <div>
-                <div>{vesselProduct1?.toUpperCase() || "N/A"}</div>
-                <div>{vesselProduct2?.toUpperCase() || "N/A"}</div>
+              <div className="flex h-full flex-col">
+                <div className="flex flex-1 items-center border-b border-slate-100">
+                  <Badge label={vesselProduct1?.toUpperCase() || "N/A"} />
+                </div>
+                <div className="flex flex-1 items-center">
+                  <Badge label={vesselProduct2?.toUpperCase() || "N/A"} />
+                </div>
               </div>
             );
           },
@@ -86,6 +102,8 @@ const DashboardProgressSection = () => {
           children: [
             {
               headerName: "Setup",
+              flex: 1,
+              minWidth: 100,
               cellRenderer: ClassProgressDatesCellRenderer(
                 "a",
                 vesselProduct1,
@@ -94,6 +112,8 @@ const DashboardProgressSection = () => {
             },
             {
               headerName: "Operations",
+              flex: 1,
+              minWidth: 100,
               cellRenderer: ClassProgressDatesCellRenderer(
                 "b",
                 vesselProduct1,
@@ -102,6 +122,8 @@ const DashboardProgressSection = () => {
             },
             {
               headerName: "Inspection",
+              flex: 1,
+              minWidth: 100,
               cellRenderer: ClassProgressDatesCellRenderer(
                 "c",
                 vesselProduct1,
@@ -110,6 +132,8 @@ const DashboardProgressSection = () => {
             },
             {
               headerName: "Drill",
+              flex: 1,
+              minWidth: 100,
               cellRenderer: ClassProgressDatesCellRenderer(
                 "d",
                 vesselProduct1,
@@ -123,23 +147,26 @@ const DashboardProgressSection = () => {
   ];
 
   return (
-    <div
-      className="ag-theme-quartz mb-10" // applying the grid theme
-      style={{ height: 500, width: "100%" }} // the grid will fill the size of the parent container
-    >
-      <h4 className="mt-8 self-start text-xl font-semibold text-slate-900 underline lg:text-3xl">
+    <div className="mb-10 overflow-hidden rounded-lg border border-slate-200 bg-slate-050 p-4 shadow-sm lg:p-5">
+      <h4 className="mb-4 text-xl font-semibold text-slate-900 lg:text-2xl">
         {strings["dashboard.title"]}
-      </h4>{" "}
-      <div className="shadow-xl" style={{ height: 500, width: "100%" }}>
-        <AgGridReact
-          getRowStyle={getRowStyle}
-          ref={gridRef}
-          rowData={data?.data.usersWithProductProgressMaps}
-          columnDefs={colDefs}
-          defaultColDef={{ cellStyle: { textAlign: "left" }, width: 125 }}
-          rowHeight={82}
-        />
-      </div>
+      </h4>
+      {isLoading ? (
+        <div className="flex justify-center py-10">
+          <BeatLoader color="#123abc" loading={true} size={15} />
+        </div>
+      ) : (
+        <div className="ag-theme-quartz h-[400px] w-full sm:h-[500px] lg:h-[600px]">
+          <AgGridReact
+            getRowStyle={getRowStyle}
+            ref={gridRef}
+            rowData={data?.data.usersWithProductProgressMaps}
+            columnDefs={colDefs}
+            defaultColDef={{ cellStyle: { textAlign: "left" }, width: 125 }}
+            rowHeight={82}
+          />
+        </div>
+      )}
     </div>
   );
 };

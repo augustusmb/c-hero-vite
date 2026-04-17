@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { pdfjs, Document, Page } from "react-pdf";
+import BeatLoader from "react-spinners/BeatLoader";
+import { ClipboardCheck, ChevronRight } from "lucide-react";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import class_3b_a from "./assets/c-hero-classes/3b/3b_a.pdf";
@@ -120,7 +122,9 @@ const PDFRenderPage = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
 
   const [numPages, setNumpages] = useState<number | null>(1);
-  const [panelWidth, setPanelWidth] = useState(500);
+  const [panelWidth, setPanelWidth] = useState(0);
+  const [isPdfLoaded, setIsPdfLoaded] = useState(false);
+  const mainPanelRef = useRef<HTMLDivElement>(null);
 
   let { classId, safety } = useParams();
 
@@ -145,18 +149,36 @@ const PDFRenderPage = () => {
 
   const onPDFSuccess = ({ numPages }: { numPages: number }) => {
     setNumpages(numPages);
+    setIsPdfLoaded(true);
   };
 
   useEffect(() => {
-    setPanelWidth(document.getElementById("mainPanel")?.offsetWidth ?? 0);
+    setIsPdfLoaded(false);
+  }, [pdfKey]);
+
+  useEffect(() => {
+    const el = mainPanelRef.current;
+    if (!el) return;
+    setPanelWidth(el.offsetWidth);
+    const observer = new ResizeObserver((entries) => {
+      const width = entries[0]?.contentRect.width;
+      if (width) setPanelWidth(width);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div id="mainPanel" className="pb-8">
+    <div id="mainPanel" ref={mainPanelRef} className="pb-8">
       <Document
         file={pdfMap[pdfKey as keyof typeof pdfMap]}
         onLoadSuccess={onPDFSuccess}
         onLoadError={console.error}
+        loading={
+          <div className="flex justify-center py-20">
+            <BeatLoader color="#123abc" loading={true} size={15} />
+          </div>
+        }
       >
         {Array.from(new Array(numPages), (_el, index) => (
           <div key={index}>
@@ -171,18 +193,21 @@ const PDFRenderPage = () => {
           </div>
         ))}
       </Document>
-      {classId ? (
-        <div className="m-10">
+      {classId && isPdfLoaded ? (
+        <div className="mt-8 flex justify-center border-t border-slate-200 pt-6">
           <Link
             to={`/test/${classId}`}
-            className="drop-shadow-orange-900 rounded bg-orange-300 px-2 py-2 text-lg font-bold text-slate-950 drop-shadow-2xl hover:bg-orange-500 hover:text-slate-050 lg:text-2xl"
+            className="group inline-flex items-center gap-2 rounded-md bg-orange-500 px-5 py-2.5 text-base font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
           >
+            <ClipboardCheck className="h-5 w-5" aria-hidden="true" />
             Take the test
+            <ChevronRight
+              className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
           </Link>
         </div>
-      ) : (
-        ""
-      )}
+      ) : null}
     </div>
   );
 };

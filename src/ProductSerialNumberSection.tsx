@@ -138,9 +138,9 @@ const ProductSerialNumberSection = () => {
   const { isLoading, isError, data, error } = useQuery({
     queryKey: [QueryKeys.LIST_SERIAL_NUMBERS, id],
     queryFn: getSerialNumbers,
+    enabled: Boolean(id),
   });
 
-  if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
   if (isError)
     return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
@@ -154,29 +154,33 @@ const ProductSerialNumberSection = () => {
   };
 
   return (
-    <div className="flex w-full flex-col rounded-md pb-4 lg:pr-4">
-      <h3 className="self-start text-xl font-semibold text-slate-900 underline lg:text-3xl">
+    <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-050 p-4 shadow-sm lg:p-5">
+      <h4 className="mb-4 text-xl font-semibold text-slate-900 lg:text-2xl">
         {strings["serial.number.section.header"]}
-      </h3>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {/* <TableHead className="w-[240px] px-2">Product Name</TableHead> */}
-            <TableHead className="px-4">
-              {strings["serial.number.table.header"]}
-            </TableHead>
-            <TableHead className="pr-4 text-end">
-              {strings["serial.number.actions"]}
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((serial: ProductSerialNumber) => {
-            return (
+      </h4>
+      {isLoading || !data ? (
+        <div className="flex justify-center py-6">
+          <BeatLoader color="#123abc" loading={true} size={15} />
+        </div>
+      ) : data.length === 0 ? (
+        <p className="py-4 text-sm text-slate-600">
+          No serial numbers added yet.
+        </p>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="px-4">
+                {strings["serial.number.table.header"]}
+              </TableHead>
+              <TableHead className="pr-4 text-end">
+                {strings["serial.number.actions"]}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data.map((serial: ProductSerialNumber) => (
               <TableRow key={serial.serial_number}>
-                {/* <TableCell className="px-3 py-1 text-start">
-                  {productsMap[serial.product_id].productName}
-                </TableCell> */}
                 <TableCell className="py-2 pl-4 text-start">
                   {serial.serial_number}
                 </TableCell>
@@ -184,6 +188,7 @@ const ProductSerialNumberSection = () => {
                   <Button
                     variant={"secondary"}
                     size={"sm"}
+                    aria-label={`Remove serial number ${serial.serial_number}`}
                     className="mt-0 w-14 hover:bg-orange-050"
                     onClick={() =>
                       deleteSerialNumberMutation.mutate({
@@ -193,78 +198,45 @@ const ProductSerialNumberSection = () => {
                     }
                   >
                     <TrashIcon className="h-5 w-5 fill-indigo-050 stroke-indigo-400" />
-
-                    {/* {strings["common.remove"]} */}
                   </Button>
                 </TableCell>
               </TableRow>
-            );
-          })}
-          <TableRow className="text-end">
-            <TableCell className="py-1 pl-2 pr-0" colSpan={3}>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleAddSerialNumber)}>
-                  <div className="flex gap-1">
-                    {/* <FormField
-                      control={form.control}
-                      name="selectedProduct"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Select {...field} onValueChange={field.onChange}>
-                              <SelectTrigger className="w-[230px] pl-2 lg:w-[230px]">
-                                <SelectValue placeholder="Select Product" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {productsArray.map((product) => {
-                                  return (
-                                    <SelectItem
-                                      key={product.code}
-                                      value={product.code}
-                                      className="pl-2"
-                                    >
-                                      {product.name}
-                                    </SelectItem>
-                                  );
-                                })}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    /> */}
-                    <FormField
-                      control={form.control}
-                      name="serialNumber"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input
-                              type="text"
-                              placeholder="Serial #"
-                              className="w-[60px] pl-2 lg:w-[120px]"
-                              {...field}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <Button
-                      size={"default"}
-                      type="submit"
-                      variant={"outline"}
-                      className="ml-auto w-20"
-                      disabled={!serialNumber}
-                    >
-                      {strings["common.add"]}
-                    </Button>
-                  </div>
-                </form>
-              </Form>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(handleAddSerialNumber)}
+          className="mt-4 flex items-center gap-2 border-t border-slate-200 pt-4"
+        >
+          <FormField
+            control={form.control}
+            name="serialNumber"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Serial #"
+                    className="w-full"
+                    {...field}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <Button
+            size={"default"}
+            type="submit"
+            variant={"outline"}
+            className="w-20"
+            disabled={!serialNumber || isLoading}
+          >
+            {strings["common.add"]}
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 };

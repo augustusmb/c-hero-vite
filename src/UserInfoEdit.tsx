@@ -1,7 +1,7 @@
 import { useForm, Controller } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import { updateUserInfo } from "./api/user.ts";
-import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserType, UpdatedUserInfo } from "./types/types.ts";
 import { QueryKeys } from "./utils/QueryKeys.ts";
@@ -27,7 +27,6 @@ type UserInfoEditProps = {
   vessels: TCreateableSelectOptions;
 };
 
-// Define a schema for the form validation
 const userInfoEditSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
@@ -67,6 +66,22 @@ const userInfoEditSchema = z.object({
 
 type UserInfoFormData = z.infer<typeof userInfoEditSchema>;
 
+const labelStyles = "mb-1 block text-sm font-medium text-slate-700";
+const sectionHeadingStyles =
+  "text-xs font-semibold uppercase tracking-wide text-slate-500";
+
+const selectStyles = {
+  placeholder: (provided: any) => ({ ...provided, textAlign: "left" as const }),
+  control: (provided: any, state: any) => ({
+    ...provided,
+    borderRadius: "0.375rem",
+    borderColor: state.isFocused ? "#3B82F6" : "#D1D5DB",
+    boxShadow: state.isFocused ? "0 0 0 1px #3B82F6" : "none",
+    "&:hover": { borderColor: state.isFocused ? "#3B82F6" : "#D1D5DB" },
+    minHeight: "42px",
+  }),
+};
+
 const UserInfoEdit: React.FC<UserInfoEditProps> = ({
   userInfoToEdit: user,
   toggleEditMode,
@@ -75,15 +90,9 @@ const UserInfoEdit: React.FC<UserInfoEditProps> = ({
   ports,
   vessels,
 }) => {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  console.log("user", user);
-
-  // Split name into firstName and lastName for the form
   const { first_name, last_name } = user;
 
-  // Convert user data to form format
   const defaultValues = {
     firstName: first_name,
     lastName: last_name,
@@ -115,68 +124,48 @@ const UserInfoEdit: React.FC<UserInfoEditProps> = ({
   });
 
   const updateUserInfoMutation = useMutation({
-    mutationFn: async (updatedUserInfo: UpdatedUserInfo) => {
-      console.log("Mutation called with:", updatedUserInfo);
-      return updateUserInfo(updatedUserInfo);
-    },
+    mutationFn: async (updatedUserInfo: UpdatedUserInfo) =>
+      updateUserInfo(updatedUserInfo),
     onMutate: async (updatedUserInfo) => {
-      console.log("onMutate called with:", updatedUserInfo);
-
-      // Cancel any outgoing refetches to avoid overwriting our optimistic update
       await queryClient.cancelQueries({
         queryKey: [QueryKeys.GET_USER, updatedUserInfo.phone],
       });
       await queryClient.cancelQueries({ queryKey: [QueryKeys.LIST_USERS] });
 
-      // Snapshot the previous values
       const previousUserData = queryClient.getQueryData([
         QueryKeys.GET_USER,
         updatedUserInfo.phone,
       ]);
       const previousListData = queryClient.getQueryData([QueryKeys.LIST_USERS]);
 
-      console.log("Previous user data:", previousUserData);
-      console.log("Previous list data:", previousListData);
-
-      // Optimistically update the user data
       if (previousUserData) {
-        const newUserData = {
-          data: [
-            {
-              ...user,
-              first_name: updatedUserInfo.first_name,
-              last_name: updatedUserInfo.last_name,
-              email: updatedUserInfo.email,
-              phone: updatedUserInfo.phone,
-              company: updatedUserInfo.company?.label || user.company,
-              company_id: updatedUserInfo.company?.value || user.company_id,
-              vessel: updatedUserInfo.vessel?.label || user.vessel,
-              vessel_id: updatedUserInfo.vessel?.value || user.vessel_id,
-              port: updatedUserInfo.port?.label || user.port,
-              port_id: updatedUserInfo.port?.value || user.port_id,
-              position: updatedUserInfo.position?.value || user.position,
-            },
-          ],
-        };
-        console.log("Setting optimistic user data:", newUserData);
-
         queryClient.setQueryData(
           [QueryKeys.GET_USER, updatedUserInfo.phone],
-          newUserData,
+          {
+            data: [
+              {
+                ...user,
+                first_name: updatedUserInfo.first_name,
+                last_name: updatedUserInfo.last_name,
+                email: updatedUserInfo.email,
+                phone: updatedUserInfo.phone,
+                company: updatedUserInfo.company?.label || user.company,
+                company_id: updatedUserInfo.company?.value || user.company_id,
+                vessel: updatedUserInfo.vessel?.label || user.vessel,
+                vessel_id: updatedUserInfo.vessel?.value || user.vessel_id,
+                port: updatedUserInfo.port?.label || user.port,
+                port_id: updatedUserInfo.port?.value || user.port_id,
+                position: updatedUserInfo.position?.value || user.position,
+              },
+            ],
+          },
         );
-      } else {
-        console.log("No previous user data found to update optimistically");
       }
 
-      // Optionally update the list of users if it exists in the cache
       if (previousListData) {
-        console.log("Updating user list data optimistically");
         queryClient.setQueryData([QueryKeys.LIST_USERS], (old: any) => {
-          if (!old || !old.data) {
-            console.log("List data is invalid or missing data array");
-            return old;
-          }
-          const updatedList = {
+          if (!old || !old.data) return old;
+          return {
             ...old,
             data: old.data.map((u: UserType) =>
               u.id === updatedUserInfo.id
@@ -197,44 +186,27 @@ const UserInfoEdit: React.FC<UserInfoEditProps> = ({
                 : u,
             ),
           };
-          console.log("Updated list data:", updatedList);
-          return updatedList;
         });
-      } else {
-        console.log("No previous list data found to update optimistically");
       }
 
-      // Return the snapshots so we can rollback if something goes wrong
       return { previousUserData, previousListData };
     },
-    onSuccess: (result) => {
-      console.log("Mutation succeeded:", result);
-    },
-    onError: (err, updatedUserInfo, context) => {
-      console.log("Mutation error:", err);
-      console.log("Rolling back to previous data");
-
-      // If the mutation fails, roll back to the previous values
+    onError: (_err, updatedUserInfo, context) => {
       if (context?.previousUserData) {
         queryClient.setQueryData(
           [QueryKeys.GET_USER, updatedUserInfo.phone],
           context.previousUserData,
         );
       }
-
       if (context?.previousListData) {
         queryClient.setQueryData(
           [QueryKeys.LIST_USERS],
           context.previousListData,
         );
       }
-
-      console.error("Error updating user info:", err);
+      toast.error("Could not save your changes. Please try again.");
     },
     onSettled: (_data, _error, variables) => {
-      console.log("Mutation settled, invalidating queries");
-
-      // Always refetch after error or success to ensure our local data is in sync with the server
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.GET_USER, variables.phone],
       });
@@ -258,225 +230,236 @@ const UserInfoEdit: React.FC<UserInfoEditProps> = ({
       id: user.id,
     };
 
-    // Log the userInfo being sent to the mutation
-    console.log("Submitting form with userInfo:", userInfo);
-
     updateUserInfoMutation.mutate(userInfo, {
       onSuccess: () => {
-        console.log("Navigation after successful mutation");
+        toast.success("Your account info has been updated.");
+        handleUserToEdit({
+          ...user,
+          first_name: data.firstName,
+          last_name: data.lastName,
+          email: data.email,
+          phone: data.phone,
+          company: data.company?.label || user.company,
+          company_id:
+            typeof data.company?.value === "number"
+              ? data.company.value
+              : user.company_id,
+          vessel: data.vessel?.label || user.vessel,
+          vessel_id:
+            typeof data.vessel?.value === "number"
+              ? data.vessel.value
+              : user.vessel_id,
+          port: data.port?.label || user.port,
+          port_id:
+            typeof data.port?.value === "number"
+              ? data.port.value
+              : user.port_id,
+          position: data.position?.value || user.position,
+        });
         toggleEditMode();
-        handleUserToEdit(Object.assign({}, user, userInfo));
-        navigate("/home");
       },
     });
   };
 
   return (
-    <form
-      className="flex flex-col gap-y-2 p-4"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="flex w-3/4 flex-col gap-y-2">
-        {/* First Name Field */}
-        <input
-          {...register("firstName")}
-          placeholder="First name"
-          type="text"
-          className={`${inputStyles} ${
-            errors.firstName ? "border-red-500" : ""
-          }`}
-        />
-        {errors.firstName && (
-          <p className={errorStyles}>{errors.firstName.message}</p>
-        )}
+    <form className="flex w-full flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
+      <section className="flex flex-col gap-3">
+        <h5 className={sectionHeadingStyles}>Personal</h5>
+        <div className="flex flex-col gap-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label htmlFor="firstName" className={labelStyles}>
+                First name
+              </label>
+              <input
+                id="firstName"
+                {...register("firstName")}
+                type="text"
+                className={`${inputStyles} w-full ${
+                  errors.firstName ? "border-red-500" : ""
+                }`}
+              />
+              {errors.firstName && (
+                <p className={errorStyles}>{errors.firstName.message}</p>
+              )}
+            </div>
 
-        {/* Last Name Field */}
-        <input
-          {...register("lastName")}
-          placeholder="Last name"
-          type="text"
-          className={`${inputStyles} ${
-            errors.lastName ? "border-red-500" : ""
-          }`}
-        />
-        {errors.lastName && (
-          <p className={errorStyles}>{errors.lastName.message}</p>
-        )}
+            <div>
+              <label htmlFor="lastName" className={labelStyles}>
+                Last name
+              </label>
+              <input
+                id="lastName"
+                {...register("lastName")}
+                type="text"
+                className={`${inputStyles} w-full ${
+                  errors.lastName ? "border-red-500" : ""
+                }`}
+              />
+              {errors.lastName && (
+                <p className={errorStyles}>{errors.lastName.message}</p>
+              )}
+            </div>
+          </div>
 
-        {/* Email Field */}
-        <input
-          {...register("email")}
-          placeholder="Email"
-          type="email"
-          className={`${inputStyles} ${errors.email ? "border-red-500" : ""}`}
-        />
-        {errors.email && <p className={errorStyles}>{errors.email.message}</p>}
-
-        {/* Phone Field */}
-        <Controller
-          name="phone"
-          control={control}
-          render={({ field }) => (
-            <PhoneInput
-              value={field.value}
-              onChange={field.onChange}
-              className={errors.phone ? "border-red-500" : ""}
+          <div>
+            <label htmlFor="email" className={labelStyles}>
+              Email
+            </label>
+            <input
+              id="email"
+              {...register("email")}
+              type="email"
+              className={`${inputStyles} w-full ${
+                errors.email ? "border-red-500" : ""
+              }`}
             />
-          )}
-        />
-        {errors.phone && <p className={errorStyles}>{errors.phone.message}</p>}
+            {errors.email && (
+              <p className={errorStyles}>{errors.email.message}</p>
+            )}
+          </div>
 
-        {/* Company Field */}
-        <Controller
-          name="company"
-          control={control}
-          render={({ field }) => (
-            <CreatableSelect
-              {...field}
-              placeholder="Company"
-              isClearable
-              options={companies}
-              isValidNewOption={(inputValue) => {
-                const filteredOptions = companies.filter(
-                  (option: TCreateableSelectOption) =>
-                    option.label
-                      .toLowerCase()
-                      .includes(inputValue.toLowerCase()),
-                );
-                return filteredOptions.length === 0;
-              }}
-              styles={{
-                placeholder: (provided) => ({
-                  ...provided,
-                  textAlign: "left",
-                }),
-                control: (provided) => ({
-                  ...provided,
-                  borderRadius: "0.375rem",
-                  borderColor: "#D1D5DB",
-                }),
-              }}
+          <div>
+            <label htmlFor="phone" className={labelStyles}>
+              Phone
+            </label>
+            <Controller
+              name="phone"
+              control={control}
+              render={({ field }) => (
+                <PhoneInput
+                  value={field.value}
+                  onChange={field.onChange}
+                  className={errors.phone ? "border-red-500" : ""}
+                />
+              )}
             />
-          )}
-        />
-        {errors.company && (
-          <p className={errorStyles}>{errors.company.message}</p>
-        )}
+            {errors.phone && (
+              <p className={errorStyles}>{errors.phone.message}</p>
+            )}
+          </div>
+        </div>
+      </section>
 
-        {/* Port Field */}
-        <Controller
-          name="port"
-          control={control}
-          render={({ field }) => (
-            <CreatableSelect
-              {...field}
-              placeholder="Port"
-              isClearable
-              options={ports}
-              isValidNewOption={(inputValue) => {
-                const filteredOptions = ports.filter(
-                  (option: TCreateableSelectOption) =>
-                    option.label
-                      .toLowerCase()
-                      .includes(inputValue.toLowerCase()),
-                );
-                return filteredOptions.length === 0;
-              }}
-              styles={{
-                placeholder: (provided) => ({
-                  ...provided,
-                  textAlign: "left",
-                }),
-                control: (provided) => ({
-                  ...provided,
-                  borderRadius: "0.375rem",
-                  borderColor: "#D1D5DB",
-                }),
-              }}
+      <section className="flex flex-col gap-3 border-t border-slate-200 pt-5">
+        <h5 className={sectionHeadingStyles}>Work</h5>
+        <div className="flex flex-col gap-3">
+          <div>
+            <label className={labelStyles}>Position</label>
+            <Controller
+              name="position"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  options={positionOptions}
+                  placeholder="Select position"
+                  styles={selectStyles}
+                />
+              )}
             />
-          )}
-        />
-        {errors.port && <p className={errorStyles}>{errors.port.message}</p>}
+            {errors.position && (
+              <p className={errorStyles}>{errors.position.message}</p>
+            )}
+          </div>
 
-        {/* Vessel Field */}
-        <Controller
-          name="vessel"
-          control={control}
-          render={({ field }) => (
-            <CreatableSelect
-              {...field}
-              placeholder="Vessel"
-              isClearable
-              options={vessels}
-              isValidNewOption={(inputValue) => {
-                const filteredOptions = vessels.filter(
-                  (option: TCreateableSelectOption) =>
-                    option.label
-                      .toLowerCase()
-                      .includes(inputValue.toLowerCase()),
-                );
-                return filteredOptions.length === 0;
-              }}
-              styles={{
-                placeholder: (provided) => ({
-                  ...provided,
-                  textAlign: "left",
-                }),
-                control: (provided) => ({
-                  ...provided,
-                  borderRadius: "0.375rem",
-                  borderColor: "#D1D5DB",
-                }),
-              }}
+          <div>
+            <label className={labelStyles}>Company</label>
+            <Controller
+              name="company"
+              control={control}
+              render={({ field }) => (
+                <CreatableSelect
+                  {...field}
+                  placeholder="Select or create company"
+                  isClearable
+                  options={companies}
+                  isValidNewOption={(inputValue) =>
+                    companies.filter((option: TCreateableSelectOption) =>
+                      option.label
+                        .toLowerCase()
+                        .includes(inputValue.toLowerCase()),
+                    ).length === 0
+                  }
+                  styles={selectStyles}
+                />
+              )}
             />
-          )}
-        />
-        {errors.vessel && (
-          <p className={errorStyles}>{errors.vessel.message}</p>
-        )}
+            {errors.company && (
+              <p className={errorStyles}>{errors.company.message}</p>
+            )}
+          </div>
 
-        {/* Position Field */}
-        <Controller
-          name="position"
-          control={control}
-          render={({ field }) => (
-            <Select
-              {...field}
-              options={positionOptions}
-              placeholder="Position"
-              styles={{
-                placeholder: (provided) => ({
-                  ...provided,
-                  textAlign: "left",
-                }),
-                control: (provided) => ({
-                  ...provided,
-                  borderRadius: "0.375rem",
-                  borderColor: "#D1D5DB",
-                }),
-              }}
+          <div>
+            <label className={labelStyles}>Vessel</label>
+            <Controller
+              name="vessel"
+              control={control}
+              render={({ field }) => (
+                <CreatableSelect
+                  {...field}
+                  placeholder="Select or create vessel"
+                  isClearable
+                  options={vessels}
+                  isValidNewOption={(inputValue) =>
+                    vessels.filter((option: TCreateableSelectOption) =>
+                      option.label
+                        .toLowerCase()
+                        .includes(inputValue.toLowerCase()),
+                    ).length === 0
+                  }
+                  styles={selectStyles}
+                />
+              )}
             />
-          )}
-        />
-        {errors.position && (
-          <p className={errorStyles}>{errors.position.message}</p>
-        )}
-      </div>
+            {errors.vessel && (
+              <p className={errorStyles}>{errors.vessel.message}</p>
+            )}
+          </div>
 
-      <div className="mt-4 flex w-3/4 items-center space-x-4">
+          <div>
+            <label className={labelStyles}>Port</label>
+            <Controller
+              name="port"
+              control={control}
+              render={({ field }) => (
+                <CreatableSelect
+                  {...field}
+                  placeholder="Select or create port"
+                  isClearable
+                  options={ports}
+                  isValidNewOption={(inputValue) =>
+                    ports.filter((option: TCreateableSelectOption) =>
+                      option.label
+                        .toLowerCase()
+                        .includes(inputValue.toLowerCase()),
+                    ).length === 0
+                  }
+                  styles={selectStyles}
+                />
+              )}
+            />
+            {errors.port && (
+              <p className={errorStyles}>{errors.port.message}</p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <div className="flex items-center justify-end gap-2 border-t border-slate-200 pt-4">
         <button
           type="button"
-          className="h-9 w-24 rounded border border-blue-500 bg-transparent font-semibold text-blue-700 hover:border-transparent hover:bg-blue-500 hover:text-white"
           onClick={toggleEditMode}
+          className="rounded-md border border-slate-300 bg-transparent px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-400"
         >
           {strings["common.cancel"]}
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="h-9 w-24 rounded border border-slate-500 bg-slate-700 font-semibold text-slate-050 hover:border-transparent hover:bg-slate-600 hover:text-slate-100 disabled:bg-slate-300"
+          className="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 disabled:cursor-not-allowed disabled:bg-orange-300"
         >
-          Save
+          {isSubmitting ? "Saving..." : "Save"}
         </button>
       </div>
     </form>

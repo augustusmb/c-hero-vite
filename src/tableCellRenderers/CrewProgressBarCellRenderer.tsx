@@ -1,30 +1,27 @@
-const PROGRESS_BAR_MIN_WIDTH = 30;
-
 const CrewProgressBarCellRenderer = (params: any) => {
   const { first_name, last_name, totalTests, testsCompleted } = params.data;
 
   const percentageComplete =
     Math.round((testsCompleted / totalTests) * 100) || 0;
 
-  const bgColor = ((percentage: number) => {
-    if (percentage <= 20) return "bg-red-300";
-    if (percentage <= 35) return "bg-orange-300";
-    if (percentage <= 60) return "bg-yellow-300";
-    if (percentage <= 99) return "bg-green-300";
-    return "bg-indigo-300";
-  })(percentageComplete);
+  const isComplete = percentageComplete === 100;
+  const fillColor = isComplete ? "bg-green-500" : "bg-slate-500";
 
   return (
-    <div>
-      <div>{`${first_name} ${last_name}`}</div>
-      <div
-        className={`flex justify-center ${bgColor} rounded-md`}
-        style={{
-          width: `${percentageComplete}%`,
-          minWidth: PROGRESS_BAR_MIN_WIDTH,
-        }}
-      >
-        {percentageComplete}%
+    <div className="flex h-full flex-col justify-center gap-1.5 py-2">
+      <div className="text-sm font-medium text-slate-900">
+        {`${first_name} ${last_name}`}
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="h-1.5 w-24 overflow-hidden rounded-full bg-slate-200">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ease-out ${fillColor}`}
+            style={{ width: `${percentageComplete}%` }}
+          />
+        </div>
+        <span className="text-xs font-medium text-slate-600">
+          {percentageComplete}%
+        </span>
       </div>
     </div>
   );
