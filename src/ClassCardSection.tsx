@@ -63,7 +63,7 @@ const SectionHeader = () => (
         <p className="mb-2 font-semibold text-slate-800">How this works</p>
         <ul className="list-disc space-y-1 pl-4 text-slate-700">
           <li>Work through a product's classes in order, top to bottom.</li>
-          <li>Click to take the test at the bottom of each class's PDF page.</li>
+          <li>Click to take the assessment at the bottom of each class's PDF page.</li>
         </ul>
       </PopoverContent>
     </Popover>

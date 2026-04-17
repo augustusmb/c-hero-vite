@@ -53,11 +53,11 @@ Sent in parallel with the SMS above.
 
 ---
 
-## Test Submission
+## Assessment Submission
 
-Triggered when a user submits a test (`submitTest` in `server/routes/SubmitTest.js`).
+Triggered when a user submits an assessment (`submitAssessment` in `server/routes/SubmitAssessment.js`).
 
-### 4. SMS to Admins (Test Result)
+### 4. SMS to Admins (Assessment Result)
 
 | Detail     | Value                                      |
 | ---------- | ------------------------------------------ |
@@ -66,7 +66,7 @@ Triggered when a user submits a test (`submitTest` in `server/routes/SubmitTest.
 | Content    | Name, phone, class ID, PASSED/FAILED       |
 
 **Example message:**
-> Hi, notifying you that John Doe (+15551234567) just attempted and PASSED test BASIC-101
+> Hi, notifying you that John Doe (+15551234567) just attempted and PASSED assessment BASIC-101
 
 ---
 
@@ -77,4 +77,4 @@ Triggered when a user submits a test (`submitTest` in `server/routes/SubmitTest.
 | 1  | New sign-up     | SMS     | Admins        | `server/sms.js`          |
 | 2  | New sign-up     | Email   | Admins        | `server/sms.js`          |
 | 3  | New sign-up     | SMS     | New user      | `server/sms.js`          |
-| 4  | Test submission | SMS     | Admins        | `server/sms.js`          |
+| 4  | Assessment submission | SMS | Admins        | `server/sms.js`          |

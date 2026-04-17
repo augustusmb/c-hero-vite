@@ -1,9 +1,14 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import TestTakingPage from "./TestTakingPage.jsx";
+import { Routes, Route, Navigate, useParams } from "react-router-dom";
+import AssessmentPage from "./AssessmentPage.tsx";
 import PDFRenderPage from "./PDFRenderPage.jsx";
 import CertificatePage from "./textComponents/CertificatePage.jsx";
 import AdminPage from "./AdminPage.tsx";
 import HomePage from "./HomePage.jsx";
+
+const LegacyTestRedirect = () => {
+  const { classId } = useParams();
+  return <Navigate to={`/assessment/${classId}`} replace />;
+};
 
 const MainPanelRouter = () => {
   return (
@@ -11,7 +16,8 @@ const MainPanelRouter = () => {
       <Routes>
         <Route path="/certification" element={<CertificatePage />} />
         <Route path="/admin" element={<AdminPage />} />
-        <Route path="/test/:classId" element={<TestTakingPage />} />
+        <Route path="/assessment/:classId" element={<AssessmentPage />} />
+        <Route path="/test/:classId" element={<LegacyTestRedirect />} />
         <Route path="/class/:classId" element={<PDFRenderPage />} />
         <Route path="/help/:safety" element={<PDFRenderPage />} />
         <Route path="/help/:troubleshooting" element={<PDFRenderPage />} />

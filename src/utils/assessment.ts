@@ -1,4 +1,4 @@
-import { TestQuestion } from "../types/types";
+import { AssessmentQuestion } from "../types/types";
 
 const ADMIN_LEVEL = "0";
 const ALL_OF_THE_ABOVE = "All of the above";
@@ -13,16 +13,16 @@ export function shuffle<T>(items: readonly T[]): T[] {
 }
 
 export function randomizeArray(
-  questions: readonly TestQuestion[],
+  questions: readonly AssessmentQuestion[],
   level: string,
-): TestQuestion[] {
+): AssessmentQuestion[] {
   if (level === ADMIN_LEVEL) {
     return [...questions].sort((a, b) => a.id - b.id);
   }
   return shuffle(questions);
 }
 
-export function prepareAnswerOptions(question: TestQuestion): string[] {
+export function prepareAnswerOptions(question: AssessmentQuestion): string[] {
   const {
     correct_answer,
     incorrect_answer1,
@@ -53,7 +53,9 @@ type BlankAnswers = {
   };
 };
 
-export function prepareBlankAnswers(questions: TestQuestion[]): BlankAnswers {
+export function prepareBlankAnswers(
+  questions: AssessmentQuestion[],
+): BlankAnswers {
   const blankAnswers: BlankAnswers = {};
   questions.forEach((question, slotIndex) => {
     blankAnswers[question.id] = {

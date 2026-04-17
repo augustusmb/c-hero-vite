@@ -196,11 +196,11 @@ const PDFRenderPage = () => {
       {classId && isPdfLoaded ? (
         <div className="mt-8 flex justify-center border-t border-slate-200 pt-6">
           <Link
-            to={`/test/${classId}`}
+            to={`/assessment/${classId}`}
             className="group inline-flex items-center gap-2 rounded-md bg-orange-500 px-5 py-2.5 text-base font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
           >
             <ClipboardCheck className="h-5 w-5" aria-hidden="true" />
-            Take the test
+            Take the assessment
             <ChevronRight
               className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
               aria-hidden="true"

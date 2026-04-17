@@ -5,7 +5,7 @@ export const messages = {
     "Welcome aboard! C-Hero ETraining will help you become part of the C-Hero Rescue Crew. \n Click HERE to download the ETraining app, or \n Click HERE to do the training on a computer/pad \n You can edit/add your info, and begin a class at your convenience.",
   // customer setup info
   classSectionInstructions:
-    "Thank you for enrolling into eTraining and your commitment to familiarizing yourself with your new C-Hero safety gear! Each product has a total of four sections to study and test against. <strong>Successfully completing</strong> the first section unlocks the next until you have finished all four. Have fun!",
+    "Thank you for enrolling into eTraining and your commitment to familiarizing yourself with your new C-Hero safety gear! Each product has a total of four sections to study and complete an assessment for. <strong>Successfully completing</strong> the first section unlocks the next until you have finished all four. Have fun!",
   branchFacilityTypes: ["Port", "Facility"],
   addressInputs: ["City", "State", "Province", "Zip"],
   cHeroEquipment: [

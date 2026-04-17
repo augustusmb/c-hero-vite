@@ -12,7 +12,7 @@ This codebase is **the training platform** crew use after their vessel buys a C-
 
 ## People
 
-- **Wayne** and **Shane** — C-Hero founders. They write the test questions, direct new customers to the site, and receive admin SMS + email notifications on signup events. In production, notifications go to `info@c-hero.com`, Shane's email, and Wayne's phone.
+- **Wayne** and **Shane** — C-Hero founders. They write the assessment questions, direct new customers to the site, and receive admin SMS + email notifications on signup events. In production, notifications go to `info@c-hero.com`, Shane's email, and Wayne's phone.
 - **Augustus (the developer / this user)** — solo freelance developer building and modernizing the app. Also receives admin notifications.
 
 ## Product catalog
@@ -54,15 +54,15 @@ Also under `c-hero-classes/`: a `safety/z_safety.pdf` and `troubleshooting/troub
 ### How a class works for the user
 
 1. User lands on a class page and **reads the PDF** (training manual for that class).
-2. User clicks **"Take the test"** to go to a separate quiz page.
+2. User clicks **"Take the assessment"** to go to a separate assessment page.
 3. Quiz is **multiple choice + true/false**, questions stored in the DB.
 4. **Must get 100% to pass** — every question right. (High bar by design — this is rescue equipment.)
 5. **No time limit.** **Retakes allowed.**
 6. The PDF is on a different page from the quiz but **remains accessible** — users are allowed to reference it while answering.
 
-### Terminology note — "test"
+### Terminology — "assessment"
 
-The word **"test"** is used throughout the codebase (routes, DB, UI copy) to mean "the quiz a user takes to pass a class." This collides with the software-engineering meaning of "test." A future rename to **"quiz"** or **"assessment"** is on the table — "assessment" is the more forward-compatible choice given the certification direction (see below). No urgency; flag for a dedicated pass.
+The multiple-choice quiz a user takes to pass a class is called an **"assessment"** throughout the codebase (routes, files, types, UI copy). This was renamed from "test" on 2026-04-16 to avoid collision with the software-engineering meaning of "test." Legacy `/test/:classId` URLs still redirect to `/assessment/:classId` for any bookmarked links. Historical migrations 003/004 retain the original "test" naming because they reference real dropped table names.
 
 ## User roles
 
@@ -134,7 +134,7 @@ Shore-side ↔ company scoping is **still being fleshed out** — the tables exi
   - Shore-side ↔ company scoping.
   - How the prusik strap fits into the class model.
   - Serial-number assignment wiring.
-- **No hard "don't touch" zones** — but handle sensitive areas (auth, `users.level` gating, test submission) case-by-case with confirmation.
+- **No hard "don't touch" zones** — but handle sensitive areas (auth, `users.level` gating, assessment submission) case-by-case with confirmation.
 - **Next priorities:** TBD — Augustus will sync with the founders.
 
 ## Glossary
@@ -144,4 +144,4 @@ Shore-side ↔ company scoping is **still being fleshed out** — the tables exi
 - **Bitt mount / Flat mount** — two ways to attach a davit to the deck.
 - **Prusik strap** — a friction-hitch rope device; relevant to some davit configurations.
 - **Class** — one of the four training units per product (Setup / Operations / Inspection / Drill).
-- **Test / Quiz / Assessment** — the multiple-choice check at the end of a class. Currently called "test" in code; likely rename pending.
+- **Assessment** — the multiple-choice check at the end of a class. (Renamed from "test" on 2026-04-16.)

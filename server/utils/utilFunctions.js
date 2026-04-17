@@ -10,14 +10,14 @@ export const createUserClassesMap = (userClasses) => {
   return userClassesMap;
 };
 
-async function getUserTestsCompletedNumber(usersClasses) {
-  const totalTests = usersClasses.length;
-  const testsCompleted = usersClasses.reduce((acc, test) => {
-    let numToAdd = test.completed ? 1 : 0;
+async function getUserAssessmentsCompletedNumber(usersClasses) {
+  const totalAssessments = usersClasses.length;
+  const assessmentsCompleted = usersClasses.reduce((acc, userClass) => {
+    let numToAdd = userClass.completed ? 1 : 0;
     return acc + numToAdd;
   }, 0);
 
-  return { totalTests, testsCompleted };
+  return { totalAssessments, assessmentsCompleted };
 }
 
 export const createUserFullProgressMap = (userClassesMap) => {
@@ -54,16 +54,16 @@ export const appendUserFullProductProgressMap = async (dashUser) => {
     "select * from users_products where user_id = $1",
     [id],
   );
-  const { totalTests, testsCompleted } =
-    await getUserTestsCompletedNumber(userClasses);
+  const { totalAssessments, assessmentsCompleted } =
+    await getUserAssessmentsCompletedNumber(userClasses);
   const userClassesMap = createUserClassesMap(userClasses);
   const userFullProgressMap = createUserFullProgressMap(userClassesMap);
 
   const finalUserData = {
     ...dashUser,
     userFullProgressMap,
-    totalTests,
-    testsCompleted,
+    totalAssessments,
+    assessmentsCompleted,
   };
   return finalUserData;
 };

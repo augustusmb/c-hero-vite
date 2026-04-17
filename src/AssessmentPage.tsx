@@ -4,17 +4,20 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Info, CheckCircle2, XCircle, RotateCcw } from "lucide-react";
-import { getTestQuestions, submitCompletedTest } from "./api/test.ts";
+import {
+  getAssessmentQuestions,
+  submitCompletedAssessment,
+} from "./api/assessment.ts";
 import {
   randomizeArray,
   prepareAnswerOptions,
   prepareBlankAnswers,
   shuffle,
-} from "./utils/test.js";
+} from "./utils/assessment.js";
 import { classTypesMap } from "./messages.ts";
 import { useClassId } from "./hooks/useClassId.tsx";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
-import { CompletedTestData, TestQuestion } from "./types/types.ts";
+import { CompletedAssessmentData, AssessmentQuestion } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import { QueryKeys } from "./utils/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
@@ -44,17 +47,19 @@ const formatAnswer = (answer: string): string => {
   return answer;
 };
 
-const TestTakingPage = () => {
+const AssessmentPage = () => {
   const { handleSubmit, reset } = useForm();
   const queryClient = useQueryClient();
-  const [testQuestions, setTestQuestions] = useState<TestQuestion[]>([]);
+  const [assessmentQuestions, setAssessmentQuestions] = useState<
+    AssessmentQuestion[]
+  >([]);
   const [currentAnswers, setCurrentAnswers] = useState<Record<
     string,
     any
   > | null>(null);
   const [questionOrder, setQuestionOrder] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [testPassed, setTestPassed] = useState(false);
+  const [assessmentPassed, setAssessmentPassed] = useState(false);
   const [missedQuestions, setMissedQuestions] = useState<MissedQuestion[]>([]);
   const [attemptKey, setAttemptKey] = useState(0);
   const { loggedInUserInfo } = useLoggedInUserContext();
@@ -62,7 +67,7 @@ const TestTakingPage = () => {
 
   const { level, first_name, last_name, phone, id } = loggedInUserInfo || {};
   const { classId = "" } = useParams();
-  const { testInfo, testType } = useClassId(classId);
+  const { classInfo, classType } = useClassId(classId);
 
   const {
     isLoading,
@@ -70,13 +75,13 @@ const TestTakingPage = () => {
     data: questions,
     error,
   } = useQuery({
-    queryKey: [QueryKeys.LIST_TEST_QUESTIONS, classId],
-    queryFn: getTestQuestions,
+    queryKey: [QueryKeys.LIST_ASSESSMENT_QUESTIONS, classId],
+    queryFn: getAssessmentQuestions,
   });
 
-  const submitTestMutation = useMutation({
-    mutationFn: async (completedTestData: CompletedTestData) => {
-      submitCompletedTest(completedTestData);
+  const submitAssessmentMutation = useMutation({
+    mutationFn: async (completedAssessmentData: CompletedAssessmentData) => {
+      return await submitCompletedAssessment(completedAssessmentData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -93,7 +98,7 @@ const TestTakingPage = () => {
           answerOptions: prepareAnswerOptions(question),
         }),
       );
-      setTestQuestions(randomQuestions);
+      setAssessmentQuestions(randomQuestions);
       const blankAnswers = prepareBlankAnswers(randomQuestions);
       setCurrentAnswers(blankAnswers);
       if (!questionOrder) setQuestionOrder(!questionOrder);
@@ -102,13 +107,13 @@ const TestTakingPage = () => {
 
   const { answeredCount, totalCount } = useMemo(() => {
     if (!currentAnswers)
-      return { answeredCount: 0, totalCount: testQuestions.length };
+      return { answeredCount: 0, totalCount: assessmentQuestions.length };
     const total = Object.keys(currentAnswers).length;
     const answered = Object.values(currentAnswers).filter(
       (a: any) => a.currentAnswer !== "",
     ).length;
     return { answeredCount: answered, totalCount: total };
-  }, [currentAnswers, testQuestions.length]);
+  }, [currentAnswers, assessmentQuestions.length]);
 
   if (isLoading)
     return (
@@ -119,7 +124,7 @@ const TestTakingPage = () => {
   if (isError)
     return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
-  const submitForm = () => {
+  const submitForm = async () => {
     if (answeredCount < totalCount) {
       toast.error(
         `Please answer all ${totalCount} questions before submitting (${
@@ -142,21 +147,30 @@ const TestTakingPage = () => {
 
     if (!classId || !first_name || !last_name || !phone || !id) {
       console.error("All fields must be filled out");
-    } else {
-      const completedTestData: CompletedTestData = {
-        classId,
-        first_name,
-        last_name,
-        phone,
-        userId: id,
-        questionsMissed: missed.map((m) => [m]),
-      };
-      submitTestMutation.mutate(completedTestData);
+      toast.error("Couldn't submit — your account info is still loading.");
+      return;
     }
 
-    setMissedQuestions(missed);
-    setTestPassed(missed.length === 0);
-    setShowModal(true);
+    const completedAssessmentData: CompletedAssessmentData = {
+      classId,
+      first_name,
+      last_name,
+      phone,
+      userId: id,
+      questionsMissed: missed.map((m) => [m]),
+    };
+
+    try {
+      await submitAssessmentMutation.mutateAsync(completedAssessmentData);
+      setMissedQuestions(missed);
+      setAssessmentPassed(missed.length === 0);
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error submitting assessment:", error);
+      toast.error(
+        "Couldn't save your assessment result — please try again.",
+      );
+    }
   };
 
   const handleClick = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -172,18 +186,18 @@ const TestTakingPage = () => {
     reset();
   };
 
-  const retakeTest = () => {
+  const retakeAssessment = () => {
     setShowModal(false);
     setMissedQuestions([]);
-    setTestPassed(false);
+    setAssessmentPassed(false);
     if (questions) {
-      const randomQuestions = shuffle<TestQuestion>(questions.data).map(
+      const randomQuestions = shuffle<AssessmentQuestion>(questions.data).map(
         (question) => ({
           ...question,
           answerOptions: prepareAnswerOptions(question),
         }),
       );
-      setTestQuestions(randomQuestions);
+      setAssessmentQuestions(randomQuestions);
       setCurrentAnswers(prepareBlankAnswers(randomQuestions));
     }
     setAttemptKey((k) => k + 1);
@@ -193,15 +207,15 @@ const TestTakingPage = () => {
   return (
     <div className="mx-auto max-w-4xl pb-10">
       <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-050 p-4 shadow-sm lg:p-6">
-        <TestHeader
-          productName={testInfo.productName}
-          testType={testType}
+        <AssessmentHeader
+          productName={classInfo.productName}
+          classType={classType}
           answeredCount={answeredCount}
           totalCount={totalCount}
         />
         <form key={attemptKey} onSubmit={handleSubmit(submitForm)}>
           <div className="divide-y divide-slate-200 border-t border-slate-200">
-            {testQuestions.map((question: TestQuestion, idx) => (
+            {assessmentQuestions.map((question: AssessmentQuestion, idx) => (
               <QuestionRow
                 key={question.id}
                 question={question}
@@ -214,9 +228,12 @@ const TestTakingPage = () => {
           <div className="mt-6 flex justify-end">
             <button
               type="submit"
+              disabled={submitAssessmentMutation.isPending}
               className="rounded-md bg-orange-500 px-6 py-2 text-base font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 disabled:cursor-not-allowed disabled:bg-orange-300"
             >
-              Submit Test
+              {submitAssessmentMutation.isPending
+                ? "Submitting…"
+                : "Submit Assessment"}
             </button>
           </div>
         </form>
@@ -227,14 +244,14 @@ const TestTakingPage = () => {
         onOpenChange={(open) => !open && closeModal()}
       >
         <DialogContent className="max-w-lg">
-          {testPassed ? (
+          {assessmentPassed ? (
             <PassContent score={totalCount} total={totalCount} />
           ) : (
             <FailContent
               missedQuestions={missedQuestions}
               total={totalCount}
               classId={classId}
-              onRetake={retakeTest}
+              onRetake={retakeAssessment}
             />
           )}
         </DialogContent>
@@ -260,7 +277,7 @@ const PassContent: React.FC<PassContentProps> = ({ score, total }) => (
       {score} / {total} correct
     </span>
     <p className="text-sm text-slate-600">
-      You passed this test. Nice work.
+      You passed this assessment. Nice work.
     </p>
     <div className="mt-4 flex w-full justify-end">
       <Link to="/">
@@ -347,23 +364,23 @@ const FailContent: React.FC<FailContentProps> = ({
           className="inline-flex items-center gap-1.5 rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400"
         >
           <RotateCcw className="h-4 w-4" />
-          Retake test
+          Retake assessment
         </button>
       </div>
     </div>
   );
 };
 
-type TestHeaderProps = {
+type AssessmentHeaderProps = {
   productName: string;
-  testType: string;
+  classType: string;
   answeredCount: number;
   totalCount: number;
 };
 
-const TestHeader: React.FC<TestHeaderProps> = ({
+const AssessmentHeader: React.FC<AssessmentHeaderProps> = ({
   productName,
-  testType,
+  classType,
   answeredCount,
   totalCount,
 }) => {
@@ -378,21 +395,23 @@ const TestHeader: React.FC<TestHeaderProps> = ({
           </h2>
           <Popover>
             <PopoverTrigger
-              aria-label="Test instructions"
+              aria-label="Assessment instructions"
               className="rounded-full p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
             >
               <Info className="h-5 w-5" />
             </PopoverTrigger>
             <PopoverContent className="w-80 text-sm">
-              <p className="mb-2 font-semibold text-slate-800">Test info</p>
+              <p className="mb-2 font-semibold text-slate-800">
+                Assessment info
+              </p>
               <ul className="list-disc space-y-1 pl-4 text-slate-700">
-                <li>The test is open book.</li>
+                <li>The assessment is open book.</li>
                 <li>All questions must be answered correctly to pass.</li>
               </ul>
             </PopoverContent>
           </Popover>
         </div>
-        <ClassTypeBreadcrumb testType={testType} />
+        <ClassTypeBreadcrumb classType={classType} />
       </div>
       <div
         className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium lg:text-sm ${
@@ -407,8 +426,8 @@ const TestHeader: React.FC<TestHeaderProps> = ({
   );
 };
 
-const ClassTypeBreadcrumb = ({ testType }: { testType: string }) => {
-  const currentLabel = classTypesMap[testType as keyof typeof classTypesMap];
+const ClassTypeBreadcrumb = ({ classType }: { classType: string }) => {
+  const currentLabel = classTypesMap[classType as keyof typeof classTypesMap];
   const entries = Object.entries(classTypesMap) as [string, string][];
 
   return (
@@ -433,7 +452,7 @@ const ClassTypeBreadcrumb = ({ testType }: { testType: string }) => {
 };
 
 type QuestionRowProps = {
-  question: TestQuestion;
+  question: AssessmentQuestion;
   idx: number;
   showAdminId: boolean;
   onAnswerChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -480,4 +499,4 @@ const QuestionRow: React.FC<QuestionRowProps> = ({
   );
 };
 
-export default TestTakingPage;
+export default AssessmentPage;

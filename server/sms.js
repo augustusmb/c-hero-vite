@@ -59,7 +59,7 @@ const sendAdminSms = async (message) => {
   }
 };
 
-const informTestResult = async (
+const informAssessmentResult = async (
   questionsMissed,
   firstName,
   lastName,
@@ -68,7 +68,7 @@ const informTestResult = async (
 ) => {
   const passed = questionsMissed.length === 0;
   const status = passed ? "PASSED" : "FAILED";
-  const message = `Hi, notifying you that ${firstName} ${lastName} (${phone}) just attempted and ${status} test ${classId}`;
+  const message = `Hi, notifying you that ${firstName} ${lastName} (${phone}) just attempted and ${status} assessment ${classId}`;
 
   await sendAdminSms(message);
 };
@@ -149,4 +149,4 @@ export const signUpSmsToUser = (phone) => {
     .then((message) => console.log("1", message.status));
 };
 
-export default informTestResult;
+export default informAssessmentResult;

@@ -24,7 +24,7 @@ export type UserType = {
   terms_accepted: boolean;
 };
 
-export type CompletedTestData = {
+export type CompletedAssessmentData = {
   classId: string;
   first_name: string;
   last_name: string;
@@ -108,7 +108,7 @@ export type UpdatedUserInfo = {
   id: number;
 };
 
-export type TestQuestion = {
+export type AssessmentQuestion = {
   id: number;
   title: string;
   correct_answer: string;

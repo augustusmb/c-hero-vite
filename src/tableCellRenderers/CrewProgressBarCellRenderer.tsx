@@ -1,8 +1,9 @@
 const CrewProgressBarCellRenderer = (params: any) => {
-  const { first_name, last_name, totalTests, testsCompleted } = params.data;
+  const { first_name, last_name, totalAssessments, assessmentsCompleted } =
+    params.data;
 
   const percentageComplete =
-    Math.round((testsCompleted / totalTests) * 100) || 0;
+    Math.round((assessmentsCompleted / totalAssessments) * 100) || 0;
 
   const isComplete = percentageComplete === 100;
   const fillColor = isComplete ? "bg-green-500" : "bg-slate-500";

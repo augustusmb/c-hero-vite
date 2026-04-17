@@ -8,7 +8,7 @@ import {
   fetchAllUsers,
   updateUserInfoAndProducts,
 } from "./routes/Users.js";
-import { submitTest } from "./routes/SubmitTest.js";
+import { submitAssessment } from "./routes/SubmitAssessment.js";
 import { getUsersAssignedClasses } from "./routes/Classes.js";
 import { getDashboardUsers } from "./routes/Dashboard.js";
 import { fetchFormOptions, signUpUserNew } from "./routes/SignUp.js";
@@ -40,7 +40,7 @@ protectedRouter.route("/users-products").put(updateUserInfoAndProducts);
 
 protectedRouter.route("/users/terms").put(acceptTermsAndConditions);
 
-protectedRouter.route("/submit-test").post(submitTest);
+protectedRouter.route("/submit-assessment").post(submitAssessment);
 
 protectedRouter.route("/classes").get(getUsersAssignedClasses);
 
