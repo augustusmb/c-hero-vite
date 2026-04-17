@@ -1,5 +1,5 @@
 import { ProductData, UserProducts } from "../types/types";
-import { hasDavitProduct } from "./user";
+import { hasDavitProduct } from "../features/user/utils";
 
 export type ProductStatus = "not-started" | "in-progress" | "complete";
 

@@ -1,11 +1,12 @@
 import { useForm, Controller } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { updateUserInfo } from "./api/user.ts";
+import { updateUserInfo } from "../../../api/user.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserType, UpdatedUserInfo } from "./types/types.ts";
-import { QueryKeys } from "./lib/QueryKeys.ts";
-import { strings } from "./utils/strings.ts";
+import { UserType } from "../../../types/types.ts";
+import { UpdatedUserInfo } from "../types.ts";
+import { QueryKeys } from "../../../lib/QueryKeys.ts";
+import { strings } from "../../../utils/strings.ts";
 import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
 import { z } from "zod";
@@ -15,8 +16,8 @@ import {
   positionOptions,
   TCreateableSelectOptions,
   TCreateableSelectOption,
-} from "./components/SignUpForm/SignUpConfig";
-import { PhoneInput } from "./components/SignUpForm/PhoneInput";
+} from "../../../components/SignUpForm/SignUpConfig";
+import { PhoneInput } from "../../../components/SignUpForm/PhoneInput";
 
 type UserInfoEditProps = {
   toggleEditMode: () => void;

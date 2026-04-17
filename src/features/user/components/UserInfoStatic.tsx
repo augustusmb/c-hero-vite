@@ -1,7 +1,7 @@
 import parsePhoneNumber from "libphonenumber-js";
 import { Mail, Phone, Building2, Anchor, MapPin, UserCircle2 } from "lucide-react";
-import { UserType } from "./types/types";
-import { strings } from "./utils/strings";
+import { UserType } from "../../../types/types";
+import { strings } from "../../../utils/strings";
 
 const UserInfoStatic = ({
   userInfoToEdit: userInfo,

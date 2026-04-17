@@ -6,7 +6,7 @@ import AdminEditUserStatic from "./AdminEditUserStatic.js";
 import AdminEditUserForm from "./AdminEditUserForm.js";
 import AdminUserInfoTable from "./AdminUserInfoTable.js";
 import { useQuery } from "@tanstack/react-query";
-import { getFullUserProductProgressMap } from "./utils/user.ts";
+import { getFullUserProductProgressMap } from "./features/user/utils.ts";
 import { UserType } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import { QueryKeys } from "./lib/QueryKeys.ts";

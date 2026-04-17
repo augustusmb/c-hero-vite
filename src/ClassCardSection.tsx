@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ClassCard from "./ClassCard.js";
 import { useQuery } from "@tanstack/react-query";
-import { getFullUserProductProgressMap } from "./utils/user.ts";
+import { getFullUserProductProgressMap } from "./features/user/utils.ts";
 import { ProductData, UserProducts } from "./types/types.ts";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import { Info } from "lucide-react";

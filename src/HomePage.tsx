@@ -1,9 +1,9 @@
 import ClassCardSection from "./ClassCardSection.tsx";
-import TermsAndConditions from "./textComponents/TermsAndConditions.jsx";
-import UserInfoSection from "./UserInfoSection.jsx";
+import TermsAndConditions from "./features/user/components/TermsAndConditions.tsx";
+import UserInfoSection from "./features/user/components/UserInfoSection.tsx";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import DashboardProgressSection from "./DashboardProgressSection.tsx";
-import ProductSerialNumberSection from "./ProductSerialNumberSection.tsx";
+import ProductSerialNumberSection from "./features/user/components/ProductSerialNumberSection.tsx";
 
 const HomePage = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();

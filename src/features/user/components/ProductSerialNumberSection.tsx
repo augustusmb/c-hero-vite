@@ -6,7 +6,7 @@
 //   SelectTrigger,
 //   SelectValue,
 // } from "./@/components/ui/select.tsx";
-import { Button } from "./@/components/ui/button.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import {
   Table,
@@ -24,17 +24,17 @@ import {
 } from "@/components/ui/form.tsx";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
+import { useLoggedInUserContext } from "../../../hooks/useLoggedInUserContext.ts";
 import {
   getSerialNumbers,
   deleteSerialNumber,
   addSerialNumber,
-} from "./api/user.ts";
+} from "../../../api/user.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import { FieldValues, useForm } from "react-hook-form";
-import { QueryKeys } from "./lib/QueryKeys.ts";
-import { strings } from "./utils/strings.ts";
-import TrashIcon from "./assets/icons/icon-trash.svg?react";
+import { QueryKeys } from "../../../lib/QueryKeys.ts";
+import { strings } from "../../../utils/strings.ts";
+import TrashIcon from "../../../assets/icons/icon-trash.svg?react";
 
 type ProductSerialNumber = {
   product_id: string;

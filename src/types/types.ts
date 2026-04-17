@@ -1,5 +1,3 @@
-import { TCreateableSelectOption } from "../components/SignUpForm/SignUpConfig.tsx";
-
 export type AdminEditUserStaticProps = {
   toggleEditMode: (editMode: boolean) => void;
   editMode: boolean;
@@ -94,18 +92,6 @@ export type NewlyAddedProducts = {
 
 export type NewlyRemovedProducts = {
   [key: string]: boolean;
-};
-
-export type UpdatedUserInfo = {
-  first_name: string;
-  last_name: string;
-  phone: string;
-  email: string;
-  company: TCreateableSelectOption;
-  vessel: TCreateableSelectOption;
-  port: TCreateableSelectOption;
-  position: TCreateableSelectOption;
-  id: number;
 };
 
 export type AssessmentQuestion = {

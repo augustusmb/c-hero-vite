@@ -60,7 +60,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getFullUserProductProgressMap,
   hasDavitProduct,
-} from "./utils/user.ts";
+} from "./features/user/utils.ts";
 import { QueryKeys } from "./lib/QueryKeys.ts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;

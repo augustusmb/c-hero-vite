@@ -1,10 +1,10 @@
-import { productsMap } from "../messages.ts";
-import { fetchUserClasses } from "../api/user.ts";
+import { productsMap } from "../../messages.ts";
+import { fetchUserClasses } from "../../api/user.ts";
 import {
   ProductProgress,
   ClassProgress,
   UserProducts,
-} from "../types/types.ts";
+} from "../../types/types.ts";
 
 export const createUserClassesMap = (userClasses: ClassProgress[]) => {
   const userClassesMap: ProductProgress = {};

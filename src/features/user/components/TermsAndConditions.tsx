@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { acceptTermsAndConditions } from "../api/acceptTerms";
+import { acceptTermsAndConditions } from "../../../api/acceptTerms";
 
 const TermsAndConditions = ({ userId }: { userId: number }) => {
   const acceptTermsMutation = useMutation({

@@ -1,6 +1,6 @@
 import { Pencil } from "lucide-react";
-import UserInfoStatic from "./UserInfoStatic.jsx";
-import UserProductsStatic from "./UserProductsStatic.jsx";
+import UserInfoStatic from "./features/user/components/UserInfoStatic.tsx";
+import UserProductsStatic from "./UserProductsStatic.tsx";
 import { UserType, UserProducts } from "./types/types.ts";
 import { strings } from "./utils/strings.ts";
 
