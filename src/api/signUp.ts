@@ -28,7 +28,10 @@ export const signUpUser = async (signUpUserData: TSignUpSchema) => {
 
     return response;
   } catch (error: any) {
-    toast.error(error.response?.data?.error || "Failed to sign up");
+    // 409 (duplicate) is handled in the form so it can show inline + a login action
+    if (error.response?.status !== 409) {
+      toast.error(error.response?.data?.error || "Failed to sign up");
+    }
     throw error;
   }
 };

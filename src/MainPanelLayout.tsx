@@ -5,7 +5,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import BeatLoader from "react-spinners/BeatLoader";
 import HeaderNavigation from "./HeaderNavigation.tsx";
 import MainPanelRouter from "./MainPanelRouter.tsx";
-import AuthLayout from "./AuthLayout.tsx";
+import SignUpPage from "./components/SignUpForm/SignUpPage.tsx";
 import { setAuthToken } from "./api/apiClient.ts";
 import { getUserByPhone } from "./api/user.ts";
 import { UserType } from "./types/types.ts";
@@ -14,7 +14,6 @@ import { strings } from "./utils/strings.ts";
 
 type LoggedInUserContextType = {
   loggedInUserInfo: UserType | null;
-  setLoggedInUserInfo: (user: any) => void;
 };
 
 export const LoggedInUserContext =
@@ -27,7 +26,6 @@ const PageLoader = () => (
 );
 
 const MainPanelLayout = () => {
-  const [loggedInUserInfo, setLoggedInUserInfo] = useState(null);
   const [tokenReady, setTokenReady] = useState(false);
   const {
     isAuthenticated,
@@ -50,7 +48,6 @@ const MainPanelLayout = () => {
 
   const {
     data: userData,
-    isLoading: userLoading,
     isError: userError,
     error,
   } = useQuery({
@@ -60,22 +57,17 @@ const MainPanelLayout = () => {
       !authLoading && Boolean(user?.name) && isAuthenticated && tokenReady,
   });
 
-  useEffect(() => {
-    if (userData) {
-      setLoggedInUserInfo(userData.data[0]);
-    }
-  }, [userData]);
+  const loggedInUserInfo: UserType | null = userData?.data?.[0] ?? null;
 
   const renderBody = () => {
     if (authLoading) return <PageLoader />;
     if (!isAuthenticated) {
       return (
-        <div className="mx-auto mt-4 text-2xl lg:w-1/2">
-          <AuthLayout />
+        <div className="mx-auto mt-4 lg:w-1/2">
+          <SignUpPage />
         </div>
       );
     }
-    if (userLoading) return <PageLoader />;
     if (userError) {
       return (
         <div className="mx-auto mt-8 max-w-md text-center text-slate-700">
@@ -83,14 +75,13 @@ const MainPanelLayout = () => {
         </div>
       );
     }
+    if (!loggedInUserInfo) return <PageLoader />;
     return <MainPanelRouter />;
   };
 
   return (
     <Router>
-      <LoggedInUserContext.Provider
-        value={{ loggedInUserInfo, setLoggedInUserInfo }}
-      >
+      <LoggedInUserContext.Provider value={{ loggedInUserInfo }}>
         <div>
           <HeaderNavigation />
         </div>

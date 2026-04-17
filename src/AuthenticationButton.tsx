@@ -5,20 +5,11 @@ import { LogOut } from "lucide-react";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import { strings } from "./utils/strings.ts";
 
-type ButtonVariant = "header" | "body";
-type AuthButtonProps = {
-  variant?: ButtonVariant;
-};
-
-const AuthenticationButton = ({ variant = "body" }: AuthButtonProps) => {
+const AuthenticationButton = () => {
   const { isAuthenticated, isLoading } = useAuth0();
 
-  if (variant === "body") {
-    return <LoginButton variant="body" />;
-  }
-
   if (isLoading) return <AuthSlotSkeleton />;
-  if (!isAuthenticated) return <LoginButton variant="header" />;
+  if (!isAuthenticated) return <LoginButton />;
   return <UserMenu />;
 };
 
@@ -26,18 +17,12 @@ const AuthSlotSkeleton = () => (
   <div className="h-10 w-10 animate-pulse rounded-full bg-slate-700 lg:h-11 lg:w-11" />
 );
 
-const loginButtonStyles = {
-  header:
-    "inline-flex items-center justify-center rounded-full bg-orange-500 px-5 py-2 text-sm font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 lg:text-base",
-  body: "w-full rounded bg-orange-500 px-10 py-4 text-2xl font-bold text-slate-050 shadow-sm transition-colors hover:bg-orange-600",
-};
-
-const LoginButton = ({ variant = "body" }: AuthButtonProps) => {
+const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
 
   return (
     <button
-      className={loginButtonStyles[variant]}
+      className="inline-flex items-center justify-center rounded-full bg-orange-500 px-5 py-2 text-sm font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 lg:text-base"
       onClick={() => loginWithRedirect()}
     >
       {strings["common.login"]}
