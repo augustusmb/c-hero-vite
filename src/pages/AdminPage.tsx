@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
-import AdminEditUserStatic from "./features/admin/components/AdminEditUserStatic.tsx";
-import AdminEditUserForm from "./features/admin/components/AdminEditUserForm.tsx";
-import AdminUserInfoTable from "./features/admin/components/AdminUserInfoTable.tsx";
+import { useLoggedInUserContext } from "../hooks/useLoggedInUserContext.ts";
+import AdminEditUserStatic from "../features/admin/components/AdminEditUserStatic.tsx";
+import AdminEditUserForm from "../features/admin/components/AdminEditUserForm.tsx";
+import AdminUserInfoTable from "../features/admin/components/AdminUserInfoTable.tsx";
 import { useQuery } from "@tanstack/react-query";
-import { getFullUserProductProgressMap } from "./features/user/utils.ts";
-import { UserType } from "./types/types.ts";
+import { getFullUserProductProgressMap } from "../features/user/utils.ts";
+import { UserType } from "../types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
-import { QueryKeys } from "./lib/QueryKeys.ts";
-import { strings } from "./utils/strings.ts";
+import { QueryKeys } from "../lib/QueryKeys.ts";
+import { strings } from "../utils/strings.ts";
 
 const AdminPage = () => {
   const navigate = useNavigate();

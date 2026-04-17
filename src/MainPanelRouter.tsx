@@ -1,9 +1,9 @@
 import { Routes, Route, Navigate, useParams } from "react-router-dom";
-import AssessmentPage from "./AssessmentPage.tsx";
-import PDFRenderPage from "./PDFRenderPage.jsx";
-import CertificatePage from "./textComponents/CertificatePage.jsx";
-import AdminPage from "./AdminPage.tsx";
-import HomePage from "./HomePage.jsx";
+import AssessmentPage from "./pages/AssessmentPage.tsx";
+import PDFRenderPage from "./pages/PDFRenderPage.tsx";
+import CertificatePage from "./pages/CertificatePage.tsx";
+import AdminPage from "./pages/AdminPage.tsx";
+import HomePage from "./pages/HomePage.tsx";
 
 const LegacyTestRedirect = () => {
   const { classId } = useParams();

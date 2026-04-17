@@ -5,7 +5,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import BeatLoader from "react-spinners/BeatLoader";
 import HeaderNavigation from "./components/HeaderNavigation.tsx";
 import MainPanelRouter from "./MainPanelRouter.tsx";
-import SignUpPage from "./components/SignUpForm/SignUpPage.tsx";
+import SignUpPage from "./pages/SignUpPage.tsx";
 import { setAuthToken } from "./api/apiClient.ts";
 import { getUserByPhone } from "./api/user.ts";
 import { UserType } from "./types/types.ts";

@@ -5,13 +5,13 @@ import BeatLoader from "react-spinners/BeatLoader";
 import { ClipboardCheck, ChevronRight, AlertTriangle } from "lucide-react";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext";
+import { useLoggedInUserContext } from "../hooks/useLoggedInUserContext";
 import { useQuery } from "@tanstack/react-query";
 import {
   getFullUserProductProgressMap,
   hasDavitProduct,
-} from "./features/user/utils.ts";
-import { QueryKeys } from "./lib/QueryKeys.ts";
+} from "../features/user/utils.ts";
+import { QueryKeys } from "../lib/QueryKeys.ts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 

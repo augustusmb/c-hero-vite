@@ -7,23 +7,23 @@ import { Info, CheckCircle2, XCircle, RotateCcw } from "lucide-react";
 import {
   getAssessmentQuestions,
   submitCompletedAssessment,
-} from "./api/assessment.ts";
+} from "../api/assessment.ts";
 import {
   randomizeArray,
   prepareAnswerOptions,
   prepareBlankAnswers,
   shuffle,
-} from "./features/assessment/utils.ts";
-import { classTypesMap } from "./messages.ts";
-import { useClassId } from "./features/classes/hooks/useClassId.tsx";
-import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
+} from "../features/assessment/utils.ts";
+import { classTypesMap } from "../messages.ts";
+import { useClassId } from "../features/classes/hooks/useClassId.tsx";
+import { useLoggedInUserContext } from "../hooks/useLoggedInUserContext.ts";
 import {
   CompletedAssessmentData,
   AssessmentQuestion,
-} from "./features/assessment/types.ts";
+} from "../features/assessment/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
-import { QueryKeys } from "./lib/QueryKeys.ts";
-import { strings } from "./utils/strings.ts";
+import { QueryKeys } from "../lib/QueryKeys.ts";
+import { strings } from "../utils/strings.ts";
 import {
   Popover,
   PopoverContent,
