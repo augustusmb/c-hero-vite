@@ -9,11 +9,7 @@ type TSelect = {
   id: number;
 };
 
-type SignUpPageProps = {
-  setActiveTab: (tab: string) => void;
-};
-
-const SignUpPage = ({ setActiveTab }: SignUpPageProps) => {
+const SignUpPage = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: [QueryKeys.FORM_OPTIONS],
     queryFn: fetchOptions,
@@ -21,7 +17,7 @@ const SignUpPage = ({ setActiveTab }: SignUpPageProps) => {
 
   const signUpUserMutation = useMutation({
     mutationFn: async (signUpUserData: TSignUpSchema) => {
-      signUpUser(signUpUserData);
+      return await signUpUser(signUpUserData);
     },
   });
 
@@ -45,10 +41,9 @@ const SignUpPage = ({ setActiveTab }: SignUpPageProps) => {
   return (
     <SignUpForm
       companies={companies}
-      setActiveTab={setActiveTab}
       ports={ports}
       vessels={vessels}
-      signUpUserMutation={signUpUserMutation.mutate}
+      signUpUserMutation={signUpUserMutation.mutateAsync}
     />
   );
 };

@@ -160,10 +160,18 @@ export async function signUpUserNew(req, res) {
   } catch (error) {
     // Handle specific error types
     if (error.code === "23505") {
-      // Unique constraint violation
+      // Unique constraint violation — identify which field
+      const constraint = error.constraint || "";
+      const detail = error.detail || "";
+      const isPhone =
+        constraint.includes("phone") || detail.includes("phone");
+
       res.status(409).json({
         success: false,
-        error: "A record with this information already exists",
+        field: isPhone ? "phone" : null,
+        error: isPhone
+          ? "This phone number is already registered."
+          : "A record with this information already exists.",
       });
     } else if (error.code === "23503") {
       // Foreign key violation

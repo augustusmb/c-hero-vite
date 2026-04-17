@@ -11,15 +11,13 @@ INSERT INTO
   )
 VALUES
   (
-    ${firstName}, 
-    ${lastName}, 
-    ${phone}, 
-    ${email}, 
+    ${firstName},
+    ${lastName},
+    ${phone},
+    ${email},
     ${position_type},
-    ${companyId}, 
-    ${portId}, 
+    ${companyId},
+    ${portId},
     ${vesselId}
   )
-ON CONFLICT (phone)
-DO NOTHING
 RETURNING *;
