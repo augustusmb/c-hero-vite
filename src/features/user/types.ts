@@ -1,4 +1,4 @@
-import { TCreateableSelectOption } from "../../components/SignUpForm/SignUpConfig.tsx";
+import { TCreateableSelectOption } from "../signup/components/SignUpConfig.tsx";
 
 export type UpdatedUserInfo = {
   first_name: string;

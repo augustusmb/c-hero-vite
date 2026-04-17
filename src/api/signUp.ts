@@ -1,5 +1,5 @@
 import apiClient from "./apiClient.ts";
-import { TSignUpSchema } from "../components/SignUpForm/SignUpConfig.ts";
+import { TSignUpSchema } from "../features/signup/components/SignUpConfig";
 import { toast, Bounce } from "react-toastify";
 
 export const fetchOptions = async () => {

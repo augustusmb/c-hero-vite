@@ -16,8 +16,8 @@ import {
   positionOptions,
   TCreateableSelectOptions,
   TCreateableSelectOption,
-} from "../../../components/SignUpForm/SignUpConfig";
-import { PhoneInput } from "../../../components/SignUpForm/PhoneInput";
+} from "../../signup/components/SignUpConfig";
+import { PhoneInput } from "../../signup/components/PhoneInput";
 
 type UserInfoEditProps = {
   toggleEditMode: () => void;

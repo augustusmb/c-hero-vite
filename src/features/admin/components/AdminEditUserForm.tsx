@@ -17,8 +17,8 @@ import {
   positionOptions,
   TCreateableSelectOption,
   TCreateableSelectOptions,
-} from "../../../components/SignUpForm/SignUpConfig.tsx";
-import { PhoneInput } from "../../../components/SignUpForm/PhoneInput.tsx";
+} from "../../signup/components/SignUpConfig.tsx";
+import { PhoneInput } from "../../signup/components/PhoneInput.tsx";
 import {
   Dialog,
   DialogContent,

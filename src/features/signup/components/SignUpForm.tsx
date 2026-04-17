@@ -22,7 +22,7 @@ import {
 } from "./SignUpConfig";
 import { PhoneInput } from "./PhoneInput";
 import { RadioImageGroup } from "./RadioImageGroup";
-import { strings } from "../../utils/strings";
+import { strings } from "../../../utils/strings";
 
 type SignUpFormProps = {
   companies: TCreateableSelectOptions;
