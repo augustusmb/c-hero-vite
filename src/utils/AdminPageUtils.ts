@@ -3,8 +3,8 @@ import {
   NewlyRemovedProducts,
   UserType,
   RawUserFormData,
-  UserProducts,
 } from "../types/types";
+import { UserProducts } from "../features/classes/types";
 
 export function compareProducts(
   userProductData: UserProducts,

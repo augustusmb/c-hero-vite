@@ -4,7 +4,7 @@ import {
   ProductProgress,
   ClassProgress,
   UserProducts,
-} from "../../types/types.ts";
+} from "../classes/types.ts";
 
 export const createUserClassesMap = (userClasses: ClassProgress[]) => {
   const userClassesMap: ProductProgress = {};

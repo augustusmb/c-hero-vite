@@ -19,13 +19,7 @@ const MainPanelRouter = () => {
         <Route path="/assessment/:classId" element={<AssessmentPage />} />
         <Route path="/test/:classId" element={<LegacyTestRedirect />} />
         <Route path="/class/:classId" element={<PDFRenderPage />} />
-        <Route path="/help/:safety" element={<PDFRenderPage />} />
-        <Route path="/help/:troubleshooting" element={<PDFRenderPage />} />
-        <Route
-          path="/help/:MobInspectionCheckList"
-          element={<PDFRenderPage />}
-        />
-        <Route path="/help/:MobDrillLog" element={<PDFRenderPage />} />
+        <Route path="/help/:docId" element={<PDFRenderPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/redirect" element={<Navigate to="/" />} />
         <Route path="/home" element={<Navigate to="/" />} />

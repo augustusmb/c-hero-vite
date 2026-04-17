@@ -1,4 +1,4 @@
-import { UserProducts } from "./types/types";
+import { UserProducts } from "./features/classes/types";
 
 const UserProductsStatic = ({
   userProductData,

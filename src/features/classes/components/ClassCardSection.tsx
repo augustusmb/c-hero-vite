@@ -1,18 +1,18 @@
 import { useState } from "react";
-import ClassCard from "./ClassCard.js";
+import ClassCard from "./ClassCard";
 import { useQuery } from "@tanstack/react-query";
-import { getFullUserProductProgressMap } from "./features/user/utils.ts";
-import { ProductData, UserProducts } from "./types/types.ts";
-import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
+import { getFullUserProductProgressMap } from "../../user/utils.ts";
+import { ProductData, UserProducts } from "../types";
+import { useLoggedInUserContext } from "../../../hooks/useLoggedInUserContext.ts";
 import { Info } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { QueryKeys } from "./lib/QueryKeys.ts";
-import { strings } from "./utils/strings.ts";
-import { getProductStatus, ProductStatus } from "./utils/classProgress.ts";
+import { QueryKeys } from "../../../lib/QueryKeys.ts";
+import { strings } from "../../../utils/strings.ts";
+import { getProductStatus, ProductStatus } from "../utils";
 
 type FilterId = ProductStatus | "all";
 

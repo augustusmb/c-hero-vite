@@ -2,59 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { pdfjs, Document, Page } from "react-pdf";
 import BeatLoader from "react-spinners/BeatLoader";
-import { ClipboardCheck, ChevronRight } from "lucide-react";
+import { ClipboardCheck, ChevronRight, AlertTriangle } from "lucide-react";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import class_3b_a from "./assets/c-hero-classes/3b/3b_a.pdf";
-import class_3b_b from "./assets/c-hero-classes/3b/3b_b.pdf";
-import class_3b_c from "./assets/c-hero-classes/3b/3b_c.pdf";
-import class_3b_d from "./assets/c-hero-classes/3b/3b_d.pdf";
-import class_3f_a from "./assets/c-hero-classes/3f/3f_a.pdf";
-import class_3f_b from "./assets/c-hero-classes/3f/3f_b.pdf";
-import class_3f_c from "./assets/c-hero-classes/3f/3f_c.pdf";
-import class_3f_d from "./assets/c-hero-classes/3f/3f_d.pdf";
-import class_5b_a from "./assets/c-hero-classes/5b/5b_a.pdf";
-import class_5b_b from "./assets/c-hero-classes/5b/5b_b.pdf";
-import class_5b_c from "./assets/c-hero-classes/5b/5b_c.pdf";
-import class_5b_d from "./assets/c-hero-classes/5b/5b_d.pdf";
-import class_5f_a from "./assets/c-hero-classes/5f/5f_a.pdf";
-import class_5f_b from "./assets/c-hero-classes/5f/5f_b.pdf";
-import class_5f_c from "./assets/c-hero-classes/5f/5f_c.pdf";
-import class_5f_d from "./assets/c-hero-classes/5f/5f_d.pdf";
-import class_7b_a from "./assets/c-hero-classes/7b/7b_a.pdf";
-import class_7b_b from "./assets/c-hero-classes/7b/7b_b.pdf";
-import class_7b_c from "./assets/c-hero-classes/7b/7b_c.pdf";
-import class_7b_d from "./assets/c-hero-classes/7b/7b_d.pdf";
-import class_7f_a from "./assets/c-hero-classes/7f/7f_a.pdf";
-import class_7f_b from "./assets/c-hero-classes/7f/7f_b.pdf";
-import class_7f_c from "./assets/c-hero-classes/7f/7f_c.pdf";
-import class_7f_d from "./assets/c-hero-classes/7f/7f_d.pdf";
-import class_9f_a from "./assets/c-hero-classes/9f/9f_a.pdf";
-import class_9f_b from "./assets/c-hero-classes/9f/9f_b.pdf";
-import class_9f_c from "./assets/c-hero-classes/9f/9f_c.pdf";
-import class_9f_d from "./assets/c-hero-classes/9f/9f_d.pdf";
-import class_hr_a from "./assets/c-hero-classes/hr/hr_a.pdf";
-import class_hr_b from "./assets/c-hero-classes/hr/hr_b.pdf";
-import class_hr_c from "./assets/c-hero-classes/hr/hr_c.pdf";
-import class_hr_d from "./assets/c-hero-classes/hr/hr_d.pdf";
-import class_rk_a from "./assets/c-hero-classes/rk/rk_a.pdf";
-import class_rk_b from "./assets/c-hero-classes/rk/rk_b.pdf";
-import class_rk_c from "./assets/c-hero-classes/rk/rk_c.pdf";
-import class_rk_d from "./assets/c-hero-classes/rk/rk_d.pdf";
-import class_rs_a from "./assets/c-hero-classes/rs/rs_a.pdf";
-import class_rs_b from "./assets/c-hero-classes/rs/rs_b.pdf";
-import class_rs_c from "./assets/c-hero-classes/rs/rs_c.pdf";
-import class_rs_d from "./assets/c-hero-classes/rs/rs_d.pdf";
-import class_vr_a from "./assets/c-hero-classes/vr/vr_a.pdf";
-import class_vr_b from "./assets/c-hero-classes/vr/vr_b.pdf";
-import class_vr_b_p from "./assets/c-hero-classes/vr/vr_b_p.pdf";
-import class_vr_c from "./assets/c-hero-classes/vr/vr_c.pdf";
-import class_vr_d from "./assets/c-hero-classes/vr/vr_d.pdf";
-import class_vr_p from "./assets/c-hero-classes/vr/vr_p.pdf";
-import safetyPDF from "./assets/c-hero-classes/safety/z_safety.pdf";
-import troubleshootingPDF from "./assets/c-hero-classes/troubleshooting/troubleshooting.pdf";
-import MobDrillLog from "./assets/MOBDrillLog.pdf";
-import MobInspectionCheckList from "./assets/MOBInspectionCheckList.pdf";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -65,57 +15,22 @@ import { QueryKeys } from "./lib/QueryKeys.ts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-let pdfMap = {
-  "3b_a": class_3b_a,
-  "3b_b": class_3b_b,
-  "3b_c": class_3b_c,
-  "3b_d": class_3b_d,
-  "3f_a": class_3f_a,
-  "3f_b": class_3f_b,
-  "3f_c": class_3f_c,
-  "3f_d": class_3f_d,
-  "5b_a": class_5b_a,
-  "5b_b": class_5b_b,
-  "5b_c": class_5b_c,
-  "5b_d": class_5b_d,
-  "5f_a": class_5f_a,
-  "5f_b": class_5f_b,
-  "5f_c": class_5f_c,
-  "5f_d": class_5f_d,
-  "7b_a": class_7b_a,
-  "7b_b": class_7b_b,
-  "7b_c": class_7b_c,
-  "7b_d": class_7b_d,
-  "7f_a": class_7f_a,
-  "7f_b": class_7f_b,
-  "7f_c": class_7f_c,
-  "7f_d": class_7f_d,
-  "9f_a": class_9f_a,
-  "9f_b": class_9f_b,
-  "9f_c": class_9f_c,
-  "9f_d": class_9f_d,
-  hr_a: class_hr_a,
-  hr_b: class_hr_b,
-  hr_c: class_hr_c,
-  hr_d: class_hr_d,
-  rk_a: class_rk_a,
-  rk_b: class_rk_b,
-  rk_c: class_rk_c,
-  rk_d: class_rk_d,
-  rs_a: class_rs_a,
-  rs_b: class_rs_b,
-  rs_c: class_rs_c,
-  rs_d: class_rs_d,
-  vr_a: class_vr_a,
-  vr_b: class_vr_b,
-  vr_b_p: class_vr_b_p,
-  vr_c: class_vr_c,
-  vr_d: class_vr_d,
-  vr_p: class_vr_p,
-  safety: safetyPDF,
-  troubleshooting: troubleshootingPDF,
-  MobDrillLog: MobDrillLog,
-  MobInspectionCheckList: MobInspectionCheckList,
+const PDF_BASE_URL = import.meta.env.VITE_PDF_BASE_URL ?? "";
+
+const SPECIAL_PDF_PATHS: Record<string, string> = {
+  safety: "safety/z_safety.pdf",
+  troubleshooting: "troubleshooting/troubleshooting.pdf",
+  MobDrillLog: "reference/MOBDrillLog.pdf",
+  MobInspectionCheckList: "reference/MOBInspectionCheckList.pdf",
+};
+
+const buildPdfUrl = (key: string | undefined): string | null => {
+  if (!key || !PDF_BASE_URL) return null;
+  const special = SPECIAL_PDF_PATHS[key];
+  if (special) return `${PDF_BASE_URL}/${special}`;
+  const folder = key.split("_")[0];
+  if (!folder) return null;
+  return `${PDF_BASE_URL}/${folder}/${key}.pdf`;
 };
 
 const PDFRenderPage = () => {
@@ -124,36 +39,54 @@ const PDFRenderPage = () => {
   const [numPages, setNumpages] = useState<number | null>(1);
   const [panelWidth, setPanelWidth] = useState(0);
   const [isPdfLoaded, setIsPdfLoaded] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
   const mainPanelRef = useRef<HTMLDivElement>(null);
 
-  let { classId, safety } = useParams();
+  const { classId, docId } = useParams();
+
+  const needsDavitCheck = classId === "vr_b";
 
   const { data: userProductsMap } = useQuery({
     queryKey: [QueryKeys.GET_USER_PRODUCTS_MAP, loggedInUserInfo?.id || 0],
     queryFn: getFullUserProductProgressMap,
-    enabled: !!loggedInUserInfo?.id,
+    enabled: !!loggedInUserInfo?.id && needsDavitCheck,
   });
 
-  const getPdfKey = () => {
+  const resolvePdfKey = () => {
     if (
       classId === "vr_b" &&
       userProductsMap &&
       !hasDavitProduct(userProductsMap)
     ) {
-      return "vr_b_p"; // Use Prusik-included operation PDF
+      return "vr_b_p";
     }
-    return classId || safety;
+    return classId || docId;
   };
 
-  const pdfKey = getPdfKey();
+  const pdfKey = resolvePdfKey();
+  const pdfUrl = buildPdfUrl(pdfKey);
 
   const onPDFSuccess = ({ numPages }: { numPages: number }) => {
     setNumpages(numPages);
     setIsPdfLoaded(true);
+    setLoadError(false);
+  };
+
+  const onPDFError = (error: Error) => {
+    console.error(error);
+    setLoadError(true);
+  };
+
+  const handleRetry = () => {
+    setLoadError(false);
+    setIsPdfLoaded(false);
+    setRetryKey((k) => k + 1);
   };
 
   useEffect(() => {
     setIsPdfLoaded(false);
+    setLoadError(false);
   }, [pdfKey]);
 
   useEffect(() => {
@@ -168,34 +101,50 @@ const PDFRenderPage = () => {
     return () => observer.disconnect();
   }, []);
 
+  if (!pdfUrl) {
+    return (
+      <div ref={mainPanelRef} className="pb-8">
+        <ErrorPanel message="PDF not found." />
+      </div>
+    );
+  }
+
   return (
     <div id="mainPanel" ref={mainPanelRef} className="pb-8">
-      <Document
-        file={pdfMap[pdfKey as keyof typeof pdfMap]}
-        onLoadSuccess={onPDFSuccess}
-        onLoadError={console.error}
-        externalLinkTarget="_blank"
-        externalLinkRel="noopener noreferrer"
-        loading={
-          <div className="flex justify-center py-20">
-            <BeatLoader color="#123abc" loading={true} size={15} />
-          </div>
-        }
-      >
-        {Array.from(new Array(numPages), (_el, index) => (
-          <div key={index}>
-            <Page
-              key={`page_${index + 1}`}
-              pageNumber={index + 1}
-              renderAnnotationLayer={true}
-              onRenderAnnotationLayerError={console.error}
-              onGetAnnotationsError={console.error}
-              width={panelWidth}
-            />
-          </div>
-        ))}
-      </Document>
-      {classId && isPdfLoaded ? (
+      {loadError ? (
+        <ErrorPanel
+          message="We couldn't load this PDF. Check your connection and try again."
+          onRetry={handleRetry}
+        />
+      ) : (
+        <Document
+          key={retryKey}
+          file={pdfUrl}
+          onLoadSuccess={onPDFSuccess}
+          onLoadError={onPDFError}
+          externalLinkTarget="_blank"
+          externalLinkRel="noopener noreferrer"
+          loading={
+            <div className="flex justify-center py-20">
+              <BeatLoader color="#123abc" loading={true} size={15} />
+            </div>
+          }
+        >
+          {Array.from(new Array(numPages), (_el, index) => (
+            <div key={index}>
+              <Page
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+                renderAnnotationLayer={true}
+                onRenderAnnotationLayerError={console.error}
+                onGetAnnotationsError={console.error}
+                width={panelWidth}
+              />
+            </div>
+          ))}
+        </Document>
+      )}
+      {classId && isPdfLoaded && !loadError ? (
         <div className="mt-8 flex justify-center border-t border-slate-200 pt-6">
           <Link
             to={`/assessment/${classId}`}
@@ -213,5 +162,26 @@ const PDFRenderPage = () => {
     </div>
   );
 };
+
+const ErrorPanel = ({
+  message,
+  onRetry,
+}: {
+  message: string;
+  onRetry?: () => void;
+}) => (
+  <div className="mx-auto mt-10 flex max-w-md flex-col items-center gap-3 rounded-lg border border-slate-200 bg-slate-050 p-6 text-center shadow-sm">
+    <AlertTriangle className="h-8 w-8 text-orange-500" aria-hidden="true" />
+    <p className="text-sm text-slate-700 lg:text-base">{message}</p>
+    {onRetry ? (
+      <button
+        onClick={onRetry}
+        className="rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
+      >
+        Retry
+      </button>
+    ) : null}
+  </div>
+);
 
 export default PDFRenderPage;

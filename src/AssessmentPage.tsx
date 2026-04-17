@@ -15,7 +15,7 @@ import {
   shuffle,
 } from "./utils/assessment.js";
 import { classTypesMap } from "./messages.ts";
-import { useClassId } from "./hooks/useClassId.tsx";
+import { useClassId } from "./features/classes/hooks/useClassId.tsx";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import { CompletedAssessmentData, AssessmentQuestion } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";

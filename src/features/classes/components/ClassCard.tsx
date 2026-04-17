@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ClassProgress, ProductData, UserProducts } from "./types/types";
-import { hasDavitProduct } from "./features/user/utils";
-import { getProductStatus, ProductStatus } from "./utils/classProgress";
-import CheckIcon from "./assets/icons/icon-check.svg?react";
+import { ClassProgress, ProductData, UserProducts } from "../types";
+import { hasDavitProduct } from "../../user/utils";
+import { getProductStatus, ProductStatus } from "../utils";
+import CheckIcon from "../../../assets/icons/icon-check.svg?react";
 import { ChevronRight } from "lucide-react";
 
 type ClassCardItemsProps = {

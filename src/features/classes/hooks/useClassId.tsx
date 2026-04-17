@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { productsMap } from "../messages.ts";
+import { productsMap } from "../../../messages.ts";
 
 export const useClassId = (classId: string) => {
   const classInfo = useMemo(() => productsMap[classId.slice(0, 2)], [classId]);

@@ -3,16 +3,16 @@ import { useQuery } from "@tanstack/react-query";
 import { AgGridReact } from "ag-grid-react"; // React Grid Logic
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
-import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
-import { getDashboardUsers } from "./api/user.ts";
+import { useLoggedInUserContext } from "../../../hooks/useLoggedInUserContext.ts";
+import { getDashboardUsers } from "../../../api/user.ts";
 import BeatLoader from "react-spinners/BeatLoader";
-import CrewProgressBarCellRenderer from "./tableCellRenderers/CrewProgressBarCellRenderer.tsx";
+import CrewProgressBarCellRenderer from "../../../tableCellRenderers/CrewProgressBarCellRenderer.tsx";
 import ClassProgressDatesCellRenderer, {
   getDateFormat,
-} from "./tableCellRenderers/ClassProgressDatesCellRenderer.tsx";
-import PositionBadge from "./components/PositionBadge.tsx";
-import { QueryKeys } from "./lib/QueryKeys.ts";
-import { strings } from "./utils/strings.ts";
+} from "../../../tableCellRenderers/ClassProgressDatesCellRenderer.tsx";
+import PositionBadge from "../../../components/PositionBadge.tsx";
+import { QueryKeys } from "../../../lib/QueryKeys.ts";
+import { strings } from "../../../utils/strings.ts";
 
 const DashboardProgressSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();

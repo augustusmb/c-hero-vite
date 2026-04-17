@@ -1,7 +1,8 @@
 import { Pencil } from "lucide-react";
 import UserInfoStatic from "./features/user/components/UserInfoStatic.tsx";
 import UserProductsStatic from "./UserProductsStatic.tsx";
-import { UserType, UserProducts } from "./types/types.ts";
+import { UserType } from "./types/types.ts";
+import { UserProducts } from "./features/classes/types.ts";
 import { strings } from "./utils/strings.ts";
 
 type AdminEditUserStaticProps = {
