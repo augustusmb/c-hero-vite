@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getFullUserProductProgressMap } from "./utils/user.ts";
 import { UserType } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
-import { QueryKeys } from "./utils/QueryKeys.ts";
+import { QueryKeys } from "./lib/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
 
 const AdminPage = () => {

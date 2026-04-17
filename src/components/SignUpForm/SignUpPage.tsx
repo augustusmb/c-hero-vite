@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import SignUpForm from "./SignUpForm";
-import { QueryKeys } from "../../utils/QueryKeys";
+import { QueryKeys } from "../../lib/QueryKeys";
 import { fetchOptions, signUpUser } from "../../api/signUp";
 import { TSignUpSchema } from "./SignUpConfig";
 

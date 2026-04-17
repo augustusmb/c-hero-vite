@@ -7,7 +7,7 @@ import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
 import { UserType, UserProducts, RawUserFormData } from "./types/types.ts";
 import { compareProducts } from "./utils/AdminPageUtils.ts";
-import { QueryKeys } from "./utils/QueryKeys.ts";
+import { QueryKeys } from "./lib/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
 import { fetchOptions } from "./api/signUp.ts";
 import { Trash2 } from "lucide-react";

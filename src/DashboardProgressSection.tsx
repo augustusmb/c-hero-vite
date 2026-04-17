@@ -11,7 +11,7 @@ import ClassProgressDatesCellRenderer, {
   getDateFormat,
 } from "./tableCellRenderers/ClassProgressDatesCellRenderer.tsx";
 import PositionBadge from "./components/PositionBadge.tsx";
-import { QueryKeys } from "./utils/QueryKeys.ts";
+import { QueryKeys } from "./lib/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
 
 const DashboardProgressSection = () => {

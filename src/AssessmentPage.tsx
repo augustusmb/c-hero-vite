@@ -19,7 +19,7 @@ import { useClassId } from "./hooks/useClassId.tsx";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
 import { CompletedAssessmentData, AssessmentQuestion } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
-import { QueryKeys } from "./utils/QueryKeys.ts";
+import { QueryKeys } from "./lib/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
 import {
   Popover,

@@ -2,8 +2,8 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { LogOut } from "lucide-react";
-import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
-import { strings } from "./utils/strings.ts";
+import { useLoggedInUserContext } from "../hooks/useLoggedInUserContext.ts";
+import { strings } from "../utils/strings.ts";
 
 const AuthenticationButton = () => {
   const { isAuthenticated, isLoading } = useAuth0();

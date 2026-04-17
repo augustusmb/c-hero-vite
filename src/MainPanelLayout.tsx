@@ -3,13 +3,13 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth0 } from "@auth0/auth0-react";
 import BeatLoader from "react-spinners/BeatLoader";
-import HeaderNavigation from "./HeaderNavigation.tsx";
+import HeaderNavigation from "./components/HeaderNavigation.tsx";
 import MainPanelRouter from "./MainPanelRouter.tsx";
 import SignUpPage from "./components/SignUpForm/SignUpPage.tsx";
 import { setAuthToken } from "./api/apiClient.ts";
 import { getUserByPhone } from "./api/user.ts";
 import { UserType } from "./types/types.ts";
-import { QueryKeys } from "./utils/QueryKeys.ts";
+import { QueryKeys } from "./lib/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
 
 type LoggedInUserContextType = {

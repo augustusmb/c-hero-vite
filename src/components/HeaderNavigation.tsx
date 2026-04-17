@@ -3,7 +3,7 @@ import { Home, LifeBuoy } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import AuthenticationButton from "./AuthenticationButton.tsx";
 import NavBarDropdown from "./NavBarDropdown.tsx";
-import BoatIcon from "./assets/icons/cruiser.svg?react";
+import BoatIcon from "../assets/icons/cruiser.svg?react";
 
 const HeaderNavigation = () => {
   const { isAuthenticated } = useAuth0();

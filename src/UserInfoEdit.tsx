@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { updateUserInfo } from "./api/user.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserType, UpdatedUserInfo } from "./types/types.ts";
-import { QueryKeys } from "./utils/QueryKeys.ts";
+import { QueryKeys } from "./lib/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
 import CreatableSelect from "react-select/creatable";
 import Select from "react-select";

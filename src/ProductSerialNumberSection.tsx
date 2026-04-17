@@ -32,7 +32,7 @@ import {
 } from "./api/user.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import { FieldValues, useForm } from "react-hook-form";
-import { QueryKeys } from "./utils/QueryKeys.ts";
+import { QueryKeys } from "./lib/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
 import TrashIcon from "./assets/icons/icon-trash.svg?react";
 

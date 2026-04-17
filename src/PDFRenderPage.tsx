@@ -61,7 +61,7 @@ import {
   getFullUserProductProgressMap,
   hasDavitProduct,
 } from "./utils/user.ts";
-import { QueryKeys } from "./utils/QueryKeys.ts";
+import { QueryKeys } from "./lib/QueryKeys.ts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -174,6 +174,8 @@ const PDFRenderPage = () => {
         file={pdfMap[pdfKey as keyof typeof pdfMap]}
         onLoadSuccess={onPDFSuccess}
         onLoadError={console.error}
+        externalLinkTarget="_blank"
+        externalLinkRel="noopener noreferrer"
         loading={
           <div className="flex justify-center py-20">
             <BeatLoader color="#123abc" loading={true} size={15} />

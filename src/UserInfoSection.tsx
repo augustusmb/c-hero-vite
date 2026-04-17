@@ -4,7 +4,7 @@ import UserInfoStatic from "./UserInfoStatic.jsx";
 import UserInfoEdit from "./UserInfoEdit.jsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import { UserType } from "./types/types.ts";
-import { QueryKeys } from "./utils/QueryKeys";
+import { QueryKeys } from "./lib/QueryKeys";
 import { fetchOptions } from "./api/signUp";
 import { useQuery } from "@tanstack/react-query";
 

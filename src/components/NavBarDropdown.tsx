@@ -2,8 +2,8 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
-import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
-import { strings } from "./utils/strings.ts";
+import { useLoggedInUserContext } from "../hooks/useLoggedInUserContext.ts";
+import { strings } from "../utils/strings.ts";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");

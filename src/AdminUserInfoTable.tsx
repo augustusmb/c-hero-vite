@@ -6,7 +6,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 import { listUsers } from "./api/user.ts";
 import { UserType } from "./types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
-import { QueryKeys } from "./utils/QueryKeys.ts";
+import { QueryKeys } from "./lib/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
 import PositionBadge from "./components/PositionBadge.tsx";
 import { formatPhone } from "./utils/formatPhone.ts";
