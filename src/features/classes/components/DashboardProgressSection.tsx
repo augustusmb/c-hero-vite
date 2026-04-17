@@ -6,10 +6,10 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied
 import { useLoggedInUserContext } from "../../../hooks/useLoggedInUserContext.ts";
 import { getDashboardUsers } from "../../../api/user.ts";
 import BeatLoader from "react-spinners/BeatLoader";
-import CrewProgressBarCellRenderer from "../../../tableCellRenderers/CrewProgressBarCellRenderer.tsx";
+import CrewProgressBarCellRenderer from "../../admin/components/table/CrewProgressBarCellRenderer.tsx";
 import ClassProgressDatesCellRenderer, {
   getDateFormat,
-} from "../../../tableCellRenderers/ClassProgressDatesCellRenderer.tsx";
+} from "../../admin/components/table/ClassProgressDatesCellRenderer.tsx";
 import PositionBadge from "../../../components/PositionBadge.tsx";
 import { QueryKeys } from "../../../lib/QueryKeys.ts";
 import { strings } from "../../../utils/strings.ts";

@@ -3,13 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { AgGridReact } from "ag-grid-react"; // React Grid Logic
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
-import { listUsers } from "./api/user.ts";
-import { UserType } from "./types/types.ts";
+import { listUsers } from "../../../api/user.ts";
+import { UserType } from "../../../types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
-import { QueryKeys } from "./lib/QueryKeys.ts";
-import { strings } from "./utils/strings.ts";
-import PositionBadge from "./components/PositionBadge.tsx";
-import { formatPhone } from "./utils/formatPhone.ts";
+import { QueryKeys } from "../../../lib/QueryKeys.ts";
+import { strings } from "../../../utils/strings.ts";
+import PositionBadge from "../../../components/PositionBadge.tsx";
+import { formatPhone } from "../../../utils/formatPhone.ts";
 
 const capitalizeFirst = (s: string | undefined | null) =>
   s ? s.charAt(0).toUpperCase() + s.slice(1) : "";

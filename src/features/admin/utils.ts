@@ -1,10 +1,10 @@
+import { UserType } from "../../types/types";
 import {
   NewlyAddedProducts,
   NewlyRemovedProducts,
-  UserType,
   RawUserFormData,
-} from "../types/types";
-import { UserProducts } from "../features/classes/types";
+} from "./types";
+import { UserProducts } from "../classes/types";
 
 export function compareProducts(
   userProductData: UserProducts,

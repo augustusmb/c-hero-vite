@@ -2,22 +2,23 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { updateUserInfoAndProducts, deleteUser } from "./api/user.ts";
+import { updateUserInfoAndProducts, deleteUser } from "../../../api/user.ts";
 import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
-import { UserType, RawUserFormData } from "./types/types.ts";
-import { UserProducts } from "./features/classes/types.ts";
-import { compareProducts } from "./utils/AdminPageUtils.ts";
-import { QueryKeys } from "./lib/QueryKeys.ts";
-import { strings } from "./utils/strings.ts";
-import { fetchOptions } from "./api/signUp.ts";
+import { UserType } from "../../../types/types.ts";
+import { RawUserFormData } from "../types.ts";
+import { UserProducts } from "../../classes/types.ts";
+import { compareProducts } from "../utils.ts";
+import { QueryKeys } from "../../../lib/QueryKeys.ts";
+import { strings } from "../../../utils/strings.ts";
+import { fetchOptions } from "../../../api/signUp.ts";
 import { Trash2 } from "lucide-react";
 import {
   positionOptions,
   TCreateableSelectOption,
   TCreateableSelectOptions,
-} from "./components/SignUpForm/SignUpConfig.tsx";
-import { PhoneInput } from "./components/SignUpForm/PhoneInput.tsx";
+} from "../../../components/SignUpForm/SignUpConfig.tsx";
+import { PhoneInput } from "../../../components/SignUpForm/PhoneInput.tsx";
 import {
   Dialog,
   DialogContent,

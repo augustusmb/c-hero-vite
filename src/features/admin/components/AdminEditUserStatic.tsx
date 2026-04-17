@@ -1,9 +1,9 @@
 import { Pencil } from "lucide-react";
-import UserInfoStatic from "./features/user/components/UserInfoStatic.tsx";
+import UserInfoStatic from "../../user/components/UserInfoStatic.tsx";
 import UserProductsStatic from "./UserProductsStatic.tsx";
-import { UserType } from "./types/types.ts";
-import { UserProducts } from "./features/classes/types.ts";
-import { strings } from "./utils/strings.ts";
+import { UserType } from "../../../types/types.ts";
+import { UserProducts } from "../../classes/types.ts";
+import { strings } from "../../../utils/strings.ts";
 
 type AdminEditUserStaticProps = {
   toggleEditMode: (editMode: boolean) => void;

@@ -1,5 +1,5 @@
 import apiClient from "./apiClient.ts";
-import { FormattedUserFormData } from "../types/types.ts";
+import { FormattedUserFormData } from "../features/admin/types.ts";
 import { UpdatedUserInfo } from "../features/user/types.ts";
 
 export const fetchUserClasses = async (userId: number) => {
