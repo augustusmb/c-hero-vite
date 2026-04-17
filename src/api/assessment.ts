@@ -1,5 +1,5 @@
 import apiClient from "./apiClient";
-import { CompletedAssessmentData } from "../types/types";
+import { CompletedAssessmentData } from "../features/assessment/types";
 
 export const getAssessmentQuestions = async (params: {
   queryKey: string[];

@@ -1,4 +1,4 @@
-import { AssessmentQuestion } from "../types/types";
+import { AssessmentQuestion } from "./types";
 
 const ADMIN_LEVEL = "0";
 const ALL_OF_THE_ABOVE = "All of the above";

@@ -15,15 +15,6 @@ export type UserType = {
   terms_accepted: boolean;
 };
 
-export type CompletedAssessmentData = {
-  classId: string;
-  first_name: string;
-  last_name: string;
-  phone: string;
-  userId: number;
-  questionsMissed: any;
-};
-
 export type RawUserFormData = {
   name: string;
   first_name: string;
@@ -60,13 +51,3 @@ export type NewlyRemovedProducts = {
   [key: string]: boolean;
 };
 
-export type AssessmentQuestion = {
-  id: number;
-  title: string;
-  correct_answer: string;
-  incorrect_answer1: string;
-  incorrect_answer2: string;
-  incorrect_answer3: string;
-  true_or_false: string;
-  answerOptions: string[];
-};

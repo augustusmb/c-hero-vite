@@ -13,11 +13,14 @@ import {
   prepareAnswerOptions,
   prepareBlankAnswers,
   shuffle,
-} from "./utils/assessment.js";
+} from "./features/assessment/utils.ts";
 import { classTypesMap } from "./messages.ts";
 import { useClassId } from "./features/classes/hooks/useClassId.tsx";
 import { useLoggedInUserContext } from "./hooks/useLoggedInUserContext.ts";
-import { CompletedAssessmentData, AssessmentQuestion } from "./types/types.ts";
+import {
+  CompletedAssessmentData,
+  AssessmentQuestion,
+} from "./features/assessment/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import { QueryKeys } from "./lib/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
