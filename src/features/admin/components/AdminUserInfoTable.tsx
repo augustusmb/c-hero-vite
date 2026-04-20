@@ -3,10 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { AgGridReact } from "ag-grid-react"; // React Grid Logic
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
-import { listUsers } from "../../../api/user.ts";
 import { UserType } from "../../../types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
-import { QueryKeys } from "../../../lib/QueryKeys.ts";
+import { userListQuery } from "../../user/queries.ts";
 import { strings } from "../../../utils/strings.ts";
 import PositionBadge from "../../../components/PositionBadge.tsx";
 import { formatPhone } from "../../../utils/formatPhone.ts";
@@ -149,10 +148,7 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
     handleUserToEdit(selectedRowData);
   };
 
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: [QueryKeys.LIST_USERS],
-    queryFn: listUsers,
-  });
+  const { isLoading, isError, data, error } = useQuery(userListQuery());
 
   if (isLoading) return <BeatLoader color="#123abc" loading={true} size={15} />;
   if (isError)
@@ -182,7 +178,7 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
         >
           <AgGridReact
             ref={gridRef}
-            rowData={data?.data}
+            rowData={data}
             columnDefs={colDefs}
             defaultColDef={defaultColDef}
             rowSelection="single"

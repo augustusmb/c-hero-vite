@@ -6,10 +6,9 @@ import AdminEditUserStatic from "../features/admin/components/AdminEditUserStati
 import AdminEditUserForm from "../features/admin/components/AdminEditUserForm.tsx";
 import AdminUserInfoTable from "../features/admin/components/AdminUserInfoTable.tsx";
 import { useQuery } from "@tanstack/react-query";
-import { getFullUserProductProgressMap } from "../features/user/utils.ts";
+import { userProductProgressQuery } from "../features/user/queries.ts";
 import { UserType } from "../types/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
-import { QueryKeys } from "../lib/QueryKeys.ts";
 import { strings } from "../utils/strings.ts";
 
 const AdminPage = () => {
@@ -39,10 +38,9 @@ const AdminPage = () => {
     }
   }, [userToEdit, loggedInUserInfo, navigate]);
 
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: [QueryKeys.LIST_USER_PRODUCTS, userToEdit.id],
-    queryFn: getFullUserProductProgressMap,
-  });
+  const { isLoading, isError, data, error } = useQuery(
+    userProductProgressQuery(userToEdit.id),
+  );
 
   if (isLoading)
     return (
@@ -72,14 +70,14 @@ const AdminPage = () => {
             userInfo={userToEdit}
             toggleEditMode={toggleEditMode}
             editMode={editMode}
-            data={data}
+            data={data ?? {}}
           />
         ) : (
           <AdminEditUserForm
             userInfo={userToEdit}
             toggleEditMode={toggleEditMode}
             editMode={editMode}
-            data={data}
+            data={data ?? {}}
             handleUserToEdit={handleUserToEdit}
           />
         )}

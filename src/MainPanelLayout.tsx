@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext } from "react";
+import { useEffect, createContext } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -6,10 +6,9 @@ import BeatLoader from "react-spinners/BeatLoader";
 import HeaderNavigation from "./components/HeaderNavigation.tsx";
 import MainPanelRouter from "./MainPanelRouter.tsx";
 import SignUpPage from "./pages/SignUpPage.tsx";
-import { setAuthToken } from "./api/apiClient.ts";
-import { getUserByPhone } from "./api/user.ts";
+import { registerAuthTokenGetter } from "./api/apiClient.ts";
+import { userByPhoneQuery } from "./features/user/queries.ts";
 import { UserType } from "./types/types.ts";
-import { QueryKeys } from "./lib/QueryKeys.ts";
 import { strings } from "./utils/strings.ts";
 
 type LoggedInUserContextType = {
@@ -26,7 +25,6 @@ const PageLoader = () => (
 );
 
 const MainPanelLayout = () => {
-  const [tokenReady, setTokenReady] = useState(false);
   const {
     isAuthenticated,
     isLoading: authLoading,
@@ -35,29 +33,22 @@ const MainPanelLayout = () => {
   } = useAuth0();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      (async () => {
-        const token = await getAccessTokenSilently();
-        setAuthToken(token);
-        setTokenReady(true);
-      })();
-    } else {
-      setTokenReady(false);
-    }
-  }, [getAccessTokenSilently, isAuthenticated]);
+    registerAuthTokenGetter(
+      isAuthenticated ? () => getAccessTokenSilently() : null,
+    );
+  }, [isAuthenticated, getAccessTokenSilently]);
 
+  const phone = user?.name ?? "";
   const {
     data: userData,
     isError: userError,
     error,
   } = useQuery({
-    queryKey: [QueryKeys.GET_USER, user?.name ?? ""],
-    queryFn: getUserByPhone,
-    enabled:
-      !authLoading && Boolean(user?.name) && isAuthenticated && tokenReady,
+    ...userByPhoneQuery(phone),
+    enabled: !authLoading && Boolean(phone) && isAuthenticated,
   });
 
-  const loggedInUserInfo: UserType | null = userData?.data?.[0] ?? null;
+  const loggedInUserInfo: UserType | null = userData?.[0] ?? null;
 
   const renderBody = () => {
     if (authLoading) return <PageLoader />;

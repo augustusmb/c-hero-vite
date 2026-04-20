@@ -4,10 +4,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Info, CheckCircle2, XCircle, RotateCcw } from "lucide-react";
-import {
-  getAssessmentQuestions,
-  submitCompletedAssessment,
-} from "../api/assessment.ts";
+import { submitCompletedAssessment } from "../api/assessment.ts";
 import {
   randomizeArray,
   prepareAnswerOptions,
@@ -22,7 +19,8 @@ import {
   AssessmentQuestion,
 } from "../features/assessment/types.ts";
 import BeatLoader from "react-spinners/BeatLoader";
-import { QueryKeys } from "../lib/QueryKeys.ts";
+import { assessmentQuestionsQuery } from "../features/assessment/queries.ts";
+import { userKeys } from "../features/user/queries.ts";
 import { strings } from "../utils/strings.ts";
 import {
   Popover,
@@ -77,25 +75,22 @@ const AssessmentPage = () => {
     isError,
     data: questions,
     error,
-  } = useQuery({
-    queryKey: [QueryKeys.LIST_ASSESSMENT_QUESTIONS, classId],
-    queryFn: getAssessmentQuestions,
-  });
+  } = useQuery(assessmentQuestionsQuery(classId));
 
   const submitAssessmentMutation = useMutation({
-    mutationFn: async (completedAssessmentData: CompletedAssessmentData) => {
-      return await submitCompletedAssessment(completedAssessmentData);
-    },
+    mutationFn: submitCompletedAssessment,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QueryKeys.LIST_USER_PRODUCTS],
-      });
+      if (id) {
+        queryClient.invalidateQueries({
+          queryKey: userKeys.productProgress(id),
+        });
+      }
     },
   });
 
   useEffect(() => {
     if (questions) {
-      const randomQuestions = randomizeArray(questions.data, level || "").map(
+      const randomQuestions = randomizeArray(questions, level || "").map(
         (question) => ({
           ...question,
           answerOptions: prepareAnswerOptions(question),
@@ -194,7 +189,7 @@ const AssessmentPage = () => {
     setMissedQuestions([]);
     setAssessmentPassed(false);
     if (questions) {
-      const randomQuestions = shuffle<AssessmentQuestion>(questions.data).map(
+      const randomQuestions = shuffle<AssessmentQuestion>(questions).map(
         (question) => ({
           ...question,
           answerOptions: prepareAnswerOptions(question),

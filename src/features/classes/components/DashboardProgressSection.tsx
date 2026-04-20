@@ -4,14 +4,13 @@ import { AgGridReact } from "ag-grid-react"; // React Grid Logic
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { useLoggedInUserContext } from "../../../hooks/useLoggedInUserContext.ts";
-import { getDashboardUsers } from "../../../api/user.ts";
+import { dashboardUsersQuery } from "../queries.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import CrewProgressBarCellRenderer from "../../admin/components/table/CrewProgressBarCellRenderer.tsx";
 import ClassProgressDatesCellRenderer, {
   getDateFormat,
 } from "../../admin/components/table/ClassProgressDatesCellRenderer.tsx";
 import PositionBadge from "../../../components/PositionBadge.tsx";
-import { QueryKeys } from "../../../lib/QueryKeys.ts";
 import { strings } from "../../../utils/strings.ts";
 
 const DashboardProgressSection = () => {
@@ -39,22 +38,20 @@ const DashboardProgressSection = () => {
     return { background: "#ffffff" };
   }, []);
 
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: [QueryKeys.LIST_USERS_DASHBOARD, level, id, vessel_id, company],
-    queryFn: getDashboardUsers,
-    enabled: !!vessel_id,
-  });
+  const { isLoading, isError, data, error } = useQuery(
+    dashboardUsersQuery({ level, id, vessel_id, company }),
+  );
 
   if (isError)
     return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
-  const vesselProducts = data?.data.vesselProducts || [];
+  const vesselProducts = data?.vesselProducts || [];
   const vesselProduct1 = vesselProducts[0]?.product_id;
   const vesselProduct2 = vesselProducts[1]?.product_id;
 
   const colDefs = [
     {
-      headerName: data?.data.vesselName,
+      headerName: data?.vesselName,
       children: [
         {
           headerName: "Crew",
@@ -160,7 +157,7 @@ const DashboardProgressSection = () => {
           <AgGridReact
             getRowStyle={getRowStyle}
             ref={gridRef}
-            rowData={data?.data.usersWithProductProgressMaps}
+            rowData={data?.usersWithProductProgressMaps}
             columnDefs={colDefs}
             defaultColDef={{ cellStyle: { textAlign: "left" }, width: 125 }}
             rowHeight={82}

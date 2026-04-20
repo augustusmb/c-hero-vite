@@ -3,9 +3,7 @@ import { acceptTermsAndConditions } from "../../../api/acceptTerms";
 
 const TermsAndConditions = ({ userId }: { userId: number }) => {
   const acceptTermsMutation = useMutation({
-    mutationFn: async (userId: number) => {
-      acceptTermsAndConditions(userId);
-    },
+    mutationFn: acceptTermsAndConditions,
   });
 
   return (

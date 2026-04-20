@@ -1,3 +1,5 @@
+import { TCreateableSelectOption } from "../signup/components/SignUpConfig.tsx";
+
 export type AssignedProductChange = {
   [key: string]: boolean;
 };
@@ -22,14 +24,15 @@ export type RawUserFormData = {
 };
 
 export type FormattedUserFormData = {
-  name: string;
+  id: number;
   first_name: string;
   last_name: string;
   email: string;
-  company: string;
-  vessel: string;
-  port: string;
-  id: number;
+  phone: string;
+  position: TCreateableSelectOption | null;
+  company: TCreateableSelectOption | null;
+  vessel: TCreateableSelectOption | null;
+  port: TCreateableSelectOption | null;
   newlyAddedProducts: NewlyAddedProducts;
   newlyRemovedProducts: NewlyRemovedProducts;
 };

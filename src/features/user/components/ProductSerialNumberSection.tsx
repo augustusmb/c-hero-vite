@@ -26,21 +26,15 @@ import {
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLoggedInUserContext } from "../../../hooks/useLoggedInUserContext.ts";
 import {
-  getSerialNumbers,
   deleteSerialNumber,
   addSerialNumber,
+  SerialNumber,
 } from "../../../api/user.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import { FieldValues, useForm } from "react-hook-form";
-import { QueryKeys } from "../../../lib/QueryKeys.ts";
+import { userKeys, userSerialNumbersQuery } from "../queries.ts";
 import { strings } from "../../../utils/strings.ts";
 import TrashIcon from "../../../assets/icons/icon-trash.svg?react";
-
-type ProductSerialNumber = {
-  product_id: string;
-  serial_number: string;
-  user_id: number;
-};
 
 const ProductSerialNumberSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
@@ -51,32 +45,19 @@ const ProductSerialNumberSection = () => {
   const serialNumber = watch("serialNumber");
 
   const deleteSerialNumberMutation = useMutation({
-    mutationFn: async ({
-      userId,
-      serialNumber,
-    }: {
-      userId: number;
-      serialNumber: string;
-    }) => {
-      deleteSerialNumber({ userId, serialNumber });
-    },
+    mutationFn: deleteSerialNumber,
     onMutate: async ({ userId, serialNumber }) => {
-      const previousData = queryClient.getQueryData([
-        QueryKeys.LIST_SERIAL_NUMBERS,
-        userId,
-      ]);
-      queryClient.setQueryData(
-        [QueryKeys.LIST_SERIAL_NUMBERS, userId],
-        (old: any) => {
-          return old.filter((item: any) => item.serial_number !== serialNumber);
-        },
+      const key = userKeys.serialNumbers(userId);
+      const previousData = queryClient.getQueryData<SerialNumber[]>(key);
+      queryClient.setQueryData<SerialNumber[]>(key, (old) =>
+        old?.filter((item) => item.serial_number !== serialNumber),
       );
       return { previousData };
     },
-    onError: (_error, variables, context) => {
+    onError: (_error, { userId }, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(
-          [QueryKeys.LIST_SERIAL_NUMBERS, variables.userId],
+          userKeys.serialNumbers(userId),
           context.previousData,
         );
       }
@@ -84,62 +65,37 @@ const ProductSerialNumberSection = () => {
   });
 
   const addSerialNumberMutation = useMutation({
-    mutationFn: async ({
-      userId,
-      serialNumber,
-    }: {
-      userId: number;
-      serialNumber: string;
-    }) => {
-      addSerialNumber({ userId, serialNumber });
-    },
+    mutationFn: addSerialNumber,
     onMutate: async ({ userId, serialNumber }) => {
-      await queryClient.cancelQueries({
-        queryKey: [QueryKeys.LIST_SERIAL_NUMBERS, userId],
-      });
+      const key = userKeys.serialNumbers(userId);
+      await queryClient.cancelQueries({ queryKey: key });
 
-      const previousData = queryClient.getQueryData([
-        QueryKeys.LIST_SERIAL_NUMBERS,
-        userId,
+      const previousData = queryClient.getQueryData<SerialNumber[]>(key);
+      queryClient.setQueryData<SerialNumber[]>(key, (old) => [
+        ...(old ?? []),
+        { product_id: "", serial_number: serialNumber, user_id: userId },
       ]);
-
-      queryClient.setQueryData(
-        [QueryKeys.LIST_SERIAL_NUMBERS, userId],
-        (old: any) => {
-          return [
-            ...old,
-            {
-              // product_id: productId,
-              serial_number: serialNumber,
-              user_id: userId,
-            },
-          ];
-        },
-      );
-
       return { previousData };
     },
-    onError: (_error, variables, context) => {
+    onError: (_error, { userId }, context) => {
       queryClient.setQueryData(
-        [QueryKeys.LIST_SERIAL_NUMBERS, variables.userId],
+        userKeys.serialNumbers(userId),
         context?.previousData ?? [],
       );
     },
     onSettled: () => {
       form.reset({ serialNumber: "", selectedProduct: "" });
-      setTimeout(() => {
+      if (id) {
         queryClient.invalidateQueries({
-          queryKey: [QueryKeys.LIST_SERIAL_NUMBERS, id],
+          queryKey: userKeys.serialNumbers(id),
         });
-      }, 1000); // Delay of 1 second
+      }
     },
   });
 
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: [QueryKeys.LIST_SERIAL_NUMBERS, id],
-    queryFn: getSerialNumbers,
-    enabled: Boolean(id),
-  });
+  const { isLoading, isError, data, error } = useQuery(
+    userSerialNumbersQuery(id ?? 0),
+  );
 
   if (isError)
     return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
@@ -179,7 +135,7 @@ const ProductSerialNumberSection = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((serial: ProductSerialNumber) => (
+            {data.map((serial: SerialNumber) => (
               <TableRow key={serial.serial_number}>
                 <TableCell className="py-2 pl-4 text-start">
                   {serial.serial_number}

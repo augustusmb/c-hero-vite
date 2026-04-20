@@ -2,10 +2,15 @@ import apiClient from "./apiClient.ts";
 import { TSignUpSchema } from "../features/signup/components/SignUpConfig";
 import { toast, Bounce } from "react-toastify";
 
-export const fetchOptions = async () => {
-  const signUpFormOptions = await apiClient.get(`api/public/sign-up`);
+export type FormOptions = {
+  companies: Array<{ id: number; name: string }>;
+  ports: Array<{ id: number; name: string }>;
+  vessels: Array<{ id: number; name: string }>;
+};
 
-  return signUpFormOptions;
+export const fetchOptions = async (): Promise<FormOptions> => {
+  const { data } = await apiClient.get<FormOptions>(`api/public/sign-up`);
+  return data;
 };
 
 export const signUpUser = async (signUpUserData: TSignUpSchema) => {
@@ -26,7 +31,7 @@ export const signUpUser = async (signUpUserData: TSignUpSchema) => {
       });
     }
 
-    return response;
+    return response.data;
   } catch (error: any) {
     // 409 (duplicate) is handled in the form so it can show inline + a login action
     if (error.response?.status !== 409) {

@@ -1,65 +1,93 @@
 import apiClient from "./apiClient.ts";
+import { UserType } from "../types/types.ts";
+import { ClassProgress } from "../features/classes/types.ts";
 import { FormattedUserFormData } from "../features/admin/types.ts";
 import { UpdatedUserInfo } from "../features/user/types.ts";
 
-export const fetchUserClasses = async (userId: number) => {
-  const usersClasses = await apiClient.get(`api/routes/classes`, {
-    params: { userId },
+export type SerialNumber = {
+  product_id: string;
+  serial_number: string;
+  user_id: number;
+};
+
+export type DashboardParams = {
+  level?: string;
+  id?: number;
+  vessel_id?: number;
+  company?: string;
+};
+
+export type VesselDashboardData = {
+  vesselName: string;
+  vesselProducts: Array<{ vessel_id: number; product_id: string }>;
+  usersWithProductProgressMaps: any[];
+};
+
+export const fetchUserClasses = async (
+  userId: number,
+): Promise<ClassProgress[]> => {
+  const { data } = await apiClient.get<ClassProgress[]>(
+    "api/routes/classes",
+    { params: { userId } },
+  );
+  return data;
+};
+
+export const getUserByPhone = async (phone: string): Promise<UserType[]> => {
+  const { data } = await apiClient.get<UserType[]>("api/routes/users", {
+    params: { phone },
   });
-
-  return usersClasses;
-  // [{product_id: '3b_c', user_id: 24, completed: false, date_completed: null}, {}...]
+  return data;
 };
 
-export const getUserByPhone = async (params: { queryKey: string[] }) => {
-  const phone = params.queryKey[1];
-  return await apiClient.get("api/routes/users", { params: { phone } });
-};
-
-export const listUsers = async () => {
-  const users = await apiClient.get(`api/routes/fetch-all-users`);
-
-  return users;
+export const listUsers = async (): Promise<UserType[]> => {
+  const { data } = await apiClient.get<UserType[]>(
+    "api/routes/fetch-all-users",
+  );
+  return data;
 };
 
 export const updateUserInfo = async (updatedUserInfo: UpdatedUserInfo) => {
-  return await apiClient.put("api/routes/users", { params: updatedUserInfo });
+  const { data } = await apiClient.put("api/routes/users", {
+    params: updatedUserInfo,
+  });
+  return data;
 };
 
 export const updateUserInfoAndProducts = async (
   updatedUserInfoProducts: FormattedUserFormData,
 ) => {
-  return await apiClient.put("api/routes/users-products", {
+  const { data } = await apiClient.put("api/routes/users-products", {
     params: updatedUserInfoProducts,
   });
+  return data;
 };
 
 export const deleteUser = async (userId: number) => {
-  return await apiClient.delete("api/routes/users", {
-    params: { userId: userId },
+  const { data } = await apiClient.delete("api/routes/users", {
+    params: { userId },
   });
+  return data;
 };
 
-export const getDashboardUsers = async ({ queryKey }: any) => {
-  const [_key, level, id, vessel_id, company] = queryKey;
-
-  const users = await apiClient.get(`api/routes/dashboard`, {
-    params: { level, id, vessel_id, company },
-  });
-
-  return users;
-};
-
-export const getSerialNumbers = async ({ queryKey }: any) => {
-  const [_key, id] = queryKey;
-  const serialNumbers = await apiClient.get(
-    `api/routes/product-serial-numbers`,
-    {
-      params: { userId: id },
-    },
+export const getDashboardUsers = async (
+  params: DashboardParams,
+): Promise<VesselDashboardData> => {
+  const { data } = await apiClient.get<VesselDashboardData>(
+    "api/routes/dashboard",
+    { params },
   );
+  return data;
+};
 
-  return serialNumbers.data;
+export const getSerialNumbers = async (
+  userId: number,
+): Promise<SerialNumber[]> => {
+  const { data } = await apiClient.get<SerialNumber[]>(
+    "api/routes/product-serial-numbers",
+    { params: { userId } },
+  );
+  return data;
 };
 
 export const deleteSerialNumber = async ({
@@ -69,9 +97,10 @@ export const deleteSerialNumber = async ({
   userId: number;
   serialNumber: string;
 }) => {
-  return await apiClient.delete("api/routes/product-serial-numbers", {
+  const { data } = await apiClient.delete("api/routes/product-serial-numbers", {
     params: { userId, serialNumber },
   });
+  return data;
 };
 
 export const addSerialNumber = async ({
@@ -81,8 +110,9 @@ export const addSerialNumber = async ({
   userId: number;
   serialNumber: string;
 }) => {
-  return await apiClient.post("api/routes/product-serial-numbers", {
+  const { data } = await apiClient.post("api/routes/product-serial-numbers", {
     userId,
     serialNumber,
   });
+  return data;
 };

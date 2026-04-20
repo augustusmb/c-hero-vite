@@ -4,17 +4,11 @@ import UserInfoStatic from "./UserInfoStatic";
 import UserInfoEdit from "./UserInfoEdit";
 import { useAuth0 } from "@auth0/auth0-react";
 import { UserType } from "../../../types/types.ts";
-import { QueryKeys } from "../../../lib/QueryKeys";
-import { fetchOptions } from "../../../api/signUp";
+import { signUpFormOptionsQuery } from "../../signup/queries";
 import { useQuery } from "@tanstack/react-query";
 
 type UserInfoSectionStaticProps = {
   userInfo: UserType;
-};
-
-type TSelect = {
-  name: string;
-  id: number;
 };
 
 const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
@@ -24,10 +18,7 @@ const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
   const [editMode, setEditMode] = useState(false);
   const [userInfoToEdit, setUserToEdit] = useState(userInfo);
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: [QueryKeys.FORM_OPTIONS],
-    queryFn: fetchOptions,
-  });
+  const { data, isLoading, error } = useQuery(signUpFormOptionsQuery());
 
   if (isAuthLoading || !user) {
     return (
@@ -68,17 +59,17 @@ const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
   }
 
   const companies =
-    data?.data?.companies?.map((company: TSelect) => ({
+    data?.companies?.map((company) => ({
       value: company.id,
       label: company.name,
     })) || [];
   const ports =
-    data?.data?.ports?.map((port: TSelect) => ({
+    data?.ports?.map((port) => ({
       value: port.id,
       label: port.name,
     })) || [];
   const vessels =
-    data?.data?.vessels?.map((vessel: TSelect) => ({
+    data?.vessels?.map((vessel) => ({
       value: vessel.id,
       label: vessel.name,
     })) || [];

@@ -9,9 +9,9 @@ import { UserType } from "../../../types/types.ts";
 import { RawUserFormData } from "../types.ts";
 import { UserProducts } from "../../classes/types.ts";
 import { compareProducts } from "../utils.ts";
-import { QueryKeys } from "../../../lib/QueryKeys.ts";
+import { userKeys } from "../../user/queries.ts";
+import { signUpFormOptionsQuery } from "../../signup/queries.ts";
 import { strings } from "../../../utils/strings.ts";
-import { fetchOptions } from "../../../api/signUp.ts";
 import { Trash2 } from "lucide-react";
 import {
   positionOptions,
@@ -69,48 +69,45 @@ const AdminEditUserForm: React.FC<AdminEditUserFormProps> = ({
   const { handleSubmit, register, control } = useForm();
   const queryClient = useQueryClient();
 
-  const { data: optionsData, isLoading: optionsLoading } = useQuery({
-    queryKey: [QueryKeys.FORM_OPTIONS],
-    queryFn: fetchOptions,
-  });
+  const { data: optionsData, isLoading: optionsLoading } = useQuery(
+    signUpFormOptionsQuery(),
+  );
 
   const companies: TCreateableSelectOptions =
-    optionsData?.data?.companies?.map((c: TSelect) => ({
+    optionsData?.companies?.map((c: TSelect) => ({
       value: c.id,
       label: c.name,
     })) || [];
   const vessels: TCreateableSelectOptions =
-    optionsData?.data?.vessels?.map((v: TSelect) => ({
+    optionsData?.vessels?.map((v: TSelect) => ({
       value: v.id,
       label: v.name,
     })) || [];
   const ports: TCreateableSelectOptions =
-    optionsData?.data?.ports?.map((p: TSelect) => ({
+    optionsData?.ports?.map((p: TSelect) => ({
       value: p.id,
       label: p.name,
     })) || [];
 
   const updateUserInfoMutation = useMutation({
-    mutationFn: async (payload: any) => {
-      return updateUserInfoAndProducts(payload);
-    },
+    mutationFn: updateUserInfoAndProducts,
     onError: () => {
       toast.error("Could not save changes. Please try again.");
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.LIST_USERS] });
-      queryClient.invalidateQueries({
-        queryKey: [QueryKeys.LIST_USER_PRODUCTS],
-      });
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({ queryKey: userKeys.list() });
+      if (variables?.id) {
+        queryClient.invalidateQueries({
+          queryKey: userKeys.productProgress(variables.id),
+        });
+      }
     },
   });
 
   const deleteUserMutation = useMutation({
-    mutationFn: async (userId: number) => {
-      deleteUser(userId);
-    },
+    mutationFn: deleteUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.LIST_USERS] });
+      queryClient.invalidateQueries({ queryKey: userKeys.list() });
     },
   });
 

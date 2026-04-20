@@ -5,7 +5,7 @@ import { updateUserInfo } from "../../../api/user.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserType } from "../../../types/types.ts";
 import { UpdatedUserInfo } from "../types.ts";
-import { QueryKeys } from "../../../lib/QueryKeys.ts";
+import { userKeys } from "../queries.ts";
 import { strings } from "../../../utils/strings.ts";
 import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
@@ -124,96 +124,69 @@ const UserInfoEdit: React.FC<UserInfoEditProps> = ({
     defaultValues,
   });
 
-  const updateUserInfoMutation = useMutation({
-    mutationFn: async (updatedUserInfo: UpdatedUserInfo) =>
-      updateUserInfo(updatedUserInfo),
-    onMutate: async (updatedUserInfo) => {
-      await queryClient.cancelQueries({
-        queryKey: [QueryKeys.GET_USER, updatedUserInfo.phone],
-      });
-      await queryClient.cancelQueries({ queryKey: [QueryKeys.LIST_USERS] });
+  const applyUpdate = (u: UserType, update: UpdatedUserInfo): UserType => ({
+    ...u,
+    first_name: update.first_name,
+    last_name: update.last_name,
+    email: update.email,
+    phone: update.phone,
+    company: update.company?.label || u.company,
+    company_id: (update.company?.value as number) || u.company_id,
+    vessel: update.vessel?.label || u.vessel,
+    vessel_id: (update.vessel?.value as number) || u.vessel_id,
+    port: update.port?.label || u.port,
+    port_id: (update.port?.value as number) || u.port_id,
+    position: (update.position?.value as string) || u.position,
+  });
 
-      const previousUserData = queryClient.getQueryData([
-        QueryKeys.GET_USER,
-        updatedUserInfo.phone,
+  const updateUserInfoMutation = useMutation({
+    mutationFn: updateUserInfo,
+    onMutate: async (update) => {
+      const byPhoneKey = userKeys.byPhone(update.phone);
+      const listKey = userKeys.list();
+
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: byPhoneKey }),
+        queryClient.cancelQueries({ queryKey: listKey }),
       ]);
-      const previousListData = queryClient.getQueryData([QueryKeys.LIST_USERS]);
+
+      const previousUserData =
+        queryClient.getQueryData<UserType[]>(byPhoneKey);
+      const previousListData = queryClient.getQueryData<UserType[]>(listKey);
 
       if (previousUserData) {
-        queryClient.setQueryData(
-          [QueryKeys.GET_USER, updatedUserInfo.phone],
-          {
-            data: [
-              {
-                ...user,
-                first_name: updatedUserInfo.first_name,
-                last_name: updatedUserInfo.last_name,
-                email: updatedUserInfo.email,
-                phone: updatedUserInfo.phone,
-                company: updatedUserInfo.company?.label || user.company,
-                company_id: updatedUserInfo.company?.value || user.company_id,
-                vessel: updatedUserInfo.vessel?.label || user.vessel,
-                vessel_id: updatedUserInfo.vessel?.value || user.vessel_id,
-                port: updatedUserInfo.port?.label || user.port,
-                port_id: updatedUserInfo.port?.value || user.port_id,
-                position: updatedUserInfo.position?.value || user.position,
-              },
-            ],
-          },
-        );
+        queryClient.setQueryData<UserType[]>(byPhoneKey, [
+          applyUpdate(user, update),
+        ]);
       }
 
       if (previousListData) {
-        queryClient.setQueryData([QueryKeys.LIST_USERS], (old: any) => {
-          if (!old || !old.data) return old;
-          return {
-            ...old,
-            data: old.data.map((u: UserType) =>
-              u.id === updatedUserInfo.id
-                ? {
-                    ...u,
-                    first_name: updatedUserInfo.first_name,
-                    last_name: updatedUserInfo.last_name,
-                    email: updatedUserInfo.email,
-                    phone: updatedUserInfo.phone,
-                    company: updatedUserInfo.company?.label || u.company,
-                    company_id: updatedUserInfo.company?.value || u.company_id,
-                    vessel: updatedUserInfo.vessel?.label || u.vessel,
-                    vessel_id: updatedUserInfo.vessel?.value || u.vessel_id,
-                    port: updatedUserInfo.port?.label || u.port,
-                    port_id: updatedUserInfo.port?.value || u.port_id,
-                    position: updatedUserInfo.position?.value || u.position,
-                  }
-                : u,
-            ),
-          };
-        });
+        queryClient.setQueryData<UserType[]>(listKey, (old) =>
+          old?.map((u) => (u.id === update.id ? applyUpdate(u, update) : u)),
+        );
       }
 
       return { previousUserData, previousListData };
     },
-    onError: (_err, updatedUserInfo, context) => {
+    onError: (_err, update, context) => {
       if (context?.previousUserData) {
         queryClient.setQueryData(
-          [QueryKeys.GET_USER, updatedUserInfo.phone],
+          userKeys.byPhone(update.phone),
           context.previousUserData,
         );
       }
       if (context?.previousListData) {
-        queryClient.setQueryData(
-          [QueryKeys.LIST_USERS],
-          context.previousListData,
-        );
+        queryClient.setQueryData(userKeys.list(), context.previousListData);
       }
       toast.error("Could not save your changes. Please try again.");
     },
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [QueryKeys.GET_USER, variables.phone],
+        queryKey: userKeys.byPhone(variables.phone),
       });
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.LIST_USERS] });
+      queryClient.invalidateQueries({ queryKey: userKeys.list() });
       queryClient.invalidateQueries({
-        queryKey: [QueryKeys.LIST_USER_PRODUCTS],
+        queryKey: userKeys.productProgress(variables.id),
       });
     },
   });

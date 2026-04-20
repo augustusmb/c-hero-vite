@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ClassCard from "./ClassCard";
 import { useQuery } from "@tanstack/react-query";
-import { getFullUserProductProgressMap } from "../../user/utils.ts";
+import { userProductProgressQuery } from "../../user/queries.ts";
 import { ProductData, UserProducts } from "../types";
 import { useLoggedInUserContext } from "../../../hooks/useLoggedInUserContext.ts";
 import { Info } from "lucide-react";
@@ -10,7 +10,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { QueryKeys } from "../../../lib/QueryKeys.ts";
 import { strings } from "../../../utils/strings.ts";
 import { getProductStatus, ProductStatus } from "../utils";
 
@@ -27,10 +26,9 @@ const ClassCardSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
   const [filter, setFilter] = useState<FilterId>("all");
 
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: [QueryKeys.GET_USER_PRODUCTS_MAP, loggedInUserInfo?.id || 0],
-    queryFn: getFullUserProductProgressMap,
-  });
+  const { isLoading, isError, data, error } = useQuery(
+    userProductProgressQuery(loggedInUserInfo?.id ?? 0),
+  );
 
   if (isError)
     return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
@@ -41,7 +39,7 @@ const ClassCardSection = () => {
       {isLoading ? (
         <SkeletonGrid />
       ) : (
-        <LoadedContent data={data} filter={filter} setFilter={setFilter} />
+        <LoadedContent data={data ?? {}} filter={filter} setFilter={setFilter} />
       )}
     </div>
   );

@@ -1,26 +1,24 @@
 import apiClient from "./apiClient";
-import { CompletedAssessmentData } from "../features/assessment/types";
+import {
+  AssessmentQuestion,
+  CompletedAssessmentData,
+} from "../features/assessment/types";
 
-export const getAssessmentQuestions = async (params: {
-  queryKey: string[];
-}) => {
-  const classId = params.queryKey[1];
-  const result = await apiClient.get("/api/routes/questions", {
-    params: { classId },
-  });
-
-  return result;
+export const getAssessmentQuestions = async (
+  classId: string,
+): Promise<AssessmentQuestion[]> => {
+  const { data } = await apiClient.get<AssessmentQuestion[]>(
+    "/api/routes/questions",
+    { params: { classId } },
+  );
+  return data;
 };
 
 export const submitCompletedAssessment = async (
   completedAssessmentData: CompletedAssessmentData,
 ) => {
-  const submittedAssessmentData = await apiClient.post(
-    "/api/routes/submit-assessment",
-    {
-      params: { completedAssessmentData },
-    },
-  );
-
-  return submittedAssessmentData;
+  const { data } = await apiClient.post("/api/routes/submit-assessment", {
+    params: { completedAssessmentData },
+  });
+  return data;
 };

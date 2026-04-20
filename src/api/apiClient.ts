@@ -1,31 +1,33 @@
-import axios from 'axios';
+import axios from "axios";
 
-const environment = import.meta.env.VITE_NODE_ENV
+const environment = import.meta.env.VITE_NODE_ENV;
 
 const apiClient = axios.create({
-  baseURL: environment === 'local' ? 'http://localhost:5173/' : 'https://c-herotraining.com/',
+  baseURL:
+    environment === "local"
+      ? "http://localhost:5173/"
+      : "https://c-herotraining.com/",
 });
 
-apiClient.interceptors.request.use(
-  async (config) => {
-    try {
-      if (apiClient.defaults.headers.common['Authorization']) {
-        config.headers.Authorization = apiClient.defaults.headers.common['Authorization'];
-      }
-    } catch (error) {
-      console.error('Error getting access token: ', error);
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+let getAccessToken: (() => Promise<string>) | null = null;
 
-export function setAuthToken(token: string) {
-  if (token) {
-    apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete apiClient.defaults.headers.common['Authorization'];
+export const registerAuthTokenGetter = (
+  fn: (() => Promise<string>) | null,
+) => {
+  getAccessToken = fn;
+};
+
+apiClient.interceptors.request.use(async (config) => {
+  const isPublic = typeof config.url === "string" && config.url.includes("/api/public/");
+  if (!isPublic && getAccessToken) {
+    try {
+      const token = await getAccessToken();
+      config.headers.Authorization = `Bearer ${token}`;
+    } catch {
+      // Not authenticated yet — let the request through so the server returns 401
+    }
   }
-}
+  return config;
+});
 
 export default apiClient;
