@@ -27,3 +27,6 @@ dist-ssr
 *.auth0config
 *.palette-19.json
 SESSION_HANDOFF.md
+
+# Claude Code — local/personal settings only (shared .claude/ config is OK to commit)
+.claude/settings.local.json
