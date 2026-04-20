@@ -1,13 +1,10 @@
 import db from "../../db/db.js";
-import path from "path";
+import { createSqlLoader } from "../utils/sqlLoader.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { resolveLookupId } from "../utils/lookupHelpers.js";
 
-const QueryFile = db.$config.pgp.QueryFile;
-const __dirname = path.resolve();
-
-const sql = (file) => {
-  const fullPath = path.join(__dirname, "/db/queries/users/", file);
-  return new QueryFile(fullPath, { minify: true });
-};
+const pgp = db.$config.pgp;
+const sql = createSqlLoader("users");
 
 const queries = {
   getUserByPhone: sql("getUserByPhone.sql"),
@@ -15,35 +12,40 @@ const queries = {
   updateUserInfo: sql("updateUserInfo.sql"),
   deleteUser: sql("deleteUser.sql"),
   acceptTermsAndConditions: sql("acceptTermsAndConditions.sql"),
-  deleteUserSpecificClasses: sql("deleteUserSpecificClasses.sql"),
   insertNewCompany:
     "INSERT INTO companies (name) VALUES (${name}) RETURNING id",
   insertNewPort: "INSERT INTO ports (name) VALUES (${name}) RETURNING id",
   insertNewVessel: "INSERT INTO vessels (name) VALUES (${name}) RETURNING id",
 };
 
-export async function getUserByPhone(req, res) {
+const usersProductsCS = new pgp.helpers.ColumnSet(["product_id", "user_id"], {
+  table: "users_products",
+});
+
+const classIdsForProduct = (product) => {
+  const suffixes =
+    product === "vr" ? ["a", "b", "c", "d", "p"] : ["a", "b", "c", "d"];
+  return suffixes.map((s) => `${product}_${s}`);
+};
+
+export const getUserByPhone = asyncHandler(async (req, res) => {
   const { phone } = req.query;
   const result = await db.query(queries.getUserByPhone, { phone });
   res.status(200).json(result);
-}
+});
 
-export async function fetchAllUsers(req, res) {
-  let allUserData = await db.any(queries.fetchAllUsers);
+export const fetchAllUsers = asyncHandler(async (_req, res) => {
+  const allUserData = await db.any(queries.fetchAllUsers);
   res.status(200).json(allUserData);
-}
+});
 
-export function deleteUser(req, res) {
-  console.log("Deleting user in server with id: ", req.query.userId);
+export const deleteUser = asyncHandler(async (req, res) => {
   const { userId } = req.query;
-  db.query(queries.deleteUser, { userId })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => console.log("Error deleting user: ", err));
-}
+  const data = await db.query(queries.deleteUser, { userId });
+  res.status(200).json(data);
+});
 
-export async function updateUserInfo(req, res) {
+export const updateUserInfo = asyncHandler(async (req, res) => {
   const {
     id,
     first_name,
@@ -56,93 +58,30 @@ export async function updateUserInfo(req, res) {
     port,
   } = req.body.params;
 
-  console.log("POSITION: ", position);
+  await db.tx(async (t) => {
+    const [companyId, portId, vesselId] = await Promise.all([
+      resolveLookupId(t, company, queries.insertNewCompany),
+      resolveLookupId(t, port, queries.insertNewPort),
+      resolveLookupId(t, vessel, queries.insertNewVessel),
+    ]);
 
-  try {
-    const result = await db.tx(async (t) => {
-      try {
-        // Handle potential new entries with proper error handling
-        const companyId = company.__isNew__
-          ? await t.one(
-              queries.insertNewCompany,
-              {
-                name: company.label,
-              },
-              (row) => row.id,
-            )
-          : company.value;
-
-        const portId = port.__isNew__
-          ? await t.one(
-              queries.insertNewPort,
-              {
-                name: port.label,
-              },
-              (row) => row.id,
-            )
-          : port.value;
-
-        const vesselId = vessel.__isNew__
-          ? await t.one(
-              queries.insertNewVessel,
-              {
-                name: vessel.label,
-              },
-              (row) => row.id,
-            )
-          : vessel.value;
-
-        // Update the user with the resolved IDs
-        await t.none(queries.updateUserInfo, {
-          id,
-          first_name,
-          last_name,
-          email,
-          phone,
-          position_type: position.value,
-          company_id: companyId,
-          vessel_id: vesselId,
-          port_id: portId,
-        });
-
-        return { success: true };
-      } catch (innerError) {
-        // Log specific error within transaction
-        console.error("Transaction error:", innerError);
-        throw innerError; // Re-throw to trigger rollback
-      }
+    await t.none(queries.updateUserInfo, {
+      id,
+      first_name,
+      last_name,
+      email,
+      phone,
+      position_type: position?.value ?? null,
+      company_id: companyId,
+      vessel_id: vesselId,
+      port_id: portId,
     });
+  });
 
-    res.status(200).json({
-      message: "User info updated successfully",
-      data: result,
-    });
-  } catch (error) {
-    // Handle specific error types
-    if (error.code === "23505") {
-      // Unique constraint violation
-      res.status(409).json({
-        success: false,
-        error: "A record with this information already exists",
-      });
-    } else if (error.code === "23503") {
-      // Foreign key violation
-      res.status(400).json({
-        success: false,
-        error: "Invalid reference to related data",
-      });
-    } else {
-      console.error("Error updating user info:", error);
-      res.status(500).json({
-        success: false,
-        message: "Error updating user info",
-        error: error.message,
-      });
-    }
-  }
-}
+  res.status(200).json({ success: true });
+});
 
-export async function updateUserInfoAndProducts(req, res) {
+export const updateUserInfoAndProducts = asyncHandler(async (req, res) => {
   const {
     id,
     first_name,
@@ -157,109 +96,48 @@ export async function updateUserInfoAndProducts(req, res) {
     newlyRemovedProducts,
   } = req.body.params;
 
-  try {
-    await db.tx(async (t) => {
-      // Resolve company/vessel/port IDs from react-select objects
-      const companyId = company?.__isNew__
-        ? await t.one(queries.insertNewCompany, { name: company.label }, (row) => row.id)
-        : company?.value ?? null;
+  await db.tx(async (t) => {
+    const [companyId, portId, vesselId] = await Promise.all([
+      resolveLookupId(t, company, queries.insertNewCompany),
+      resolveLookupId(t, port, queries.insertNewPort),
+      resolveLookupId(t, vessel, queries.insertNewVessel),
+    ]);
 
-      const portId = port?.__isNew__
-        ? await t.one(queries.insertNewPort, { name: port.label }, (row) => row.id)
-        : port?.value ?? null;
-
-      const vesselId = vessel?.__isNew__
-        ? await t.one(queries.insertNewVessel, { name: vessel.label }, (row) => row.id)
-        : vessel?.value ?? null;
-
-      // Update user info with resolved IDs
-      await t.none(queries.updateUserInfo, {
-        id,
-        first_name,
-        last_name,
-        email,
-        phone,
-        position_type: position?.value ?? null,
-        company_id: companyId,
-        vessel_id: vesselId,
-        port_id: portId,
-      });
-
-      // Handle product assignment changes
-      const insertQuery = updateUserProducts(
-        Object.keys(newlyAddedProducts),
-        id,
-        newlyAddedProducts,
-      );
-      const deleteQuery = deleteUserSpecificClasses(
-        Object.keys(newlyRemovedProducts),
-        id,
-      );
-
-      await t.none(insertQuery);
-      await t.none(deleteQuery);
+    await t.none(queries.updateUserInfo, {
+      id,
+      first_name,
+      last_name,
+      email,
+      phone,
+      position_type: position?.value ?? null,
+      company_id: companyId,
+      vessel_id: vesselId,
+      port_id: portId,
     });
 
-    res.status(200).json({ message: "User info updated successfully" });
-  } catch (error) {
-    if (error.code === "23505") {
-      res.status(409).json({ success: false, error: "A record with this information already exists" });
-    } else if (error.code === "23503") {
-      res.status(400).json({ success: false, error: "Invalid reference to related data" });
-    } else {
-      console.error("Error updating user info and products:", error);
-      res.status(500).json({ success: false, message: "Error updating user info" });
+    const addedProducts = Object.keys(newlyAddedProducts ?? {});
+    if (addedProducts.length > 0) {
+      const rows = addedProducts
+        .flatMap(classIdsForProduct)
+        .map((product_id) => ({ product_id, user_id: id }));
+      await t.none(pgp.helpers.insert(rows, usersProductsCS));
     }
-  }
-}
 
-function updateUserProducts(products, user_id) {
-  if (products.length === 0) return "-- This is a comment";
-
-  let classes = [];
-  products.forEach((product) => {
-    let suffixes = ["a", "b", "c", "d"];
-    if (product === "vr") {
-      suffixes.push("p");
+    const removedProducts = Object.keys(newlyRemovedProducts ?? {});
+    if (removedProducts.length > 0) {
+      const classIds = removedProducts.flatMap(classIdsForProduct);
+      await t.none(
+        "DELETE FROM users_products WHERE product_id IN ($1:csv) AND user_id = $2",
+        [classIds, id],
+      );
     }
-    classes.push(suffixes.map((suffix) => `${product}_${suffix}`));
   });
-  classes = classes.flat();
 
-  let values = classes.map((product_id) => `('${product_id}', '${user_id}')`);
-  let valuesPart = values.join(", ");
-  let insertStatement = `INSERT INTO users_products (product_id, user_id) VALUES ${valuesPart}`;
-  return insertStatement;
-}
+  res.status(200).json({ success: true });
+});
 
-function deleteUserSpecificClasses(products, user_id) {
-  if (products.length === 0) return "-- This is a comment";
-
-  let classes = [];
-  products.forEach((product) => {
-    classes.push([
-      `${product}_a`,
-      `${product}_b`,
-      `${product}_c`,
-      `${product}_d`,
-    ]);
-  });
-  classes = classes.flat();
-
-  let productIds = classes.map((id) => `'${id}'`).join(", ");
-  let deleteStatement = `DELETE FROM users_products WHERE product_id IN (${productIds}) AND user_id = ${user_id}`;
-  return deleteStatement;
-}
-
-export function acceptTermsAndConditions(req, res) {
+export const acceptTermsAndConditions = asyncHandler(async (req, res) => {
   const { userId } = req.body.params;
-
-  db.query(queries.acceptTermsAndConditions, { userId })
-    .then((data) => {
-      console.log("User terms and conditions updated successfully");
-      res.status(200).json(data);
-    })
-    .catch((err) =>
-      console.log("Error updating user accepting terms and conditions: ", err),
-    );
-}
+  const data = await db.query(queries.acceptTermsAndConditions, { userId });
+  res.status(200).json(data);
+});

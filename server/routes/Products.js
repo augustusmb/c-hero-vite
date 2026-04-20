@@ -1,46 +1,29 @@
-import db from '../../db/db.js';
-import path from 'path';
+import db from "../../db/db.js";
+import { createSqlLoader } from "../utils/sqlLoader.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
-const QueryFile = db.$config.pgp.QueryFile;
-const __dirname = path.resolve();
-
-const sql = (file) => {
-  const fullPath = path.join(__dirname, '/db/queries/products/', file);
-  return new QueryFile(fullPath, {minify: true});
-}
+const sql = createSqlLoader("products");
 
 const queries = {
-  getSerialNumbers: sql('getSerialNumbers.sql'),
-  deleteSerialNumber: sql('deleteSerialNumber.sql'),
-  addSerialNumber: sql('addSerialNumber.sql')
+  getSerialNumbers: sql("getSerialNumbers.sql"),
+  deleteSerialNumber: sql("deleteSerialNumber.sql"),
+  addSerialNumber: sql("addSerialNumber.sql"),
 };
 
-export function getSerialNumbers(req, res) {
-  const { userId } = req.query
+export const getSerialNumbers = asyncHandler(async (req, res) => {
+  const { userId } = req.query;
+  const data = await db.query(queries.getSerialNumbers, { userId });
+  res.status(200).json(data);
+});
 
-  db.query(queries.getSerialNumbers, { userId })
-  .then(data => {
-    res.status(200).json(data)
-  })
-  .catch(err => console.log('Error retrieving user\'s product serial numbers', err))
-}
+export const deleteSerialNumber = asyncHandler(async (req, res) => {
+  const { userId, serialNumber } = req.query;
+  await db.none(queries.deleteSerialNumber, { userId, serialNumber });
+  res.status(200).json({ success: true });
+});
 
-export function deleteSerialNumber(req, res) {
-  const { userId, serialNumber } = req.query
-
-  db.none(queries.deleteSerialNumber, { userId, serialNumber })
-  .then(() => {
-    res.status(200).json('Serial number of product deleted for user')
-  })
-  .catch(err => console.log('Error deleting serial number of product for user', err))
-}
-
-export function addSerialNumber(req, res) {
-  const { userId, serialNumber } = req.body
-
-  db.none(queries.addSerialNumber, { userId, serialNumber })
-  .then(() => {
-    res.status(200).json('Serial number added for user')
-  })
-  .catch(err => console.log('Error adding serial number for user', err))
-}
+export const addSerialNumber = asyncHandler(async (req, res) => {
+  const { userId, serialNumber } = req.body;
+  await db.none(queries.addSerialNumber, { userId, serialNumber });
+  res.status(200).json({ success: true });
+});

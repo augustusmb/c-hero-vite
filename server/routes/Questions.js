@@ -1,20 +1,15 @@
-import db from '../../db/db.js';
-import path from 'path';
+import db from "../../db/db.js";
+import { createSqlLoader } from "../utils/sqlLoader.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
-const QueryFile = db.$config.pgp.QueryFile;
-const __dirname = path.resolve();
-
-const sql = (file) => {
-  const fullPath = path.join(__dirname, '/db/queries/questions/', file);
-  return new QueryFile(fullPath, {minify: true});
-}
+const sql = createSqlLoader("questions");
 
 const queries = {
-  getQuestions: sql('getQuestions.sql')
+  getQuestions: sql("getQuestions.sql"),
 };
 
-export const getQuestions = async (req, res) => {
-  const { classId } = req.query
-  let result = await db.any(queries.getQuestions, { classId })
-  res.status(200).json(result)
-}
+export const getQuestions = asyncHandler(async (req, res) => {
+  const { classId } = req.query;
+  const result = await db.any(queries.getQuestions, { classId });
+  res.status(200).json(result);
+});

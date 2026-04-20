@@ -1,15 +1,11 @@
 import db from "../../db/db.js";
-import path from "path";
 import pLimit from "p-limit";
 import { notifyAdminsNewSignUp, signUpSmsToUser } from "../sms.js";
+import { createSqlLoader } from "../utils/sqlLoader.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { resolveLookupId } from "../utils/lookupHelpers.js";
 
-const QueryFile = db.$config.pgp.QueryFile;
-const __dirname = path.resolve();
-
-const sql = (file) => {
-  const fullPath = path.join(__dirname, "/db/queries/users/", file);
-  return new QueryFile(fullPath, { minify: true });
-};
+const sql = createSqlLoader("users");
 
 const queries = {
   insertUser: sql("insertUser.sql"),
@@ -22,18 +18,10 @@ const queries = {
   insertNewVessel: "INSERT INTO vessels (name) VALUES (${name}) RETURNING id",
 };
 
-export async function fetchFormOptions(req, res) {
-  try {
-    const options = await db.query(queries.fetchFormOptions);
-    return res.status(200).json(options[0]); // Will return {companies: [...], vessels: [...], ports: [...]}
-  } catch (error) {
-    console.error("Error fetching form options:", error);
-    return res.status(500).json({
-      message: "Error fetching form options",
-      error: error.message,
-    });
-  }
-}
+export const fetchFormOptions = asyncHandler(async (_req, res) => {
+  const options = await db.query(queries.fetchFormOptions);
+  res.status(200).json(options[0]);
+});
 
 const SUFFIXES = Object.freeze(["a", "b", "c", "d", "p"]);
 
@@ -46,7 +34,7 @@ const generateClassIds = (product) =>
       : null,
   ).filter(Boolean);
 
-export async function signUpUserNew(req, res) {
+export const signUpUserNew = asyncHandler(async (req, res) => {
   const {
     firstName,
     lastName,
@@ -61,136 +49,66 @@ export async function signUpUserNew(req, res) {
     rescueDavitMount,
   } = req.body.data;
 
-  try {
-    const result = await db.tx(async (t) => {
-      try {
-        // Handle potential new entries with proper error handling
-        const companyId = company.__isNew__
-          ? await t.one(
-              queries.insertNewCompany,
-              {
-                name: company.label,
-              },
-              (row) => row.id,
-            )
-          : company.value;
+  const newUser = await db.tx(async (t) => {
+    const [companyId, portId, vesselId] = await Promise.all([
+      resolveLookupId(t, company, queries.insertNewCompany),
+      resolveLookupId(t, port, queries.insertNewPort),
+      resolveLookupId(t, vessel, queries.insertNewVessel),
+    ]);
 
-        const portId = port.__isNew__
-          ? await t.one(
-              queries.insertNewPort,
-              {
-                name: port.label,
-              },
-              (row) => row.id,
-            )
-          : port.value;
+    const user = await t.one(
+      queries.signUpUserNew,
+      {
+        firstName,
+        lastName,
+        phone,
+        email,
+        position_type: position?.value ?? null,
+        companyId,
+        portId,
+        vesselId,
+      },
+      (row) => row,
+    );
 
-        const vesselId = vessel.__isNew__
-          ? await t.one(
-              queries.insertNewVessel,
-              {
-                name: vessel.label,
-              },
-              (row) => row.id,
-            )
-          : vessel.value;
+    const rescueDavitType = `${rescueDavit}${rescueDavitMount}`;
+    const allClassIds = [
+      ...generateClassIds(rescuePole),
+      ...generateClassIds(rescueDavitType),
+    ];
 
-        // Insert the user with the resolved IDs
-        const newUser = await t.one(
-          queries.signUpUserNew,
-          {
-            firstName,
-            lastName,
-            phone,
-            email,
-            position_type: position.value,
-            companyId,
-            portId,
-            vesselId,
-          },
-          (row) => row,
-        );
+    const limit = pLimit(4);
+    await Promise.all(
+      allClassIds.map((product_id) =>
+        limit(() =>
+          t.none(queries.insertUsersProducts, {
+            product_id,
+            user_id: user.id,
+          }),
+        ),
+      ),
+    );
 
-        const userId = newUser.id;
-        const rescueDavitType = `${rescueDavit}${rescueDavitMount}`;
-        const rescuePoleClassIds = generateClassIds(rescuePole);
-        const davitClassIds = generateClassIds(rescueDavitType);
+    return user;
+  });
 
-        // Handle product associations within the same transaction
-        const limit = pLimit(4);
-        const allClassIds = [...rescuePoleClassIds, ...davitClassIds];
+  notifyAdminsNewSignUp({
+    firstName,
+    lastName,
+    phone,
+    email,
+    company,
+    vessel,
+    port,
+    position,
+    rescuePole,
+    rescueDavit,
+    rescueDavitMount,
+  });
+  signUpSmsToUser(phone);
 
-        const productPromises = allClassIds.map((product_id) =>
-          limit(() =>
-            t.none(queries.insertUsersProducts, {
-              product_id,
-              user_id: userId,
-            }),
-          ),
-        );
-
-        await Promise.all(productPromises);
-        notifyAdminsNewSignUp({
-          firstName,
-          lastName,
-          phone,
-          email,
-          company,
-          vessel,
-          port,
-          position,
-          rescuePole,
-          rescueDavit,
-          rescueDavitMount,
-        });
-        return newUser; // Return the created user data
-      } catch (innerError) {
-        // Log specific error within transaction
-        console.error("Transaction error:", innerError);
-        throw innerError; // Re-throw to trigger rollback
-      }
-    });
-
-    // Success response
-    signUpSmsToUser(phone);
-    res.status(201).json({
-      success: true,
-      data: result,
-    });
-  } catch (error) {
-    // Handle specific error types
-    if (error.code === "23505") {
-      // Unique constraint violation — identify which field
-      const constraint = error.constraint || "";
-      const detail = error.detail || "";
-      const isPhone =
-        constraint.includes("phone") || detail.includes("phone");
-
-      res.status(409).json({
-        success: false,
-        field: isPhone ? "phone" : null,
-        error: isPhone
-          ? "This phone number is already registered."
-          : "A record with this information already exists.",
-      });
-    } else if (error.code === "23503") {
-      // Foreign key violation
-      res.status(400).json({
-        success: false,
-        error: "Invalid reference to related data",
-      });
-    } else {
-      console.error(
-        "Error in server, file SignUp.js. Error signing up a new user:",
-        error,
-      );
-      res.status(500).json({
-        success: false,
-        error: "Failed to create user, phone number possibly already in use",
-      });
-    }
-  }
-}
+  res.status(201).json({ success: true, data: newUser });
+});
 
 export async function signUpUser(req, res) {
   console.log(`You've made it into user sign up`);

@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import { publicRouter, protectedRouter } from "./routes.js";
+import { errorHandler } from "./utils/errorHandler.js";
 import bodyParser from "body-parser";
 import cors from "cors";
 import path from "path";
@@ -10,7 +11,7 @@ import jwksClient from "jwks-rsa";
 dotenv.config();
 const __dirname = path.resolve();
 
-import { defineConfig, loadEnv } from "vite";
+import { loadEnv } from "vite";
 
 const env = loadEnv("all", process.cwd());
 
@@ -48,10 +49,6 @@ const checkJwt = (req, res, next) => {
   }
 };
 
-app.use((req, res, next) => {
-  console.log(`Received ${req.method} request for ${req.url}`);
-  next();
-});
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -69,6 +66,8 @@ app.use("/api/*", (req, res) => {
   res.status(404).json({ message: "API endpoint not found" });
 });
 
+app.use(errorHandler);
+
 if (env.VITE_NODE_ENV === "production") {
   app.use(express.static("dist"));
 }
@@ -77,11 +76,11 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/dist/index.html"));
 });
 
-app.listen(port, () => {
-  console.log("listening on port: ", port);
-});
-
 app.use((req, res) => {
   const indexPath = path.join(__dirname, "/dist/index.html");
   res.sendFile(indexPath);
+});
+
+app.listen(port, () => {
+  console.log("listening on port: ", port);
 });
