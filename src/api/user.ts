@@ -19,7 +19,6 @@ export type DashboardParams = {
 
 export type VesselDashboardData = {
   vesselName: string;
-  vesselProducts: Array<{ vessel_id: number; product_id: string }>;
   usersWithProductProgressMaps: any[];
 };
 

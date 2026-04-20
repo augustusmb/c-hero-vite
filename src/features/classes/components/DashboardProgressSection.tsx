@@ -7,10 +7,7 @@ import { useLoggedInUserContext } from "../../../hooks/useLoggedInUserContext.ts
 import { dashboardUsersQuery } from "../queries.ts";
 import BeatLoader from "react-spinners/BeatLoader";
 import CrewProgressBarCellRenderer from "../../admin/components/table/CrewProgressBarCellRenderer.tsx";
-import ClassProgressDatesCellRenderer, {
-  getDateFormat,
-} from "../../admin/components/table/ClassProgressDatesCellRenderer.tsx";
-import PositionBadge from "../../../components/PositionBadge.tsx";
+import ClassProgressDatesCellRenderer from "../../admin/components/table/ClassProgressDatesCellRenderer.tsx";
 import { strings } from "../../../utils/strings.ts";
 
 const DashboardProgressSection = () => {
@@ -45,9 +42,30 @@ const DashboardProgressSection = () => {
   if (isError)
     return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
 
-  const vesselProducts = data?.vesselProducts || [];
-  const vesselProduct1 = vesselProducts[0]?.product_id;
-  const vesselProduct2 = vesselProducts[1]?.product_id;
+  const ROW_BASE_HEIGHT = 24;
+  const ROW_PER_PRODUCT_HEIGHT = 30;
+  const ROW_MIN_HEIGHT = 116;
+
+  const getAssignedProductCodes = (row?: {
+    userFullProgressMap?: Record<string, { assigned?: boolean }>;
+  }) =>
+    Object.keys(row?.userFullProgressMap ?? {}).filter(
+      (code) => row?.userFullProgressMap?.[code]?.assigned,
+    );
+
+  const getRowHeight = (params: { data?: unknown }) => {
+    const count = getAssignedProductCodes(params.data as any).length;
+    return Math.max(
+      ROW_MIN_HEIGHT,
+      ROW_BASE_HEIGHT + Math.max(1, count) * ROW_PER_PRODUCT_HEIGHT,
+    );
+  };
+
+  const centeredCellStyle = {
+    display: "flex",
+    alignItems: "center",
+    textAlign: "left" as const,
+  };
 
   const colDefs = [
     {
@@ -57,39 +75,37 @@ const DashboardProgressSection = () => {
           headerName: "Crew",
           field: "name",
           cellRenderer: CrewProgressBarCellRenderer,
-          width: 200,
-        },
-        { headerName: "Port", field: "port" },
-        {
-          headerName: "Position",
-          field: "position",
-          cellRenderer: (params: { value?: string }) => (
-            <PositionBadge value={params.value} />
-          ),
-        },
-        {
-          headerName: "Date Started",
-          valueGetter: (params: { data: { date_signed_up: Date } }) => {
-            return getDateFormat(params.data.date_signed_up) ?? "—";
-          },
+          cellStyle: centeredCellStyle,
+          width: 320,
         },
         {
           headerName: "MOB Equipment",
-          width: 135,
-          cellRenderer: () => {
-            const Badge = ({ label }: { label: string }) => (
-              <span className="inline-flex items-center rounded bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700">
-                {label}
-              </span>
-            );
+          width: 160,
+          cellRenderer: (params: {
+            data: {
+              userFullProgressMap?: Record<string, { assigned?: boolean }>;
+            };
+          }) => {
+            const codes = getAssignedProductCodes(params.data);
+            if (codes.length === 0) {
+              return (
+                <div className="flex h-full items-center text-xs text-slate-400">
+                  None
+                </div>
+              );
+            }
             return (
-              <div className="flex h-full flex-col">
-                <div className="flex flex-1 items-center border-b border-slate-100">
-                  <Badge label={vesselProduct1?.toUpperCase() || "N/A"} />
-                </div>
-                <div className="flex flex-1 items-center">
-                  <Badge label={vesselProduct2?.toUpperCase() || "N/A"} />
-                </div>
+              <div className="flex h-full flex-col divide-y divide-slate-100">
+                {codes.map((code) => (
+                  <div
+                    key={code}
+                    className="flex flex-1 items-center py-1"
+                  >
+                    <span className="inline-flex w-fit items-center rounded bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700">
+                      {code.toUpperCase()}
+                    </span>
+                  </div>
+                ))}
               </div>
             );
           },
@@ -101,41 +117,31 @@ const DashboardProgressSection = () => {
               headerName: "Setup",
               flex: 1,
               minWidth: 100,
-              cellRenderer: ClassProgressDatesCellRenderer(
-                "a",
-                vesselProduct1,
-                vesselProduct2,
-              ),
+              cellRenderer: ClassProgressDatesCellRenderer("a"),
             },
             {
               headerName: "Operations",
               flex: 1,
               minWidth: 100,
-              cellRenderer: ClassProgressDatesCellRenderer(
-                "b",
-                vesselProduct1,
-                vesselProduct2,
-              ),
+              cellRenderer: ClassProgressDatesCellRenderer("b"),
             },
             {
               headerName: "Inspection",
               flex: 1,
               minWidth: 100,
-              cellRenderer: ClassProgressDatesCellRenderer(
-                "c",
-                vesselProduct1,
-                vesselProduct2,
-              ),
+              cellRenderer: ClassProgressDatesCellRenderer("c"),
             },
             {
               headerName: "Drill",
               flex: 1,
               minWidth: 100,
-              cellRenderer: ClassProgressDatesCellRenderer(
-                "d",
-                vesselProduct1,
-                vesselProduct2,
-              ),
+              cellRenderer: ClassProgressDatesCellRenderer("d"),
+            },
+            {
+              headerName: "Prusik",
+              flex: 1,
+              minWidth: 100,
+              cellRenderer: ClassProgressDatesCellRenderer("p"),
             },
           ],
         },
@@ -160,7 +166,7 @@ const DashboardProgressSection = () => {
             rowData={data?.usersWithProductProgressMaps}
             columnDefs={colDefs}
             defaultColDef={{ cellStyle: { textAlign: "left" }, width: 125 }}
-            rowHeight={82}
+            getRowHeight={getRowHeight}
           />
         </div>
       )}

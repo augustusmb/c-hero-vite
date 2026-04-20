@@ -1,12 +1,23 @@
+import PositionBadge from "../../../../components/PositionBadge.tsx";
+import { getDateFormat } from "./ClassProgressDatesCellRenderer.tsx";
+
 const CrewProgressBarCellRenderer = (params: any) => {
-  const { first_name, last_name, totalAssessments, assessmentsCompleted } =
-    params.data;
+  const {
+    first_name,
+    last_name,
+    totalAssessments,
+    assessmentsCompleted,
+    port,
+    position,
+    date_signed_up,
+  } = params.data;
 
   const percentageComplete =
     Math.round((assessmentsCompleted / totalAssessments) * 100) || 0;
 
   const isComplete = percentageComplete === 100;
   const fillColor = isComplete ? "bg-green-500" : "bg-slate-500";
+  const formattedDate = getDateFormat(date_signed_up);
 
   return (
     <div className="flex h-full flex-col justify-center gap-1.5 py-2">
@@ -24,6 +35,16 @@ const CrewProgressBarCellRenderer = (params: any) => {
           {percentageComplete}%
         </span>
       </div>
+      {(port || position) && (
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
+          {port && <span>{port}</span>}
+          {port && position && <span className="text-slate-300">·</span>}
+          {position && <PositionBadge value={position} />}
+        </div>
+      )}
+      {formattedDate && (
+        <div className="text-xs text-slate-500">{`Started ${formattedDate}`}</div>
+      )}
     </div>
   );
 };

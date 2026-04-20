@@ -4,6 +4,7 @@ type ClassProgress = {
 
 type UserFullProgressMap = {
   [x: string]: {
+    assigned: boolean;
     classProgress: {
       [x: string]: ClassProgress;
     };
@@ -25,31 +26,40 @@ export function getDateFormat(date: Date | undefined | null): string | null {
 }
 
 const ClassProgressDatesCellRenderer =
-  (suffix: string, vesselProduct1: string, vesselProduct2: string) =>
-  (params: ClassProgressParams) => (
-    <div className="flex h-full flex-col">
-      {[vesselProduct1, vesselProduct2].map((product, index) => {
-        const formatted = getDateFormat(
-          params?.data?.userFullProgressMap?.[product]?.classProgress?.[
-            `${product}_${suffix}`
-          ]?.date_completed,
-        );
-        return (
-          <div
-            key={index}
-            className={`flex flex-1 items-center text-sm ${
-              index === 0 ? "border-b border-slate-100" : ""
-            }`}
-          >
-            {formatted ? (
-              <span className="text-slate-900">{formatted}</span>
-            ) : (
-              <span className="text-slate-400">—</span>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
+  (suffix: string) => (params: ClassProgressParams) => {
+    const progressMap = params?.data?.userFullProgressMap ?? {};
+    const assignedCodes = Object.keys(progressMap).filter(
+      (code) => progressMap[code]?.assigned,
+    );
+
+    if (assignedCodes.length === 0) {
+      return (
+        <div className="flex h-full items-center text-sm text-slate-400">—</div>
+      );
+    }
+
+    return (
+      <div className="flex h-full flex-col divide-y divide-slate-100">
+        {assignedCodes.map((code) => {
+          const formatted = getDateFormat(
+            progressMap[code]?.classProgress?.[`${code}_${suffix}`]
+              ?.date_completed,
+          );
+          return (
+            <div
+              key={code}
+              className="flex flex-1 items-center py-1 text-sm"
+            >
+              {formatted ? (
+                <span className="text-slate-900">{formatted}</span>
+              ) : (
+                <span className="text-slate-400">—</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
 
 export default ClassProgressDatesCellRenderer;
