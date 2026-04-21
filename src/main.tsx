@@ -11,6 +11,10 @@ const domain = import.meta.env.VITE_AUTH0_DOMAIN;
 const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
 const audience = import.meta.env.VITE_AUTH0_AUDIENCE;
 
+if (import.meta.env.VITE_NODE_ENV === "local") {
+  document.title = "C-Hero (local)";
+}
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
