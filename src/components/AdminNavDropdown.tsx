@@ -2,18 +2,23 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
+import { useLoggedInUserContext } from "../hooks/useLoggedInUserContext.ts";
 import { strings } from "../utils/strings.ts";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function NavbarDropDown() {
+export default function AdminNavDropdown() {
+  const { loggedInUserInfo } = useLoggedInUserContext();
+
+  if (!loggedInUserInfo?.is_admin) return null;
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium text-slate-050 transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 lg:px-4 lg:py-2 lg:text-base">
-          {strings["nav.more"]}
+          {strings["nav.admin"]}
           <ChevronDownIcon
             className="h-4 w-4 text-slate-050"
             aria-hidden="true"
@@ -35,65 +40,26 @@ export default function NavbarDropDown() {
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  to="/help/safety"
+                  to="/admin/users"
                   className={classNames(
                     active ? "bg-slate-100 text-slate-900" : "text-slate-700",
                     "block px-4 py-2 text-sm",
                   )}
                 >
-                  {strings["nav.safety"]}
+                  {strings["admin.users"]}
                 </Link>
               )}
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  to="/help/troubleshooting"
+                  to="/admin/questions"
                   className={classNames(
                     active ? "bg-slate-100 text-slate-900" : "text-slate-700",
                     "block px-4 py-2 text-sm",
                   )}
                 >
-                  {strings["nav.troubleshooting"]}
-                </Link>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  to="/help/MobInspectionCheckList"
-                  className={classNames(
-                    active ? "bg-slate-100 text-slate-900" : "text-slate-700",
-                    "block px-4 py-2 text-sm",
-                  )}
-                >
-                  {strings["nav.mob.inspection.checklist"]}
-                </Link>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  to="/help/MobDrillLog"
-                  className={classNames(
-                    active ? "bg-slate-100 text-slate-900" : "text-slate-700",
-                    "block px-4 py-2 text-sm",
-                  )}
-                >
-                  {strings["nav.mob.drill.log"]}
-                </Link>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  to="/certification"
-                  className={classNames(
-                    active ? "bg-slate-100 text-slate-900" : "text-slate-700",
-                    "block px-4 py-2 text-sm",
-                  )}
-                >
-                  {strings["nav.certification"]}
+                  {strings["admin.questions"]}
                 </Link>
               )}
             </Menu.Item>

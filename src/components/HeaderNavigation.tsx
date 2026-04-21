@@ -3,6 +3,7 @@ import { Home, LifeBuoy } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import AuthenticationButton from "./AuthenticationButton.tsx";
 import NavBarDropdown from "./NavBarDropdown.tsx";
+import AdminNavDropdown from "./AdminNavDropdown.tsx";
 import BoatIcon from "../assets/icons/cruiser.svg?react";
 
 const HeaderNavigation = () => {
@@ -39,6 +40,7 @@ const HeaderNavigation = () => {
               <Home className="h-4 w-4" aria-hidden="true" />
               <span className="hidden sm:inline">Home</span>
             </Link>
+            <AdminNavDropdown />
             <NavBarDropdown />
           </>
         )}

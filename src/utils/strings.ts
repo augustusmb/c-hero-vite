@@ -18,6 +18,8 @@ export const strings = {
   "please.login": "Please click below to Login",
   "nav.more": "More",
   "nav.admin": "Admin",
+  "admin.users": "Users",
+  "admin.questions": "Questions",
   "nav.safety": "Safety",
   "nav.troubleshooting": "Troubleshooting",
   "nav.mob.inspection.checklist": "MOB Inspection Checklist",

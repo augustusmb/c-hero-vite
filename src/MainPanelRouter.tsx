@@ -3,6 +3,7 @@ import AssessmentPage from "./pages/AssessmentPage.tsx";
 import PDFRenderPage from "./pages/PDFRenderPage.tsx";
 import CertificatePage from "./pages/CertificatePage.tsx";
 import AdminPage from "./pages/AdminPage.tsx";
+import AdminQuestionsPage from "./pages/AdminQuestionsPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
 
 const LegacyTestRedirect = () => {
@@ -15,7 +16,9 @@ const MainPanelRouter = () => {
     <div className="p-1 lg:m-8">
       <Routes>
         <Route path="/certification" element={<CertificatePage />} />
-        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin" element={<Navigate to="/admin/users" replace />} />
+        <Route path="/admin/users" element={<AdminPage />} />
+        <Route path="/admin/questions" element={<AdminQuestionsPage />} />
         <Route path="/assessment/:classId" element={<AssessmentPage />} />
         <Route path="/test/:classId" element={<LegacyTestRedirect />} />
         <Route path="/class/:classId" element={<PDFRenderPage />} />
