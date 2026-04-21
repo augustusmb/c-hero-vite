@@ -94,13 +94,8 @@ const AdminEditUserForm: React.FC<AdminEditUserFormProps> = ({
     onError: () => {
       toast.error("Could not save changes. Please try again.");
     },
-    onSettled: (_data, _error, variables) => {
-      queryClient.invalidateQueries({ queryKey: userKeys.list() });
-      if (variables?.id) {
-        queryClient.invalidateQueries({
-          queryKey: userKeys.productProgress(variables.id),
-        });
-      }
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: userKeys.all });
     },
   });
 

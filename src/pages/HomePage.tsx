@@ -9,7 +9,7 @@ const HomePage = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
 
   return (
-    <div className="grid gap-6 lg:grid-cols-5">
+    <div className="mx-auto grid max-w-6xl gap-6 pb-10 lg:grid-cols-5">
       <div className="flex flex-col gap-6 lg:order-1 lg:col-span-2">
         {loggedInUserInfo && <UserInfoSection userInfo={loggedInUserInfo} />}
         <ProductSerialNumberSection />

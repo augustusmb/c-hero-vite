@@ -106,7 +106,7 @@ const UserInfoSection: React.FC<UserInfoSectionStaticProps> = ({
 };
 
 const Card = ({ children }: { children: React.ReactNode }) => (
-  <div className="mb-6 overflow-hidden rounded-lg border border-slate-200 bg-slate-050 p-4 shadow-sm lg:p-5">
+  <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-050 p-4 shadow-sm lg:p-5">
     {children}
   </div>
 );
