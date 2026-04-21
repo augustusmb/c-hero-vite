@@ -35,7 +35,7 @@ export default function NavbarDropDown() {
       >
         <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-indigo-050 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
-            {loggedInUserInfo?.level === "0" ? (
+            {loggedInUserInfo?.is_admin ? (
               <Menu.Item>
                 {({ active }) => (
                   <Link

@@ -66,7 +66,7 @@ const AssessmentPage = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
   const navigate = useNavigate();
 
-  const { level, first_name, last_name, phone, id } = loggedInUserInfo || {};
+  const { is_admin, first_name, last_name, phone, id } = loggedInUserInfo || {};
   const { classId = "" } = useParams();
   const {
     classInfo,
@@ -96,7 +96,7 @@ const AssessmentPage = () => {
 
   useEffect(() => {
     if (questions) {
-      const randomQuestions = randomizeArray(questions, level || "").map(
+      const randomQuestions = randomizeArray(questions, !!is_admin).map(
         (question) => ({
           ...question,
           answerOptions: prepareAnswerOptions(question),
@@ -224,7 +224,7 @@ const AssessmentPage = () => {
                 key={question.id}
                 question={question}
                 idx={idx}
-                showAdminId={loggedInUserInfo?.level === "0"}
+                showAdminId={!!loggedInUserInfo?.is_admin}
                 onAnswerChange={handleClick}
               />
             ))}

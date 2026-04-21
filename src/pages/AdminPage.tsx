@@ -33,7 +33,7 @@ const AdminPage = () => {
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    if (loggedInUserInfo?.level !== "0") {
+    if (!loggedInUserInfo?.is_admin) {
       return navigate("/redirect");
     }
   }, [userToEdit, loggedInUserInfo, navigate]);

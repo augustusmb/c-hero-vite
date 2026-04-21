@@ -1,6 +1,5 @@
 import { AssessmentQuestion } from "./types";
 
-const ADMIN_LEVEL = "0";
 const ALL_OF_THE_ABOVE = "All of the above";
 
 export function shuffle<T>(items: readonly T[]): T[] {
@@ -14,9 +13,9 @@ export function shuffle<T>(items: readonly T[]): T[] {
 
 export function randomizeArray(
   questions: readonly AssessmentQuestion[],
-  level: string,
+  isAdmin: boolean,
 ): AssessmentQuestion[] {
-  if (level === ADMIN_LEVEL) {
+  if (isAdmin) {
     return [...questions].sort((a, b) => a.id - b.id);
   }
   return shuffle(questions);
