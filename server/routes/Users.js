@@ -18,7 +18,7 @@ const queries = {
   insertNewVessel: "INSERT INTO vessels (name) VALUES (${name}) RETURNING id",
 };
 
-const usersProductsCS = new pgp.helpers.ColumnSet(["product_id", "user_id"], {
+const usersProductsCS = new pgp.helpers.ColumnSet(["class_id", "user_id"], {
   table: "users_products",
 });
 
@@ -119,7 +119,7 @@ export const updateUserInfoAndProducts = asyncHandler(async (req, res) => {
     if (addedProducts.length > 0) {
       const rows = addedProducts
         .flatMap(classIdsForProduct)
-        .map((product_id) => ({ product_id, user_id: id }));
+        .map((class_id) => ({ class_id, user_id: id }));
       await t.none(pgp.helpers.insert(rows, usersProductsCS));
     }
 
@@ -127,7 +127,7 @@ export const updateUserInfoAndProducts = asyncHandler(async (req, res) => {
     if (removedProducts.length > 0) {
       const classIds = removedProducts.flatMap(classIdsForProduct);
       await t.none(
-        "DELETE FROM users_products WHERE product_id IN ($1:csv) AND user_id = $2",
+        "DELETE FROM users_products WHERE class_id IN ($1:csv) AND user_id = $2",
         [classIds, id],
       );
     }

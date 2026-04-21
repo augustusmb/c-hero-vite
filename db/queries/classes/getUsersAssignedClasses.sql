@@ -1,9 +1,9 @@
 select
 *
-from 
+from
 users_products
 where
 user_id = ${userId}
 order by
-product_id
+class_id
 asc

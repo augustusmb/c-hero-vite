@@ -1,4 +1,4 @@
 INSERT INTO
-  users_products (product_id, user_id)
+  users_products (class_id, user_id)
 VALUES
-  (${product_id}, ${user_id})
+  (${class_id}, ${user_id})

@@ -61,7 +61,7 @@ const ClassCard: React.FC<ClassCardProps> = ({
 
   const completedCount = orderedClasses.filter((c) => c.completed).length;
   const totalCount = orderedClasses.length;
-  const nextIncompleteId = orderedClasses.find((c) => !c.completed)?.product_id;
+  const nextIncompleteId = orderedClasses.find((c) => !c.completed)?.class_id;
   const percentComplete =
     totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
   const status = getProductStatus(product, assignedProductsMap);
@@ -101,9 +101,9 @@ const ClassCard: React.FC<ClassCardProps> = ({
       <div className="flex flex-col gap-1 p-2">
         {orderedClasses.map((cls) => (
           <ClassCardItem
-            key={cls.product_id}
+            key={cls.class_id}
             item={cls}
-            isNext={cls.product_id === nextIncompleteId}
+            isNext={cls.class_id === nextIncompleteId}
           />
         ))}
       </div>
@@ -112,12 +112,12 @@ const ClassCard: React.FC<ClassCardProps> = ({
 };
 
 const ClassCardItem: React.FC<ClassCardItemsProps> = ({ item, isNext }) => {
-  const label = classTypesMapping[item.product_id.slice(3, 4)];
+  const label = classTypesMapping[item.class_id.slice(3, 4)];
 
   if (item.completed) {
     return (
       <Link
-        to={`/class/${item.product_id}`}
+        to={`/class/${item.class_id}`}
         className="flex w-full items-center justify-between rounded-sm bg-green-050 px-2 py-1 text-sm text-slate-700 hover:bg-green-100 lg:text-base"
       >
         <span>{label}</span>
@@ -129,7 +129,7 @@ const ClassCardItem: React.FC<ClassCardItemsProps> = ({ item, isNext }) => {
   if (isNext) {
     return (
       <Link
-        to={`/class/${item.product_id}`}
+        to={`/class/${item.class_id}`}
         className="group flex w-full items-center justify-between rounded-sm bg-orange-500 px-3 py-1.5 text-sm font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 lg:text-base"
       >
         <span>{label}</span>
@@ -143,7 +143,7 @@ const ClassCardItem: React.FC<ClassCardItemsProps> = ({ item, isNext }) => {
 
   return (
     <Link
-      to={`/class/${item.product_id}`}
+      to={`/class/${item.class_id}`}
       className="block w-full rounded-sm bg-slate-100 px-2 py-1 text-sm text-slate-700 hover:bg-slate-200 lg:text-base"
     >
       {label}

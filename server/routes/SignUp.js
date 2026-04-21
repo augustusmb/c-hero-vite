@@ -79,10 +79,10 @@ export const signUpUserNew = asyncHandler(async (req, res) => {
 
     const limit = pLimit(4);
     await Promise.all(
-      allClassIds.map((product_id) =>
+      allClassIds.map((class_id) =>
         limit(() =>
           t.none(queries.insertUsersProducts, {
-            product_id,
+            class_id,
             user_id: user.id,
           }),
         ),
@@ -186,9 +186,9 @@ export async function signUpUser(req, res) {
 
     const limit = pLimit(4);
 
-    let promises = usersClasses.map((product_id) =>
+    let promises = usersClasses.map((class_id) =>
       limit(() =>
-        db.query(queries.insertUsersProducts, { product_id, user_id }),
+        db.query(queries.insertUsersProducts, { class_id, user_id }),
       ),
     );
     await Promise.all(promises);

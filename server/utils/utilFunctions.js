@@ -2,8 +2,8 @@ import db from "../../db/db.js";
 
 export const createUserClassesMap = (userClasses) => {
   const userClassesMap = {};
-  userClasses.forEach((class_id) => {
-    userClassesMap[class_id.product_id] = class_id;
+  userClasses.forEach((row) => {
+    userClassesMap[row.class_id] = row;
   });
 
   return userClassesMap;

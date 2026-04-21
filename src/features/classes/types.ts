@@ -1,5 +1,5 @@
 export type ClassProgress = {
-  product_id: string;
+  class_id: string;
   user_id: number;
   completed: boolean;
   data_completed: string | null;

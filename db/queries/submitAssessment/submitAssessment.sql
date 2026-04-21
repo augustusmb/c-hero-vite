@@ -5,4 +5,4 @@ SET
   date_completed = NOW()
 WHERE
   user_id = ${userId}
-  AND product_id = ${classId}
+  AND class_id = ${classId}

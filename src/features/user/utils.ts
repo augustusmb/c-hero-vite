@@ -7,13 +7,13 @@ import {
   UserProducts,
 } from "../classes/types.ts";
 
-// Returns an object keyed by product_id (e.g., "3b_a") where each value is the
+// Returns an object keyed by class_id (e.g., "3b_a") where each value is the
 // user's progress row for that class:
-//   { "3b_a": { product_id, user_id, completed, date_completed }, ... }
+//   { "3b_a": { class_id, user_id, completed, date_completed }, ... }
 const createUserClassesMap = (userClasses: ClassProgress[]) => {
   const userClassesMap: ProductProgress = {};
-  userClasses.forEach((class_id) => {
-    userClassesMap[class_id.product_id] = class_id;
+  userClasses.forEach((row) => {
+    userClassesMap[row.class_id] = row;
   });
   return userClassesMap;
 };
