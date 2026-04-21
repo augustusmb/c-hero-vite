@@ -12,6 +12,7 @@ const queries = {
   insertUsersProducts: sql("insertUsersProducts.sql"),
   fetchFormOptions: sql("fetchFormOptions.sql"),
   signUpUserNew: sql("signUpUserNew.sql"),
+  checkPhoneExists: sql("checkPhoneExists.sql"),
   insertNewCompany:
     "INSERT INTO companies (name) VALUES (${name}) RETURNING id",
   insertNewPort: "INSERT INTO ports (name) VALUES (${name}) RETURNING id",
@@ -21,6 +22,15 @@ const queries = {
 export const fetchFormOptions = asyncHandler(async (_req, res) => {
   const options = await db.query(queries.fetchFormOptions);
   res.status(200).json(options[0]);
+});
+
+export const checkPhoneAvailable = asyncHandler(async (req, res) => {
+  const { phone } = req.query;
+  if (typeof phone !== "string" || !/^\+[1-9]\d{1,14}$/.test(phone)) {
+    return res.status(400).json({ error: "Invalid phone format" });
+  }
+  const { exists } = await db.one(queries.checkPhoneExists, { phone });
+  res.status(200).json({ available: !exists });
 });
 
 const SUFFIXES = Object.freeze(["a", "b", "c", "d", "p"]);

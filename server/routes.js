@@ -17,7 +17,11 @@ import {
 import { submitAssessment } from "./routes/SubmitAssessment.js";
 import { getUsersAssignedClasses } from "./routes/Classes.js";
 import { getDashboardUsers } from "./routes/Dashboard.js";
-import { fetchFormOptions, signUpUserNew } from "./routes/SignUp.js";
+import {
+  fetchFormOptions,
+  signUpUserNew,
+  checkPhoneAvailable,
+} from "./routes/SignUp.js";
 import {
   listProducts,
   getSerialNumbers,
@@ -32,6 +36,7 @@ export const protectedRouter = express.Router();
 
 publicRouter.get("/sign-up", fetchFormOptions);
 publicRouter.post("/sign-up", signUpUserNew);
+publicRouter.get("/sign-up/phone-available", checkPhoneAvailable);
 publicRouter.get("/products", listProducts);
 
 protectedRouter.route("/questions").get(getQuestions);

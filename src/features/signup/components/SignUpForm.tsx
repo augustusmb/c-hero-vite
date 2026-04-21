@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import {
   rescueDavitOptions,
@@ -23,6 +24,7 @@ import {
 import { PhoneInput } from "./PhoneInput";
 import { RadioImageGroup } from "./RadioImageGroup";
 import { strings } from "../../../utils/strings";
+import { phoneAvailableQuery } from "../queries";
 
 type SignUpFormProps = {
   companies: TCreateableSelectOptions;
@@ -44,6 +46,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     handleSubmit,
     reset,
     setError,
+    clearErrors,
     trigger,
     watch,
     setValue,
@@ -60,6 +63,26 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
 
   const [step, setStep] = useState<1 | 2>(1);
 
+  const phone = watch("phone") ?? "";
+  const [debouncedPhone, setDebouncedPhone] = useState(phone);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedPhone(phone), 400);
+    return () => clearTimeout(timer);
+  }, [phone]);
+
+  const phoneAvailability = useQuery(phoneAvailableQuery(debouncedPhone));
+
+  useEffect(() => {
+    if (phoneAvailability.data?.available === false) {
+      setError("phone", {
+        type: "manual",
+        message: "This phone number is already registered.",
+      });
+    } else if (phoneAvailability.data?.available === true) {
+      clearErrors("phone");
+    }
+  }, [phoneAvailability.data, setError, clearErrors]);
+
   const step1Fields: Array<keyof TSignUpSchema> = [
     "firstName",
     "lastName",
@@ -73,7 +96,15 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
 
   const handleNext = async () => {
     const valid = await trigger(step1Fields);
-    if (valid) setStep(2);
+    if (!valid) return;
+    if (phoneAvailability.data?.available === false) {
+      setError("phone", {
+        type: "manual",
+        message: "This phone number is already registered.",
+      });
+      return;
+    }
+    setStep(2);
   };
 
   const onSubmit = async (data: TSignUpSchema) => {

@@ -13,6 +13,16 @@ export const fetchOptions = async (): Promise<FormOptions> => {
   return data;
 };
 
+export const checkPhoneAvailable = async (
+  phone: string,
+): Promise<{ available: boolean }> => {
+  const { data } = await apiClient.get<{ available: boolean }>(
+    `api/public/sign-up/phone-available`,
+    { params: { phone } },
+  );
+  return data;
+};
+
 export const signUpUser = async (signUpUserData: TSignUpSchema) => {
   try {
     const response = await apiClient.post(`api/public/sign-up`, {
