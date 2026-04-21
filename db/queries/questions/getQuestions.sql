@@ -7,7 +7,7 @@ WHERE
     SELECT
       question_id
     FROM
-      product_question_links
+      class_questions
     WHERE
-      product_id = ${classId}
+      class_id = ${classId}
   )

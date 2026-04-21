@@ -83,7 +83,7 @@ From `db/init/tables/`:
 - **`vessels`** — the boats. Joined to products via `vessels_products` and to users via `users_vessels`.
 - **`ports`** — physical location where a vessel is based. Joined to vessels via `ports_vessels`. Minimal meaning today; may grow.
 - **`users`** — joined to vessels (`users_vessels`) and to products (`users_products`).
-- **`products`** — the catalog above. Questions live in `questions`, joined to products via `products_questions`.
+- **`products`** — the catalog above. Questions live in `questions`, joined to classes via `class_questions` (where `class_id` is a composite like `hr_b` = HR product + Operations class).
 
 Shore-side ↔ company scoping is **still being fleshed out** — the tables exist but the exact hierarchy (how a shore-side user's jurisdiction is computed) isn't fully settled.
 
@@ -115,7 +115,7 @@ Shore-side ↔ company scoping is **still being fleshed out** — the tables exi
 ## Question authoring
 
 - Questions are authored by a founder in a **Google Sheet**.
-- Augustus manually transfers them into Postgres (`questions` / `products_questions` tables).
+- Augustus manually transfers them into Postgres (`questions` / `class_questions` tables).
 - No admin UI for question editing yet.
 
 ## Certification
