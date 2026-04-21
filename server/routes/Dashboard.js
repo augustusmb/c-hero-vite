@@ -12,13 +12,14 @@ const queries = {
 export const getDashboardUsers = asyncHandler(async (req, res) => {
   const { vessel_id } = req.query;
 
-  const vesselData = await db.one("SELECT * FROM vessels WHERE id = $1", [
-    vessel_id,
+  const [vesselData, dashboardUsers, products] = await Promise.all([
+    db.one("SELECT * FROM vessels WHERE id = $1", [vessel_id]),
+    db.query(queries.getDashboardUsers, [vessel_id]),
+    db.any("SELECT id, name, category FROM products"),
   ]);
-  const dashboardUsers = await db.query(queries.getDashboardUsers, [vessel_id]);
   const usersWithProductProgressMaps = await Promise.all(
     dashboardUsers.map((dashUser) =>
-      appendUserFullProductProgressMap(dashUser),
+      appendUserFullProductProgressMap(dashUser, products),
     ),
   );
 

@@ -59,7 +59,7 @@ const corsOrigin =
 app.use(cors({ origin: corsOrigin }));
 const port = env.PORT || 8080;
 
-app.use("/api/public/sign-up", publicRouter);
+app.use("/api/public", publicRouter);
 app.use("/api/routes", checkJwt, protectedRouter);
 
 app.use("/api/*", (req, res) => {

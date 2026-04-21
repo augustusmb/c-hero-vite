@@ -8,7 +8,13 @@ const queries = {
   getSerialNumbers: sql("getSerialNumbers.sql"),
   deleteSerialNumber: sql("deleteSerialNumber.sql"),
   addSerialNumber: sql("addSerialNumber.sql"),
+  listProducts: "SELECT id, name, category FROM products ORDER BY id",
 };
+
+export const listProducts = asyncHandler(async (_req, res) => {
+  const data = await db.any(queries.listProducts);
+  res.status(200).json(data);
+});
 
 export const getSerialNumbers = asyncHandler(async (req, res) => {
   const { userId } = req.query;

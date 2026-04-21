@@ -13,6 +13,7 @@ import { getUsersAssignedClasses } from "./routes/Classes.js";
 import { getDashboardUsers } from "./routes/Dashboard.js";
 import { fetchFormOptions, signUpUserNew } from "./routes/SignUp.js";
 import {
+  listProducts,
   getSerialNumbers,
   addSerialNumber,
   deleteSerialNumber,
@@ -23,8 +24,9 @@ export const protectedRouter = express.Router();
 
 // router.route("/").post(signUpUser);
 
-publicRouter.get("/", fetchFormOptions);
-publicRouter.post("/", signUpUserNew);
+publicRouter.get("/sign-up", fetchFormOptions);
+publicRouter.post("/sign-up", signUpUserNew);
+publicRouter.get("/products", listProducts);
 
 protectedRouter.route("/questions").get(getQuestions);
 

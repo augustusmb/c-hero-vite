@@ -1,4 +1,3 @@
-// import { productsArray, productsMap } from "./messages";
 // import {
 //   Select,
 //   SelectContent,

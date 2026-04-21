@@ -1,5 +1,4 @@
 import db from "../../db/db.js";
-import { productsMap } from "./dataUtils.js";
 
 export const createUserClassesMap = (userClasses) => {
   const userClassesMap = {};
@@ -20,20 +19,26 @@ async function getUserAssessmentsCompletedNumber(usersClasses) {
   return { totalAssessments, assessmentsCompleted };
 }
 
-export const createUserFullProgressMap = (userClassesMap) => {
-  const userProductsMap = JSON.parse(JSON.stringify(productsMap));
-  // {
-  //   "3b":   {
-  //   productId: "3b",
-  //   productName: "3B Series 3 Davit - Bitt Mount",
-  //   classProgress: {},
-  //   assigned: false
-  //   },
-  //   ...
-  // }
+const buildEmptyProductsMap = (products) => {
+  const map = {};
+  for (const product of products) {
+    map[product.id] = {
+      productId: product.id,
+      productName: product.name,
+      category: product.category,
+      classProgress: {},
+      assigned: false,
+    };
+  }
+  return map;
+};
+
+export const createUserFullProgressMap = (userClassesMap, products) => {
+  const userProductsMap = buildEmptyProductsMap(products);
   for (let key in userClassesMap) {
     let productCode = key.slice(0, 2);
     let classType = key.slice(3, 4);
+    if (!userProductsMap[productCode]) continue;
     let { classProgress } = userProductsMap[productCode];
     if (classType === "a") {
       userProductsMap[productCode].assigned = true;
@@ -41,13 +46,16 @@ export const createUserFullProgressMap = (userClassesMap) => {
       classProgress[`${productCode}_b`] = userClassesMap[`${productCode}_b`];
       classProgress[`${productCode}_c`] = userClassesMap[`${productCode}_c`];
       classProgress[`${productCode}_d`] = userClassesMap[`${productCode}_d`];
+      if (productCode === "vr") {
+        classProgress[`${productCode}_p`] = userClassesMap[`${productCode}_p`];
+      }
     }
   }
 
   return userProductsMap;
 };
 
-export const appendUserFullProductProgressMap = async (dashUser) => {
+export const appendUserFullProductProgressMap = async (dashUser, products) => {
   const { id } = dashUser;
 
   const userClasses = await db.query(
@@ -57,7 +65,10 @@ export const appendUserFullProductProgressMap = async (dashUser) => {
   const { totalAssessments, assessmentsCompleted } =
     await getUserAssessmentsCompletedNumber(userClasses);
   const userClassesMap = createUserClassesMap(userClasses);
-  const userFullProgressMap = createUserFullProgressMap(userClassesMap);
+  const userFullProgressMap = createUserFullProgressMap(
+    userClassesMap,
+    products,
+  );
 
   const finalUserData = {
     ...dashUser,
@@ -68,9 +79,11 @@ export const appendUserFullProductProgressMap = async (dashUser) => {
   return finalUserData;
 };
 
-export const hasDavitProduct = (userProductsMap) => {
-  const davitCodes = ["3b", "3f", "5b", "5f", "7b", "7f", "9f"];
-  return Object.keys(userProductsMap).some(
-    (code) => davitCodes.includes(code) && userProductsMap[code].assigned,
+const isDavitCategory = (category) =>
+  typeof category === "string" &&
+  (category.includes("Davit") || category === "Man Rated");
+
+export const hasDavitProduct = (userProductsMap) =>
+  Object.values(userProductsMap).some(
+    (entry) => entry?.assigned && isDavitCategory(entry?.category),
   );
-};

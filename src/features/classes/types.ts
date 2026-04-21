@@ -12,6 +12,7 @@ export type ProductProgress = {
 export type ProductData = {
   productId: string;
   productName: string;
+  category: string;
   assigned: boolean;
   classProgress: ProductProgress;
 };
@@ -22,5 +23,6 @@ export type UserProducts = {
     classProgress: ProductProgress;
     productId: string;
     productName: string;
+    category: string;
   };
 };

@@ -1,5 +1,6 @@
-import { productsMap } from "../../messages.ts";
 import { fetchUserClasses } from "../../api/user.ts";
+import { getProducts } from "../products/api.ts";
+import { Product } from "../products/types.ts";
 import {
   ProductProgress,
   ClassProgress,
@@ -17,11 +18,29 @@ const createUserClassesMap = (userClasses: ClassProgress[]) => {
   return userClassesMap;
 };
 
-const createUserFullProgressMap = (userClassesMap: ProductProgress) => {
-  const userProductsMap = JSON.parse(JSON.stringify(productsMap));
+const buildEmptyProductsMap = (products: Product[]): UserProducts => {
+  const map: UserProducts = {};
+  for (const product of products) {
+    map[product.id] = {
+      productId: product.id,
+      productName: product.name,
+      category: product.category,
+      classProgress: {},
+      assigned: false,
+    };
+  }
+  return map;
+};
+
+const createUserFullProgressMap = (
+  userClassesMap: ProductProgress,
+  products: Product[],
+): UserProducts => {
+  const userProductsMap = buildEmptyProductsMap(products);
   for (let key in userClassesMap) {
     let productCode = key.slice(0, 2);
     let classType = key.slice(3, 4);
+    if (!userProductsMap[productCode]) continue;
     let { classProgress } = userProductsMap[productCode];
     if (classType === "a") {
       userProductsMap[productCode].assigned = true;
@@ -29,9 +48,9 @@ const createUserFullProgressMap = (userClassesMap: ProductProgress) => {
       classProgress[`${productCode}_b`] = userClassesMap[`${productCode}_b`];
       classProgress[`${productCode}_c`] = userClassesMap[`${productCode}_c`];
       classProgress[`${productCode}_d`] = userClassesMap[`${productCode}_d`];
-      productCode === "vr" &&
-        (classProgress[`${productCode}_p`] =
-          userClassesMap[`${productCode}_p`]);
+      if (productCode === "vr") {
+        classProgress[`${productCode}_p`] = userClassesMap[`${productCode}_p`];
+      }
     }
   }
   return userProductsMap;
@@ -40,14 +59,19 @@ const createUserFullProgressMap = (userClassesMap: ProductProgress) => {
 export const getFullUserProductProgressMap = async (
   userId: number,
 ): Promise<UserProducts> => {
-  const userClasses = await fetchUserClasses(userId);
+  const [userClasses, products] = await Promise.all([
+    fetchUserClasses(userId),
+    getProducts(),
+  ]);
   const userClassesMap = createUserClassesMap(userClasses);
-  return createUserFullProgressMap(userClassesMap);
+  return createUserFullProgressMap(userClassesMap, products);
 };
 
-export const hasDavitProduct = (userProductsMap: UserProducts) => {
-  const davitCodes = ["3b", "3f", "5b", "5f", "7b", "7f", "9f"];
-  return Object.keys(userProductsMap).some(
-    (code) => davitCodes.includes(code) && userProductsMap[code].assigned,
+const isDavitCategory = (category: string | undefined) =>
+  typeof category === "string" &&
+  (category.includes("Davit") || category === "Man Rated");
+
+export const hasDavitProduct = (userProductsMap: UserProducts) =>
+  Object.values(userProductsMap).some(
+    (entry) => entry?.assigned && isDavitCategory(entry?.category),
   );
-};

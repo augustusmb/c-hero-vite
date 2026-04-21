@@ -68,14 +68,20 @@ const AssessmentPage = () => {
 
   const { level, first_name, last_name, phone, id } = loggedInUserInfo || {};
   const { classId = "" } = useParams();
-  const { classInfo, classType } = useClassId(classId);
+  const {
+    classInfo,
+    classType,
+    isLoading: isLoadingProducts,
+  } = useClassId(classId);
 
   const {
-    isLoading,
+    isLoading: isLoadingQuestions,
     isError,
     data: questions,
     error,
   } = useQuery(assessmentQuestionsQuery(classId));
+
+  const isLoading = isLoadingProducts || isLoadingQuestions;
 
   const submitAssessmentMutation = useMutation({
     mutationFn: submitCompletedAssessment,
@@ -206,7 +212,7 @@ const AssessmentPage = () => {
     <div className="mx-auto max-w-4xl pb-10">
       <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-050 p-4 shadow-sm lg:p-6">
         <AssessmentHeader
-          productName={classInfo.productName}
+          productName={classInfo?.productName ?? ""}
           classType={classType}
           answeredCount={answeredCount}
           totalCount={totalCount}
