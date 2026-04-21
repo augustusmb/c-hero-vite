@@ -29,9 +29,9 @@ export const messages = {
 
 export const classTypesMap = {
   a: "Setup",
-  b: "Operation",
-  c: "MOB Drills",
-  d: "Inspection & Storage",
+  b: "Operations",
+  c: "Inspection & Storage",
+  d: "MOB Drills",
   p: "Prusik Strap",
 };
 

@@ -87,3 +87,15 @@ export const hasDavitProduct = (userProductsMap) =>
   Object.values(userProductsMap).some(
     (entry) => entry?.assigned && isDavitCategory(entry?.category),
   );
+
+const CLASS_SUFFIX_ORDER = ["a", "b", "c", "d", "p"];
+
+export const getPredecessorClassId = (classId) => {
+  const i = typeof classId === "string" ? classId.lastIndexOf("_") : -1;
+  if (i === -1) return null;
+  const productId = classId.slice(0, i);
+  const suffix = classId.slice(i + 1);
+  const idx = CLASS_SUFFIX_ORDER.indexOf(suffix);
+  if (idx <= 0) return null;
+  return `${productId}_${CLASS_SUFFIX_ORDER[idx - 1]}`;
+};

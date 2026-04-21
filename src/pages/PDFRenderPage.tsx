@@ -2,13 +2,18 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { pdfjs, Document, Page } from "react-pdf";
 import BeatLoader from "react-spinners/BeatLoader";
-import { ClipboardCheck, ChevronRight, AlertTriangle } from "lucide-react";
+import { ClipboardCheck, ChevronRight, AlertTriangle, Lock } from "lucide-react";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { useLoggedInUserContext } from "../hooks/useLoggedInUserContext";
 import { useQuery } from "@tanstack/react-query";
 import { hasDavitProduct } from "../features/user/utils.ts";
 import { userProductProgressQuery } from "../features/user/queries.ts";
+import {
+  getPredecessorClassId,
+  isClassLocked,
+} from "../features/classes/utils.ts";
+import { CLASS_LABELS } from "../features/classes/classLabel.ts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -42,12 +47,15 @@ const PDFRenderPage = () => {
 
   const { classId, docId } = useParams();
 
-  const needsDavitCheck = classId === "vr_b";
-
   const { data: userProductsMap } = useQuery({
     ...userProductProgressQuery(loggedInUserInfo?.id ?? 0),
-    enabled: !!loggedInUserInfo?.id && needsDavitCheck,
+    enabled: !!loggedInUserInfo?.id && !!classId,
   });
+
+  const locked =
+    !!classId &&
+    !loggedInUserInfo?.is_admin &&
+    isClassLocked(classId, userProductsMap);
 
   const resolvePdfKey = () => {
     if (
@@ -101,6 +109,20 @@ const PDFRenderPage = () => {
     return (
       <div ref={mainPanelRef} className="pb-8">
         <ErrorPanel message="PDF not found." />
+      </div>
+    );
+  }
+
+  if (locked && classId) {
+    const predecessorId = getPredecessorClassId(classId);
+    const predecessorLabel = predecessorId
+      ? CLASS_LABELS[predecessorId.slice(-1)] ?? "the previous class"
+      : "the previous class";
+    return (
+      <div ref={mainPanelRef} className="pb-8">
+        <LockedPanel
+          message={`You need to complete ${predecessorLabel} before you can start this class.`}
+        />
       </div>
     );
   }
@@ -177,6 +199,22 @@ const ErrorPanel = ({
         Retry
       </button>
     ) : null}
+  </div>
+);
+
+const LockedPanel = ({ message }: { message: string }) => (
+  <div className="mx-auto mt-10 flex max-w-md flex-col items-center gap-3 rounded-lg border border-slate-200 bg-slate-050 p-6 text-center shadow-sm">
+    <Lock className="h-8 w-8 text-slate-500" aria-hidden="true" />
+    <h2 className="text-base font-semibold text-slate-900 lg:text-lg">
+      Class locked
+    </h2>
+    <p className="text-sm text-slate-700 lg:text-base">{message}</p>
+    <Link
+      to="/"
+      className="mt-2 inline-flex items-center gap-2 rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
+    >
+      Back to Home
+    </Link>
   </div>
 );
 

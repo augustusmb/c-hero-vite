@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ClassProgress, ProductData, UserProducts } from "../types";
-import { hasDavitProduct } from "../../user/utils";
-import { getProductStatus, ProductStatus } from "../utils";
+import { getProductStatus, getVisibleSuffixes, ProductStatus } from "../utils";
 import { CLASS_LABELS } from "../classLabel";
 import CheckIcon from "../../../assets/icons/icon-check.svg?react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Lock } from "lucide-react";
 
 type ClassCardItemsProps = {
   item: ClassProgress;
   isNext: boolean;
+  locked: boolean;
 };
 type ClassCardProps = {
   product: ProductData;
@@ -38,12 +38,7 @@ const ClassCard: React.FC<ClassCardProps> = ({
   product,
   assignedProductsMap,
 }) => {
-  const isDavitAssigned = hasDavitProduct(assignedProductsMap);
-  const shouldShowPrusik = product.productId === "vr" && !isDavitAssigned;
-
-  const orderSuffixes = shouldShowPrusik
-    ? ["a", "b", "p", "d", "c"]
-    : ["a", "b", "d", "c"];
+  const orderSuffixes = getVisibleSuffixes(product, assignedProductsMap);
 
   const orderedClasses = orderSuffixes
     .map((suffix) => product.classProgress[`${product.productId}_${suffix}`])
@@ -89,19 +84,31 @@ const ClassCard: React.FC<ClassCardProps> = ({
         </div>
       </div>
       <div className="flex flex-col gap-1 p-2">
-        {orderedClasses.map((cls) => (
-          <ClassCardItem
-            key={cls.class_id}
-            item={cls}
-            isNext={cls.class_id === nextIncompleteId}
-          />
-        ))}
+        {(() => {
+          let priorCompleted = true;
+          return orderedClasses.map((cls) => {
+            const locked = !priorCompleted;
+            priorCompleted = priorCompleted && cls.completed;
+            return (
+              <ClassCardItem
+                key={cls.class_id}
+                item={cls}
+                isNext={cls.class_id === nextIncompleteId}
+                locked={locked}
+              />
+            );
+          });
+        })()}
       </div>
     </div>
   );
 };
 
-const ClassCardItem: React.FC<ClassCardItemsProps> = ({ item, isNext }) => {
+const ClassCardItem: React.FC<ClassCardItemsProps> = ({
+  item,
+  isNext,
+  locked,
+}) => {
   const label = CLASS_LABELS[item.class_id.slice(3, 4)];
 
   if (item.completed) {
@@ -113,6 +120,19 @@ const ClassCardItem: React.FC<ClassCardItemsProps> = ({ item, isNext }) => {
         <span>{label}</span>
         <CheckIcon className="h-4 w-4 fill-green-050 stroke-green-600" />
       </Link>
+    );
+  }
+
+  if (locked) {
+    return (
+      <div
+        aria-disabled="true"
+        className="flex w-full cursor-not-allowed items-center justify-between rounded-sm bg-slate-100 px-2 py-1 text-sm text-slate-400 lg:text-base"
+        title="Complete the previous class to unlock this one"
+      >
+        <span>{label}</span>
+        <Lock className="h-3.5 w-3.5" aria-hidden="true" />
+      </div>
     );
   }
 

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { Info, CheckCircle2, XCircle, RotateCcw } from "lucide-react";
+import { Info, CheckCircle2, XCircle, RotateCcw, Lock } from "lucide-react";
 import { submitCompletedAssessment } from "../api/assessment.ts";
 import {
   randomizeArray,
@@ -13,6 +13,12 @@ import {
 } from "../features/assessment/utils.ts";
 import { classTypesMap } from "../messages.ts";
 import { useClassId } from "../features/classes/hooks/useClassId.tsx";
+import {
+  getPredecessorClassId,
+  isClassLocked,
+} from "../features/classes/utils.ts";
+import { CLASS_LABELS } from "../features/classes/classLabel.ts";
+import { userProductProgressQuery } from "../features/user/queries.ts";
 import { useLoggedInUserContext } from "../hooks/useLoggedInUserContext.ts";
 import {
   CompletedAssessmentData,
@@ -81,7 +87,15 @@ const AssessmentPage = () => {
     error,
   } = useQuery(assessmentQuestionsQuery(classId));
 
-  const isLoading = isLoadingProducts || isLoadingQuestions;
+  const { data: userProductsMap, isLoading: isLoadingProgress } = useQuery({
+    ...userProductProgressQuery(id ?? 0),
+    enabled: !!id && !!classId,
+  });
+
+  const locked = !is_admin && isClassLocked(classId, userProductsMap);
+
+  const isLoading =
+    isLoadingProducts || isLoadingQuestions || (!!id && isLoadingProgress);
 
   const submitAssessmentMutation = useMutation({
     mutationFn: submitCompletedAssessment,
@@ -127,6 +141,31 @@ const AssessmentPage = () => {
     );
   if (isError)
     return <span>{`${strings["common.error"]}: ${error.message}`}</span>;
+
+  if (locked) {
+    const predecessorId = getPredecessorClassId(classId);
+    const predecessorLabel = predecessorId
+      ? CLASS_LABELS[predecessorId.slice(-1)] ?? "the previous class"
+      : "the previous class";
+    return (
+      <div className="mx-auto mt-10 flex max-w-md flex-col items-center gap-3 rounded-lg border border-slate-200 bg-slate-050 p-6 text-center shadow-sm">
+        <Lock className="h-8 w-8 text-slate-500" aria-hidden="true" />
+        <h2 className="text-base font-semibold text-slate-900 lg:text-lg">
+          Assessment locked
+        </h2>
+        <p className="text-sm text-slate-700 lg:text-base">
+          You need to complete {predecessorLabel} before you can take this
+          assessment.
+        </p>
+        <Link
+          to="/"
+          className="mt-2 inline-flex items-center gap-2 rounded-md bg-orange-500 px-4 py-2 text-sm font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
+        >
+          Back to Home
+        </Link>
+      </div>
+    );
+  }
 
   const submitForm = async () => {
     if (answeredCount < totalCount) {
