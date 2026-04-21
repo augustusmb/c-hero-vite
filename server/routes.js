@@ -1,6 +1,12 @@
 import express from "express";
 import { getQuestions } from "./routes/Questions.js";
 import {
+  listQuestions as listAdminQuestions,
+  createQuestion as createAdminQuestion,
+  updateQuestion as updateAdminQuestion,
+  deleteQuestion as deleteAdminQuestion,
+} from "./routes/AdminQuestions.js";
+import {
   getUserByPhone,
   updateUserInfo,
   deleteUser,
@@ -29,6 +35,16 @@ publicRouter.post("/sign-up", signUpUserNew);
 publicRouter.get("/products", listProducts);
 
 protectedRouter.route("/questions").get(getQuestions);
+
+protectedRouter
+  .route("/admin/questions")
+  .get(listAdminQuestions)
+  .post(createAdminQuestion);
+
+protectedRouter
+  .route("/admin/questions/:id")
+  .put(updateAdminQuestion)
+  .delete(deleteAdminQuestion);
 
 protectedRouter
   .route("/users")

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ClassProgress, ProductData, UserProducts } from "../types";
 import { hasDavitProduct } from "../../user/utils";
 import { getProductStatus, ProductStatus } from "../utils";
+import { CLASS_LABELS } from "../classLabel";
 import CheckIcon from "../../../assets/icons/icon-check.svg?react";
 import { ChevronRight } from "lucide-react";
 
@@ -13,17 +14,6 @@ type ClassCardItemsProps = {
 type ClassCardProps = {
   product: ProductData;
   assignedProductsMap: UserProducts;
-};
-
-type ClassTypesMap = {
-  [key: string]: string;
-};
-const classTypesMapping: ClassTypesMap = {
-  a: "Setup",
-  b: "Operation",
-  c: "MOB Drills",
-  d: "Inspection & Storage",
-  p: "Prusik Strap",
 };
 
 const STATUS_STYLES: Record<
@@ -112,7 +102,7 @@ const ClassCard: React.FC<ClassCardProps> = ({
 };
 
 const ClassCardItem: React.FC<ClassCardItemsProps> = ({ item, isNext }) => {
-  const label = classTypesMapping[item.class_id.slice(3, 4)];
+  const label = CLASS_LABELS[item.class_id.slice(3, 4)];
 
   if (item.completed) {
     return (

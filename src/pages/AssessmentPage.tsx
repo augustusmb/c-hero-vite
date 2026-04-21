@@ -469,7 +469,7 @@ const QuestionRow: React.FC<QuestionRowProps> = ({
   onAnswerChange,
 }) => {
   const { answerOptions } = question;
-  const isTrueFalse = question.true_or_false === "TRUE";
+  const isTrueFalse = question.true_or_false;
   const options = isTrueFalse ? ["True", "False"] : answerOptions;
 
   return (

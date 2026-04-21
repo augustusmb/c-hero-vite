@@ -44,8 +44,8 @@ Each product has **four classes**, identified by a single letter suffix on the P
 
 1. **Setup** — `_a.pdf`
 2. **Operations** — `_b.pdf`
-3. **Inspection** — `_c.pdf`
-4. **Drill** — `_d.pdf`
+3. **Inspection & Storage** — `_c.pdf`
+4. **MOB Drills** — `_d.pdf`
 
 Some classes also have a **prusik strap** variant (e.g. `vr_p.pdf`, `vr_b_p.pdf`) — a conditional extra unit that applies when a davit has a prusik strap attached. **How this slots into the class model is still being figured out** (treat as a likely ~5th class, but don't hardcode assumptions).
 

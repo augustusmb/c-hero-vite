@@ -5,7 +5,7 @@ export type AssessmentQuestion = {
   incorrect_answer1: string;
   incorrect_answer2: string;
   incorrect_answer3: string;
-  true_or_false: string;
+  true_or_false: boolean;
   answerOptions: string[];
 };
 
