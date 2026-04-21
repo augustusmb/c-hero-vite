@@ -11,7 +11,6 @@ export type SerialNumber = {
 };
 
 export type DashboardParams = {
-  level?: string;
   id?: number;
   vessel_id?: number;
   company?: string;

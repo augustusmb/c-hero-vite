@@ -66,7 +66,7 @@ The multiple-choice quiz a user takes to pass a class is called an **"assessment
 
 ## User roles
 
-Four roles, tracked via `users.level` (a load-bearing admin gate — see memory).
+Four roles. The three end-user roles (crew / captain / shore-side) live in `users.position` (a `position_type` enum); admin is a separate `users.is_admin` boolean, not a role value.
 
 - **Crew** — works on a single vessel. Takes classes for the products their vessel has.
 - **Captain** — runs a single vessel. Sees their crew's progress.
@@ -134,7 +134,7 @@ Shore-side ↔ company scoping is **still being fleshed out** — the tables exi
   - Shore-side ↔ company scoping.
   - How the prusik strap fits into the class model.
   - Serial-number assignment wiring.
-- **No hard "don't touch" zones** — but handle sensitive areas (auth, `users.level` gating, assessment submission) case-by-case with confirmation.
+- **No hard "don't touch" zones** — but handle sensitive areas (auth, admin gating, assessment submission) case-by-case with confirmation.
 - **Next priorities:** TBD — Augustus will sync with the founders.
 
 ## Glossary

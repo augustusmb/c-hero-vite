@@ -144,8 +144,9 @@ const AdminUserInfoTable: React.FC<AdminTableProps> = ({
   }
 
   const onSelectionChanged = (e: { api: any }) => {
-    const selectedRowData = e.api.getSelectedNodes()[0].data;
-    handleUserToEdit(selectedRowData);
+    const nodes = e.api.getSelectedNodes();
+    if (nodes.length === 0) return;
+    handleUserToEdit(nodes[0].data);
   };
 
   const { isLoading, isError, data, error } = useQuery(userListQuery());

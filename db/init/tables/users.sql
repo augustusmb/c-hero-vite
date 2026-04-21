@@ -4,6 +4,5 @@ create table users (
   phone text not null,
   email text,
   title text,
-  level int,
   picture text
 );

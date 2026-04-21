@@ -5,7 +5,6 @@ export type UserType = {
   last_name: string;
   email: string;
   phone: string;
-  level: string;
   is_admin?: boolean;
   company: string;
   vessel: string;

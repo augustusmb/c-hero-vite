@@ -21,7 +21,6 @@ const AdminPage = () => {
     last_name: "",
     email: "",
     phone: "",
-    level: "",
     company: "",
     vessel_id: 0,
     company_id: 0,

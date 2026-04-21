@@ -119,7 +119,6 @@ const AdminEditUserForm: React.FC<AdminEditUserFormProps> = ({
       last_name: "",
       email: "",
       phone: "",
-      level: "",
       company: "",
       vessel: "",
       vessel_id: 0,

@@ -12,7 +12,7 @@ import { strings } from "../../../utils/strings.ts";
 
 const DashboardProgressSection = () => {
   const { loggedInUserInfo } = useLoggedInUserContext();
-  const { level, id, vessel_id, company } = loggedInUserInfo || {};
+  const { id, vessel_id, company } = loggedInUserInfo || {};
   const gridRef = useRef<AgGridReact | null>(null);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const DashboardProgressSection = () => {
   }, []);
 
   const { isLoading, isError, data, error } = useQuery(
-    dashboardUsersQuery({ level, id, vessel_id, company }),
+    dashboardUsersQuery({ id, vessel_id, company }),
   );
 
   if (isError)
