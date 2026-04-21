@@ -11,14 +11,10 @@ import jwksClient from "jwks-rsa";
 dotenv.config();
 const __dirname = path.resolve();
 
-import { loadEnv } from "vite";
-
-const env = loadEnv("all", process.cwd());
-
 const app = express();
 
 const client = jwksClient({
-  jwksUri: `https://${env.VITE_AUTH0_DOMAIN}/.well-known/jwks.json`,
+  jwksUri: `https://${process.env.VITE_AUTH0_DOMAIN}/.well-known/jwks.json`,
 });
 
 function getKey(header, callback) {
@@ -53,11 +49,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const corsOrigin =
-  env.VITE_NODE_ENV === "local"
+  process.env.VITE_NODE_ENV === "local"
     ? "http://localhost:5173/"
     : "https://c-herotraining.com/";
 app.use(cors({ origin: corsOrigin }));
-const port = env.PORT || 8080;
+const port = process.env.PORT || 8080;
 
 app.use("/api/public", publicRouter);
 app.use("/api/routes", checkJwt, protectedRouter);
@@ -68,7 +64,7 @@ app.use("/api/*", (req, res) => {
 
 app.use(errorHandler);
 
-if (env.VITE_NODE_ENV === "production") {
+if (process.env.VITE_NODE_ENV === "production") {
   app.use(express.static("dist"));
 }
 

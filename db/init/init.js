@@ -5,7 +5,7 @@ import path from 'path';
 import pgPromise from 'pg-promise';
 const pgp = pgPromise({});
 
-const db = pgp(import.meta.env.VITE_DB_LOCAL);
+const db = pgp(process.env.DB_LOCAL);
 const __dirname = path.resolve();
 
 const sql = (file) => {

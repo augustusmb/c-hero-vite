@@ -20,7 +20,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['server/**/*.js'],
+      files: ['server/**/*.js', 'db/**/*.js'],
       env: { node: true, browser: false },
     },
   ],

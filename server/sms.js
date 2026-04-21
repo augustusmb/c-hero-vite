@@ -4,9 +4,9 @@ import sgMail from "@sendgrid/mail";
 
 dotenv.config();
 
-const accountSid = process.env.VITE_TWILIO_ACCOUNT_SID;
-const authToken = process.env.VITE_TWILIO_AUTH_TOKEN;
-const sendGridApiKey = process.env.VITE_TWILIO_SENDGRID_API_KEY;
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const sendGridApiKey = process.env.SENDGRID_API_KEY;
 const client = twilio(accountSid, authToken);
 
 console.log("Evironment: ", process.env.VITE_NODE_ENV);
