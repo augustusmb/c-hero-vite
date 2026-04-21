@@ -32,11 +32,11 @@ const AdminEditUserStatic: React.FC<AdminEditUserStaticProps> = ({
           <Pencil className="h-4 w-4" />
         </button>
       </div>
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-        <div className="lg:col-span-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div>
           <UserInfoStatic userInfoToEdit={user} />
         </div>
-        <div className="lg:col-span-2">
+        <div>
           <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">
             Assigned Products
           </h4>

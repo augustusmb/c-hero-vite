@@ -222,8 +222,8 @@ const AdminEditUserForm: React.FC<AdminEditUserFormProps> = ({
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-          <div className="flex flex-col gap-5 lg:col-span-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="flex flex-col gap-5">
             <section className="flex flex-col gap-3">
               <h4 className={sectionHeadingStyles}>Personal</h4>
               <div className="grid grid-cols-2 gap-3">
@@ -406,12 +406,12 @@ const AdminEditUserForm: React.FC<AdminEditUserFormProps> = ({
             </section>
           </div>
 
-          <div className="flex flex-col gap-5 border-t border-slate-200 pt-5 lg:col-span-2 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+          <div className="flex flex-col gap-5 border-t border-slate-200 pt-5 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
             <section className="flex flex-col gap-3">
               <h4 className={sectionHeadingStyles}>Assigned Products</h4>
               <div className="flex flex-col gap-2">
                 {assignedProducts.length > 0 && (
-                  <div className="flex flex-col gap-1.5">
+                  <div className="grid grid-cols-2 gap-1.5">
                     {assignedProducts.map((product) => (
                       <label
                         key={product.productId}
@@ -434,9 +434,9 @@ const AdminEditUserForm: React.FC<AdminEditUserFormProps> = ({
                   </div>
                 )}
                 {unassignedProducts.length > 0 && (
-                  <div className="flex flex-col gap-1.5">
+                  <div className="grid grid-cols-2 gap-1.5">
                     {assignedProducts.length > 0 && (
-                      <div className="my-1 border-t border-slate-200" />
+                      <div className="col-span-2 my-1 border-t border-slate-200" />
                     )}
                     {unassignedProducts.map((product) => (
                       <label
