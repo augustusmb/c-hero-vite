@@ -8,7 +8,7 @@ type RadioImageGroupProps<T extends string> = {
   }>;
   name: string;
   selected: T | null;
-  onSelect: (value: T) => void;
+  onSelect: (value: T | null) => void;
   error?: string;
 };
 
@@ -21,11 +21,24 @@ export function RadioImageGroup<T extends string>({
   onSelect,
   error,
 }: RadioImageGroupProps<T>) {
+  const toggle = (value: T) => onSelect(selected === value ? null : value);
+
   return (
     <div className="flex flex-col gap-1 pb-2 pt-4">
-      <label className="text-base font-semibold text-gray-900">
-        {title}
-      </label>
+      <div className="flex items-baseline justify-between gap-2">
+        <label className="text-base font-semibold text-gray-900">
+          {title}
+        </label>
+        {selected !== null && (
+          <button
+            type="button"
+            onClick={() => onSelect(null)}
+            className="text-xs font-medium text-blue-600 hover:underline"
+          >
+            Clear selection
+          </button>
+        )}
+      </div>
       <p className="mb-2 max-w-2xl text-sm text-gray-600">
         {description}
       </p>
@@ -37,21 +50,20 @@ export function RadioImageGroup<T extends string>({
         {options.map((item) => (
           <div
             key={item.value}
-            onClick={() => onSelect(item.value)}
+            onClick={() => toggle(item.value)}
             className={`flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border p-2 ${
               selected === item.value
                 ? "border-2 border-blue-500 bg-blue-50"
                 : "border-gray-200"
             }`}
           >
-            <label
-              htmlFor={item.value}
+            <span
               className={`text-center text-sm font-medium ${
                 selected === item.value ? "text-blue-500" : "text-gray-900"
               }`}
             >
               {item.label}
-            </label>
+            </span>
             <img
               src={item.image}
               alt={item.label}
@@ -63,7 +75,7 @@ export function RadioImageGroup<T extends string>({
               id={item.value}
               name={name}
               checked={selected === item.value}
-              onChange={() => onSelect(item.value)}
+              onChange={() => toggle(item.value)}
               className="sr-only"
             />
           </div>

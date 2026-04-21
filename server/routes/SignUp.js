@@ -59,6 +59,13 @@ export const signUpUserNew = asyncHandler(async (req, res) => {
     rescueDavitMount,
   } = req.body.data;
 
+  const hasCompleteDavit = rescueDavit && rescueDavitMount;
+  if (!rescuePole && !hasCompleteDavit) {
+    return res
+      .status(400)
+      .json({ error: "Select a rescue pole, a davit, or both." });
+  }
+
   const newUser = await db.tx(async (t) => {
     const [companyId, portId, vesselId] = await Promise.all([
       resolveLookupId(t, company, queries.insertNewCompany),
@@ -81,10 +88,14 @@ export const signUpUserNew = asyncHandler(async (req, res) => {
       (row) => row,
     );
 
-    const rescueDavitType = `${rescueDavit}${rescueDavitMount}`;
+    const davitProductCode =
+      rescueDavit && rescueDavitMount
+        ? `${rescueDavit}${rescueDavitMount}`
+        : null;
+
     const allClassIds = [
-      ...generateClassIds(rescuePole),
-      ...generateClassIds(rescueDavitType),
+      ...(rescuePole ? generateClassIds(rescuePole) : []),
+      ...(davitProductCode ? generateClassIds(davitProductCode) : []),
     ];
 
     const limit = pLimit(4);

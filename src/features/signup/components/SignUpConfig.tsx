@@ -152,34 +152,40 @@ export const signUpSchema = z.object({
         });
       }
     }),
-  rescuePole: z
-    .enum(["rk", "vr", "rs", "hr"], {
-      required_error: "Please select a rescue pole type",
-    })
-    .nullable()
-    .refine((val) => val !== null, {
-      message: "Please select a rescue pole type",
-    }),
-  rescueDavitMount: z
-    .enum(["b", "f"], {
-      required_error: "Please select a mounting option",
-    })
-    .nullable()
-    .refine((val) => val !== null, {
-      message: "Please select a mounting option",
-    }),
-
-  rescueDavit: z
-    .enum(["3", "5", "7", "9"], {
-      required_error: "Please select a davit type",
-    })
-    .nullable()
-    .refine((val) => val !== null, {
-      message: "Please select a davit type",
-    }),
+  rescuePole: z.enum(["rk", "vr", "rs", "hr"]).nullable(),
+  rescueDavitMount: z.enum(["b", "f"]).nullable(),
+  rescueDavit: z.enum(["3", "5", "7", "9"]).nullable(),
   consentSMS: z.boolean().refine((val) => val === true, {
     message: "You must consent to receive SMS messages",
   }),
+}).superRefine((data, ctx) => {
+  const hasPole = !!data.rescuePole;
+  const hasDavitSeries = !!data.rescueDavit;
+  const hasDavitMount = !!data.rescueDavitMount;
+
+  if (!hasPole && !hasDavitSeries && !hasDavitMount) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["rescuePole"],
+      message: "Please select a rescue pole, a davit, or both.",
+    });
+    return;
+  }
+
+  if (hasDavitSeries && !hasDavitMount) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["rescueDavitMount"],
+      message: "Please select a mounting option for your davit.",
+    });
+  }
+  if (hasDavitMount && !hasDavitSeries) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["rescueDavit"],
+      message: "Please select a davit series.",
+    });
+  }
 });
 
 export type TSignUpSchema = z.infer<typeof signUpSchema>;

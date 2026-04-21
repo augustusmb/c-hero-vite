@@ -23,6 +23,7 @@ import {
 } from "./SignUpConfig";
 import { PhoneInput } from "./PhoneInput";
 import { RadioImageGroup } from "./RadioImageGroup";
+import { ReviewStep } from "./ReviewStep";
 import { strings } from "../../../utils/strings";
 import { phoneAvailableQuery } from "../queries";
 
@@ -58,10 +59,13 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
       port: null,
       vessel: null,
       position: null,
+      rescuePole: null,
+      rescueDavitMount: null,
+      rescueDavit: null,
     },
   });
 
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
 
   const phone = watch("phone") ?? "";
   const [debouncedPhone, setDebouncedPhone] = useState(phone);
@@ -94,6 +98,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     "vessel",
   ];
 
+  const step2Fields: Array<keyof TSignUpSchema> = [
+    "rescuePole",
+    "rescueDavit",
+    "rescueDavitMount",
+  ];
+
   const handleNext = async () => {
     const valid = await trigger(step1Fields);
     if (!valid) return;
@@ -105,6 +115,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
       return;
     }
     setStep(2);
+  };
+
+  const handleReview = async () => {
+    const valid = await trigger(step2Fields);
+    if (!valid) return;
+    setStep(3);
   };
 
   const onSubmit = async (data: TSignUpSchema) => {
@@ -166,44 +182,34 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
             if you are returning.
           </p>
         </div>
-        <div className="mb-4 flex items-center justify-center gap-4">
-          <div className="flex items-center gap-2">
-            <div
-              className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold ${
-                step === 1
-                  ? "bg-orange-500 text-slate-050"
-                  : "bg-slate-300 text-slate-700"
-              }`}
-            >
-              1
+        <div className="mb-4 flex items-center justify-center gap-3 sm:gap-4">
+          {[
+            { n: 1, label: "Your info" },
+            { n: 2, label: "Equipment" },
+            { n: 3, label: "Review" },
+          ].map(({ n, label }, idx) => (
+            <div key={n} className="flex items-center gap-2 sm:gap-3">
+              {idx > 0 && <div className="h-px w-6 bg-slate-300 sm:w-12" />}
+              <div className="flex items-center gap-2">
+                <div
+                  className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold ${
+                    step === n
+                      ? "bg-orange-500 text-slate-050"
+                      : "bg-slate-300 text-slate-700"
+                  }`}
+                >
+                  {n}
+                </div>
+                <span
+                  className={`hidden text-sm font-medium sm:inline ${
+                    step === n ? "text-slate-900" : "text-slate-500"
+                  }`}
+                >
+                  {label}
+                </span>
+              </div>
             </div>
-            <span
-              className={`text-sm font-medium ${
-                step === 1 ? "text-slate-900" : "text-slate-500"
-              }`}
-            >
-              Your info
-            </span>
-          </div>
-          <div className="h-px w-12 bg-slate-300 sm:w-16" />
-          <div className="flex items-center gap-2">
-            <div
-              className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold ${
-                step === 2
-                  ? "bg-orange-500 text-slate-050"
-                  : "bg-slate-300 text-slate-700"
-              }`}
-            >
-              2
-            </div>
-            <span
-              className={`text-sm font-medium ${
-                step === 2 ? "text-slate-900" : "text-slate-500"
-              }`}
-            >
-              Equipment
-            </span>
-          </div>
+          ))}
         </div>
         {step === 1 && (
           <>
@@ -431,13 +437,18 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         )}
         {step === 2 && (
           <>
+        <div className="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+          {strings["equipment.step.helper"]}
+        </div>
         <RadioImageGroup<RescuePoleType>
           title={strings["rescuePole.title"]}
           description={strings["rescuePole.description"]}
           options={rescuePoleOptions}
           name="rescuePole"
-          selected={watch("rescuePole")}
-          onSelect={(value) => setValue("rescuePole", value)}
+          selected={watch("rescuePole") ?? null}
+          onSelect={(value) =>
+            setValue("rescuePole", value, { shouldValidate: true })
+          }
           error={errors.rescuePole?.message}
         />
         <RadioImageGroup<RescueDavitMountType>
@@ -445,8 +456,10 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
           description={strings["rescueDavitMount.description"]}
           options={rescueDavitMountingOptions}
           name="rescueDavitMount"
-          selected={watch("rescueDavitMount")}
-          onSelect={(value) => setValue("rescueDavitMount", value)}
+          selected={watch("rescueDavitMount") ?? null}
+          onSelect={(value) =>
+            setValue("rescueDavitMount", value, { shouldValidate: true })
+          }
           error={errors.rescueDavitMount?.message}
         />
         <RadioImageGroup<RescueDavitType>
@@ -454,27 +467,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
           description={strings["rescueDavit.description"]}
           options={rescueDavitOptions}
           name="rescueDavit"
-          selected={watch("rescueDavit")}
-          onSelect={(value) => setValue("rescueDavit", value)}
+          selected={watch("rescueDavit") ?? null}
+          onSelect={(value) =>
+            setValue("rescueDavit", value, { shouldValidate: true })
+          }
           error={errors.rescueDavit?.message}
         />
-        <div className="mt-2 flex items-start gap-3">
-          <input
-            {...register("consentSMS")}
-            type="checkbox"
-            id="consentSMS"
-            className="mt-0.5 h-4 w-4 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-          />
-          <label
-            htmlFor="consentSMS"
-            className="text-left text-sm leading-relaxed text-slate-600"
-          >
-            {strings["sms.consent"]}
-          </label>
-        </div>
-        {errors.consentSMS && (
-          <p className={errorStyles}>{errors.consentSMS.message}</p>
-        )}
             <div className="mt-2 flex gap-3">
               <button
                 type="button"
@@ -484,14 +482,23 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
                 ← Back
               </button>
               <button
-                type="submit"
-                disabled={isSubmitting}
-                className="flex-1 rounded-md bg-orange-500 px-6 py-2.5 text-base font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600 disabled:bg-orange-300"
+                type="button"
+                onClick={handleReview}
+                className="flex-1 rounded-md bg-orange-500 px-6 py-2.5 text-base font-semibold text-slate-050 shadow-sm transition-colors hover:bg-orange-600"
               >
-                Create Account
+                Review →
               </button>
             </div>
           </>
+        )}
+        {step === 3 && (
+          <ReviewStep
+            values={watch()}
+            onBack={() => setStep(2)}
+            register={register}
+            errors={errors}
+            isSubmitting={isSubmitting}
+          />
         )}
       </form>
     </div>

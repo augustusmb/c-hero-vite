@@ -115,9 +115,9 @@ export const notifyAdminsNewSignUp = async ({
 
       <h3>Equipment Configuration</h3>
       <ul>
-        <li><strong>Rescue Davit:</strong> ${rescueDavit}</li>
-        <li><strong>Davit Mounting:</strong> ${rescueDavitMount}</li>
-        <li><strong>Rescue Pole:</strong> ${rescuePole}</li>
+        <li><strong>Rescue Pole:</strong> ${rescuePole ?? "— not selected —"}</li>
+        <li><strong>Rescue Davit:</strong> ${rescueDavit ?? "— not selected —"}</li>
+        <li><strong>Davit Mounting:</strong> ${rescueDavitMount ?? "— not selected —"}</li>
       </ul>
     `,
   };

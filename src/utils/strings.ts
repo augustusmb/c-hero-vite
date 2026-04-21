@@ -36,11 +36,13 @@ export const strings = {
     "I consent to receive SMS verification codes from Twilio for logging into c-herotraining.com",
   "rescueDavitMount.title": "Rescue Davit Mounting",
   "rescueDavitMount.description":
-    "The Davits can be mounted in 2 ways. Choose ONE of the following mounts:",
+    "Davits can be mounted in 2 ways. If your vessel has a davit, select its mount type.",
   "rescueDavit.title": "Rescue Davits",
   "rescueDavit.description":
-    "The 4 Davit types differ in how the winch plate is attached to the davit base. Choose ONE of the following Rescue Davits:",
+    "The 4 Davit types differ in how the winch plate is attached to the davit base. If your vessel has a davit, select its series.",
   "rescuePole.title": "Rescue Poles",
   "rescuePole.description":
-    "Our 4 Rescue Poles differ in how the strap is attached to the Hoop. Choose ONE of the following Rescue Poles:",
+    "Our 4 Rescue Poles differ in how the strap is attached to the Hoop. If your vessel has a rescue pole, select it.",
+  "equipment.step.helper":
+    "Select the equipment your vessel has. You need to select at least one product — a rescue pole, a davit (series + mount), or both.",
 };
