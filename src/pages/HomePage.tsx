@@ -10,11 +10,11 @@ const HomePage = () => {
 
   return (
     <div className="grid gap-6 lg:grid-cols-5">
-      <div className="order-2 flex flex-col gap-6 lg:order-1 lg:col-span-2">
+      <div className="flex flex-col gap-6 lg:order-1 lg:col-span-2">
         {loggedInUserInfo && <UserInfoSection userInfo={loggedInUserInfo} />}
         <ProductSerialNumberSection />
       </div>
-      <div className="order-1 lg:order-2 lg:col-span-3">
+      <div className="lg:order-2 lg:col-span-3">
         {loggedInUserInfo?.terms_accepted ? (
           <ClassCardSection />
         ) : (
