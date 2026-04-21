@@ -18,7 +18,6 @@ const queries = {
   users: sql('users.sql'),
   questions: sql('questions.sql'),
   users_products: sql('users_products.sql'),
-  users_vessels: sql('users_vessels.sql'),
   vessels_products: sql('vessels_products.sql'),
 };
 

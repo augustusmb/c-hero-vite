@@ -80,9 +80,9 @@ Four roles, tracked via `users.level` (a load-bearing admin gate — see memory)
 From `db/init/tables/`:
 
 - **`company`** — an operator that buys C-Hero products. Joined to vessels via `company_vessels` and to products via `company_products`.
-- **`vessels`** — the boats. Joined to products via `vessels_products` and to users via `users_vessels`.
+- **`vessels`** — the boats. Joined to products via `vessels_products`. A user's vessel is stored directly via `users.vessel_id`.
 - **`ports`** — physical location where a vessel is based. Joined to vessels via `ports_vessels`. Minimal meaning today; may grow.
-- **`users`** — joined to vessels (`users_vessels`) and to classes (`users_products` — the `class_id` column holds composite class identifiers like `hr_b`, despite the table name).
+- **`users`** — joined to vessels directly via `users.vessel_id`, and to classes via `users_products` (the `class_id` column holds composite class identifiers like `hr_b`, despite the table name).
 - **`products`** — the catalog above. Questions live in `questions`, joined to classes via `class_questions` (where `class_id` is a composite like `hr_b` = HR product + Operations class).
 
 Shore-side ↔ company scoping is **still being fleshed out** — the tables exist but the exact hierarchy (how a shore-side user's jurisdiction is computed) isn't fully settled.
