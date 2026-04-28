@@ -1,10 +1,11 @@
 import dotenv from "dotenv";
 import { publicRouter, protectedRouter } from "./routes.js";
 import { errorHandler } from "./utils/errorHandler.js";
-import bodyParser from "body-parser";
 import cors from "cors";
 import path from "path";
 import express from "express";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
 
@@ -12,6 +13,7 @@ dotenv.config();
 const __dirname = path.resolve();
 
 const app = express();
+app.set("trust proxy", 1);
 
 const client = jwksClient({
   jwksUri: `https://${process.env.VITE_AUTH0_DOMAIN}/.well-known/jwks.json`,
@@ -58,8 +60,9 @@ const checkJwt = (req, res, next) => {
   );
 };
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(helmet({ contentSecurityPolicy: false }));
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 
 const corsOrigin =
   process.env.VITE_NODE_ENV === "local"
@@ -67,6 +70,14 @@ const corsOrigin =
     : "https://c-herotraining.com";
 app.use(cors({ origin: corsOrigin }));
 const port = process.env.PORT || 8080;
+
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use("/api", globalLimiter);
 
 app.use("/api/public", publicRouter);
 app.use("/api/routes", checkJwt, protectedRouter);
@@ -80,10 +91,6 @@ app.use(errorHandler);
 if (process.env.VITE_NODE_ENV === "production") {
   app.use(express.static("dist"));
 }
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "/dist/index.html"));
-});
 
 app.use((req, res) => {
   const indexPath = path.join(__dirname, "/dist/index.html");

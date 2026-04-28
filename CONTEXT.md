@@ -92,8 +92,8 @@ Shore-side ↔ company scoping is **still being fleshed out** — the tables exi
 1. A company buys a C-Hero product (physical sale, off-platform).
 2. Founders direct that company's crew to the training site.
 3. User hits signup, enters phone number.
-4. **Twilio** sends a 4-digit code; user enters it.
-5. **Auth0** handles authentication (JWT on protected `/api/routes/` endpoints).
+4. **Auth0** sends a 4-digit SMS verification code via its built-in Twilio integration (configured in the Auth0 dashboard — *not* via `server/sms.js`).
+5. **Auth0** issues a JWT used on protected `/api/routes/` endpoints.
 6. During signup, the user selects which products their vessel has.
 7. Products, their four classes, and serial numbers are associated with the user.
 8. **SendGrid** sends a welcome email.
@@ -102,7 +102,7 @@ Shore-side ↔ company scoping is **still being fleshed out** — the tables exi
 
 ## Notifications (`server/sms.js`)
 
-- **Twilio** — login codes to end users; admin SMS to founders on signup events.
+- **Twilio** (via `server/sms.js`) — admin SMS to founders on signup + assessment events. (User-facing SMS verification codes are sent by Auth0's own Twilio integration, not this code.)
 - **SendGrid** — welcome email to new users; admin email alerts to founders.
 - Production vs. dev is gated by `VITE_NODE_ENV`: in dev, admin notifications only go to Augustus.
 

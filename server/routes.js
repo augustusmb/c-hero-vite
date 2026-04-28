@@ -1,4 +1,5 @@
 import express from "express";
+import rateLimit from "express-rate-limit";
 import { getQuestions } from "./routes/Questions.js";
 import {
   listQuestions as listAdminQuestions,
@@ -32,8 +33,18 @@ import {
 export const publicRouter = express.Router();
 export const protectedRouter = express.Router();
 
+const signUpLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: "Too many sign-up attempts. Please try again in 15 minutes.",
+  },
+});
+
 publicRouter.get("/sign-up", fetchFormOptions);
-publicRouter.post("/sign-up", signUpUserNew);
+publicRouter.post("/sign-up", signUpLimiter, signUpUserNew);
 publicRouter.get("/sign-up/phone-available", checkPhoneAvailable);
 publicRouter.get("/products", listProducts);
 
