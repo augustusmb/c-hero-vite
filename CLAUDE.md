@@ -33,7 +33,7 @@ For product, domain, and business context (who the users are, how the training f
 - `db/` — PostgreSQL
   - `db/db.js` — pg-promise connection
   - `db/queries/` — SQL query files organized by domain
-  - `db/init/tables/` — SQL table definitions
+  - `db/migrations/` — schema migrations (canonical source of schema changes)
 
 ## Conventions
 - Frontend is TypeScript; backend (`server/`) is plain JavaScript with ES modules

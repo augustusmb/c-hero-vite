@@ -77,13 +77,13 @@ Four roles. The three end-user roles (crew / captain / shore-side) live in `user
 
 ## Organizational model
 
-From `db/init/tables/`:
+Current prod tables (verify with `\dt` if in doubt — schema is tracked via `db/migrations/`):
 
-- **`company`** — an operator that buys C-Hero products. Joined to vessels via `company_vessels` and to products via `company_products`.
+- **`companies`** — an operator that buys C-Hero products. A user's company is stored directly via `users.company_id`.
 - **`vessels`** — the boats. Joined to products via `vessels_products`. A user's vessel is stored directly via `users.vessel_id`.
-- **`ports`** — physical location where a vessel is based. Joined to vessels via `ports_vessels`. Minimal meaning today; may grow.
-- **`users`** — joined to vessels directly via `users.vessel_id`, and to classes via `users_products` (the `class_id` column holds composite class identifiers like `hr_b`, despite the table name).
-- **`products`** — the catalog above. Questions live in `questions`, joined to classes via `class_questions` (where `class_id` is a composite like `hr_b` = HR product + Operations class).
+- **`ports`** — physical location where a vessel is based. Stored on a user directly via `users.port_id`. Minimal meaning today; may grow.
+- **`users`** — joined to companies, vessels, and ports directly via `users.company_id` / `users.vessel_id` / `users.port_id`, and to classes via `users_products` (the `class_id` column holds composite class identifiers like `hr_b`, despite the table name).
+- **`products`** — the catalog above. Serial numbers live in `product_serial_numbers`. Questions live in `questions`, joined to classes via `class_questions` (where `class_id` is a composite like `hr_b` = HR product + Operations class).
 
 Shore-side ↔ company scoping is **still being fleshed out** — the tables exist but the exact hierarchy (how a shore-side user's jurisdiction is computed) isn't fully settled.
 
