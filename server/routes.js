@@ -32,8 +32,6 @@ import {
 export const publicRouter = express.Router();
 export const protectedRouter = express.Router();
 
-// router.route("/").post(signUpUser);
-
 publicRouter.get("/sign-up", fetchFormOptions);
 publicRouter.post("/sign-up", signUpUserNew);
 publicRouter.get("/sign-up/phone-available", checkPhoneAvailable);
