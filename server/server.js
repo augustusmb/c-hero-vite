@@ -15,11 +15,16 @@ const app = express();
 
 const client = jwksClient({
   jwksUri: `https://${process.env.VITE_AUTH0_DOMAIN}/.well-known/jwks.json`,
+  cache: true,
+  cacheMaxAge: 36e5,
+  rateLimit: true,
+  jwksRequestsPerMinute: 5,
 });
 
 function getKey(header, callback) {
   client.getSigningKey(header.kid, function (err, key) {
-    var signingKey = key.publicKey || key.rsaPublicKey;
+    if (err) return callback(err);
+    const signingKey = key.publicKey || key.rsaPublicKey;
     callback(null, signingKey);
   });
 }
@@ -27,22 +32,30 @@ function getKey(header, callback) {
 const checkJwt = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
-
-    jwt.verify(token, getKey, { algorithms: ["RS256"] }, (err, user) => {
-      if (err) {
-        console.log("err: ", err);
-        return res.status(403).send(err.message);
-      }
-
-      req.user = user;
-      next();
-    });
-  } else {
-    console.log(`No auth header`);
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.sendStatus(401);
   }
+
+  const token = authHeader.slice(7).trim();
+  if (!token) return res.sendStatus(401);
+
+  jwt.verify(
+    token,
+    getKey,
+    {
+      algorithms: ["RS256"],
+      audience: process.env.VITE_AUTH0_AUDIENCE,
+      issuer: `https://${process.env.VITE_AUTH0_DOMAIN}/`,
+    },
+    (err, user) => {
+      if (err) {
+        console.error("[checkJwt]", err.message);
+        return res.status(401).send(err.message);
+      }
+      req.user = user;
+      next();
+    },
+  );
 };
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -50,8 +63,8 @@ app.use(bodyParser.json());
 
 const corsOrigin =
   process.env.VITE_NODE_ENV === "local"
-    ? "http://localhost:5173/"
-    : "https://c-herotraining.com/";
+    ? "http://localhost:5173"
+    : "https://c-herotraining.com";
 app.use(cors({ origin: corsOrigin }));
 const port = process.env.PORT || 8080;
 
